@@ -173,7 +173,7 @@ FOR i=0, (n_elements(name_list)-1) DO BEGIN
         ; Mark that one object has been modified
         new_count = new_count + 1
 
-        plot_spectrum,new_name[j],FINAL_WAVE,FINAL_SPEC,FINAL_SPECERR
+        plot_spectrum,new_name[j],FINAL_WAVE,FINAL_SPEC,FINAL_SPECERR,FINAL_SOURCE
         BREAK
         
       ENDIF
