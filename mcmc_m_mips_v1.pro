@@ -91,34 +91,44 @@ count = 0
 
 ; *************************************************** ;
 ; Begin main loop
-; *************************************************** ;
+; data stored in mcmc_res: [parameters+fcn_val,step,chain]
 
+
+; *************************************************** ;
+; For each step
 for i = 1, params.nstep - 1, 1 do begin ; iterate through nsteps
+; *************************************************** ;
 
   min_val = max(mcmc_res[num_parameter,k-1,*],ind) ; The min_val here is actaully log(exp(-chisq/2/dof))
 
+  ; If new min is better than global min, replace
   if (((-1.)*min_val) le ((-1.)*min_val_glb)) then begin
     elements = mcmc_res[*,k-1,ind]
     min_val_glb = min_val
   endif
 
-  curr_all = mcmc_res[*,k-1,*]     
-  for chn =0,num_chains-1,1 do begin
+  ; Pick current step
+  curr_all = mcmc_res[*,k-1,*]  
+  
+  ; *************************************************** ;
+  ; For each chain   
+  for chn =0,num_chains-1,1 do begin ; iterate through chains
+  ; *************************************************** ;
 
-  ;data= (mcmc_res[num_parameter,0:i-1,chn])
-  ;minVal = min(data)
-  ;maxVal = max(data)
-  ;medianVal = median(data,/even)
-
-  ;Find the quartiles.
-  ;Q1 = Median(data[Where(data LE medianVal, countlowerhalf)])
-  ;Q3= Median(data[Where(data GT medianVal, countupperhalf)])
-
-  current = mcmc_res[0:num_parameter-1,k-1,chn]
-  currentValue = mcmc_res[num_parameter,k-1,chn]
-
-; After 500 steps, if a chain is not within 100*min_chi_sq, then it is replaced by the best chain
-
+    ; Statistics
+    ;data= (mcmc_res[num_parameter,0:i-1,chn])
+    ;minVal = min(data)
+    ;maxVal = max(data)
+    ;medianVal = median(data,/even)
+    ;Find the quartiles.
+    ;Q1 = Median(data[Where(data LE medianVal, countlowerhalf)])
+    ;Q3= Median(data[Where(data GT medianVal, countupperhalf)])
+  
+    ; Select data for given step and chain
+    current = mcmc_res[0:num_parameter-1,k-1,chn]
+    currentValue = mcmc_res[num_parameter,k-1,chn]
+  
+    ; After 500 steps, if a chain is not within 100*min_chi_sq, then it is replaced by the best chain
     if i>500 then begin
       if (-1.*max(mcmc_res[num_parameter,0:k-1,chn] ) > 100.*(-1.0)*min_val_glb)  then begin
         current = elements[0:num_parameter-1]
@@ -126,80 +136,86 @@ for i = 1, params.nstep - 1, 1 do begin ; iterate through nsteps
       endif 
     endif
 
-  prob = [p1,p2,p3]
-  tmp  = max(multinom(1,prob,1,seed=seed19),in2)
-  CR = 1.0  - prob[in2]
-  Lm[in2] = Lm[in2]  +1
+    ; *************************************************** ;
+    ; Random walk... take a stroll
+    
+    ; Simulate probabilities with multinom in /pro
+    prob = [p1,p2,p3]
+    tmp  = max(multinom(1,prob,1,seed=seed19),in2) ; SIMULATE MULTINOMIAL RANDOM VARIABLES
+    CR = 1.0  - prob[in2]
+    Lm[in2] = Lm[in2]  +1
 
-  u = randomu(seed1)
-   
-  ech_val = randomu(seed6,num_parameter)*(randomn(seed8,num_parameter,BINOMIAL=[1,.5]) -1.)
-  ech_val  = (ech_val + 1.)
-
-  tst_sub =  randomu(seed4,num_parameter)
-  fac_num = ((CR-tst_sub) gt 0)*1D + ((CR-tst_sub) le 0)*0D
-
-  while (n_elements(fac_num) lt 2) do begin
+    ; 
+    u = randomu(seed1) 
+     
+    ech_val = randomu(seed6,num_parameter)*(randomn(seed8,num_parameter,BINOMIAL=[1,.5]) -1.)
+    ech_val  = (ech_val + 1.)
+  
     tst_sub =  randomu(seed4,num_parameter)
     fac_num = ((CR-tst_sub) gt 0)*1D + ((CR-tst_sub) le 0)*0D
-  endwhile
-
-
-  diff_chng =  selectTrial(num_chains,fac_num,chn)       
-  dprime = total(fac_num)
-
-  gamd = 2.38/sqrt(2.*numb_shft*dprime) 
-  if (i mod 5) le 0 then gamd =1.0
-
-    chng_val = ech_val*gamd*fac_num*diff_chng + randomn(seed3,num_parameter,1)*param_bnd[1,*]*.0075
-    trial = current + chng_val
-
-    counts=where(trial gt param_bnd[1,*],number)
-      if (number gt 0) then begin
-          trial[counts]= trial[counts] - 2.*(trial[counts] - param_bnd[1,counts]) 
-      endif
-   
-      counts=where(trial lt param_bnd[0,*],number)
-      if (number gt 0) then begin
-        trial[counts]= trial[counts] + 2.*(-trial[counts] + param_bnd[0,counts]) 
-      endif
-
-      counts=where(trial  gt param_bnd[1,*] or  trial  lt param_bnd[0,*],number)
-
-      while(number ge 1) do begin
-        ech_val[counts] = ech_val[counts]*.5
-        chng_val = ech_val*gamd*fac_num*diff_chng + randomn(seed3,num_parameter,1)*param_bnd[1,*]*.0075
-        trial[counts] = current[counts] + chng_val[counts]
-        counts=where(trial gt param_bnd[1,*] or  trial lt param_bnd[0,*],number)
-      end
-
-      if(min(finite(trial))) eq 0 then begin
-        trial = current
-      end
-
-
-    newValue = logTargetDistribution(trial,data_base)
-    ;- determine acceptance probability via MH algorithm
-    ;     alpha = exp(newValue - currentValue) * transitionRatio
-    alpha = exp(newValue - currentValue)
   
-    if u  lt alpha then begin  ;- new trial accepted
+    while (n_elements(fac_num) lt 2) do begin
+      tst_sub =  randomu(seed4,num_parameter)
+      fac_num = ((CR-tst_sub) gt 0)*1D + ((CR-tst_sub) le 0)*0D
+    endwhile
+  
+  
+    diff_chng =  selectTrial(num_chains,fac_num,chn)       
+    dprime = total(fac_num)
+  
+    gamd = 2.38/sqrt(2.*numb_shft*dprime) 
+    if (i mod 5) le 0 then gamd =1.0
+  
+      chng_val = ech_val*gamd*fac_num*diff_chng + randomn(seed3,num_parameter,1)*param_bnd[1,*]*.0075
+      trial = current + chng_val
+  
+      counts=where(trial gt param_bnd[1,*],number)
+        if (number gt 0) then begin
+            trial[counts]= trial[counts] - 2.*(trial[counts] - param_bnd[1,counts]) 
+        endif
+     
+        counts=where(trial lt param_bnd[0,*],number)
+        if (number gt 0) then begin
+          trial[counts]= trial[counts] + 2.*(-trial[counts] + param_bnd[0,counts]) 
+        endif
+  
+        counts=where(trial  gt param_bnd[1,*] or  trial  lt param_bnd[0,*],number)
+  
+        while(number ge 1) do begin
+          ech_val[counts] = ech_val[counts]*.5
+          chng_val = ech_val*gamd*fac_num*diff_chng + randomn(seed3,num_parameter,1)*param_bnd[1,*]*.0075
+          trial[counts] = current[counts] + chng_val[counts]
+          counts=where(trial gt param_bnd[1,*] or  trial lt param_bnd[0,*],number)
+        end
+  
+        if(min(finite(trial))) eq 0 then begin
+          trial = current
+        end
+  
+    ; *************************************************** ;
+    ; Evaluate and store new position
+    newValue = logTargetDistribution(trial,data_base)
+    
+    ; Determine acceptance probability via MH algorithm
+    ;alpha = exp(newValue - currentValue) * transitionRatio
+    alpha = exp(newValue - currentValue) 
+    
+    if u lt alpha then begin ; New trial accepted
       ;current = trial
       ;currentValue = newValue
       mcmc_res[0:num_parameter-1,k,chn] = trial
       mcmc_res[num_parameter,k,chn] = newValue
       nsuccess++
-    endif else begin 
+    endif else begin ; New trial rejected
       mcmc_res[0:num_parameter-1,k,chn] = current
       mcmc_res[num_parameter,k,chn] = currentValue
-      nfail++                    ;- new trial rejected
+      nfail++ 
     endelse
-
-  ;std_delm = stdev(mcmc_res[0:num_parameter-1,0:i,chn])
-  ;delm[in2] = delm[in2] + total(( mcmc_res[0:num_parameter-1,i,chn] -  mcmc_res[0:num_parameter-1,i-1,chn])^2/std_delm/std_delm)
+  
+    ;std_delm = stdev(mcmc_res[0:num_parameter-1,0:i,chn])
+    ;delm[in2] = delm[in2] + total(( mcmc_res[0:num_parameter-1,i,chn] -  mcmc_res[0:num_parameter-1,i-1,chn])^2/std_delm/std_delm)
 
   endfor
-
 
   ;p1= t*num_chains*(delm[0]/Lm[0])/total(delm)
   ;p2= t*num_chains*(delm[1]/Lm[1])/total(delm)
@@ -210,20 +226,23 @@ for i = 1, params.nstep - 1, 1 do begin ; iterate through nsteps
   ;p2 =p2/(p1+p2+p3)
   ;p3 =p3/(p1+p2+p3)
 
-  k++
-;;; Every 100th chain link, the mcmc chains (all chains) are stored in
-;;; the fits file as a separate extension. Note that in each save set,
-;;; the first row is the same as the last row of the preceding record
-;;; - This is because the last record is needed to calculate whether a
-;;;   new chain link should be accepted or not - Consequently, the
-;;;                                              effective number of
-;;;                                              links in a chain are .99*num_step
+  k++ ; iterate 100th step counter
+
+  ; *************************************************** ;  
+  ; Every 100th chain link, the mcmc chains (all chains) are stored in
+  ; the fits file as a separate extension. Note that in each save set,
+  ; the first row is the same as the last row of the preceding record.
+  ; 
+  ; This is because the last record is needed to calculate whether a
+  ; new chain link should be accepted or not. 
+  ; 
+  ; Consequently, the effective number of links in a chain are .99*num_step.
  
   if (k mod 100) le 0 then begin
   ;save, file='output_fin_new/'+params.name_obj+'_chn_mcmc_multi_part.sav',i,nsuccess,nfail,num_chains,param_bnd,data_base,mcmc_res 
   ;print,'Number: ',i
   count++
-  file='output_fin_new/'+params.name_obj+'_chn_mcmc_multi_part.fits'
+  file='output_v1/'+params.name_obj+'_chn_mcmc_multi_part.fits'
   FITS_OPEN,file,fcb,/append
   fxhmake,header1,mcmc_res,/date
   fxaddpar,header1,'total_num_chains',num_chains
@@ -239,22 +258,26 @@ for i = 1, params.nstep - 1, 1 do begin ; iterate through nsteps
   FITS_CLOSE,FCB
   mcmc_res[*,0,*] = mcmc_res[*,99,*]
 
-  k = 1
+  k = 1 ; Reset 100th step counter
 
   endif
 
 endfor
 
-k =1
-min_val = max(mcmc_res[num_parameter,k-1,*],ind)           ; The min_val here is actaully log(exp(-chisq/2/dof))
+; *************************************************** ;
+; End main loop
 
+k =1 ; Reset k
+min_val = max(mcmc_res[num_parameter,k-1,*],ind) ; The min_val here is actaully log(exp(-chisq/2/dof))
+
+; Update best value if needed
 if (((-1.)*min_val) le ((-1.)*min_val_glb)) then begin
   elements = mcmc_res[*,k-1,ind]
   min_val_glb = min_val
 endif
 
-
-file='output_fin_new/'+params.name_obj+'_chn_mcmc_multi_part.fits'
+; Write final best value as last extension of associated FITS file
+file='output_v1/'+params.name_obj+'_chn_mcmc_multi_part.fits'
 FITS_OPEN,file,fcb,/append
 fxhmake,header1,elements,/date
 fxaddpar,header1,'total_num_chains',num_chains
@@ -271,6 +294,7 @@ FITS_CLOSE,FCB
  
 ;save, file='output_fin_new/'+params.name_obj+'_chn_mcmc_multi_fin.sav',i,nsuccess,nfail,num_chains,param_bnd,data_base,mcmc_res 
 
+; End of main script -> exit out
 return,1
 end
 
@@ -323,7 +347,7 @@ end
 ; ****************************************************************************************************** ;
 function logTargetDistribution,link,result
 ; ****************************************************************************************************** ;
-
+; Take current 'link' in current 'chain', model the spectrum and compare to actual 'result'
 
 COMMON fnc_name,mips70_val,mips70_error,dof1,use_mips70 
 COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
@@ -336,9 +360,18 @@ COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_em
 ;temp1, grain1, scale1, olivine/pyroxene, crystalline, enstatite/fosterite,  
 ;temp2, grain2, scale2, olivine/pyroxene2, crystalline2, enstatite/fosterite2 
 
+; un'log' value
 link[2]=10^(link[2])
 link[8]=10^(link[8])
 
+; *************************************************** ;
+; If using MIPS70, calculate the chi squared values seperately then combine.
+; In this case the two values are weighted differently as described:
+; 
+; The assumption here is that since there can exist an additional dust
+; component besides the one modeled here contributing principally only
+; to the mips70 flux, all models which either fit mips70 flux or
+; under-represent the flux are considered equally likely
 if (use_mips70 gt 0) then begin
 
   spectra1 = modeltwograin([[result[0,*]],[71.42]], link) ;                                                                             
@@ -346,16 +379,11 @@ if (use_mips70 gt 0) then begin
   spectra= spectra1[0:n_elements(result[0,*])-1]
 
   chisq = TOTAL ( ((result[1,*]-spectra)^2.0)/((.05*result[2,*])^2.0+(result[2,*])^2.0))
-
-
-; The assumption here is that since there can exist an additional dust
-; component besides the one modeled here contributing principally only
-; to the mips70 flux, all models which either fit mips70 flux or
-; under-represent the flux are considered equally likely
-
   chisq2 = ((mips70_val-mips70)^2.0)/((mips70_error)^2.0)
   like_func  = -(chisq+chisq2)/(2.0*dof1) 
 
+; *************************************************** ;
+; If not using MIPS, avoid the mess above
 endif else begin
 
   spectra = modeltwograin(result[0,*], link)
@@ -363,7 +391,8 @@ endif else begin
   like_func = -(chisq)/(2.0*dof1)
 
 endelse
-   
+
+; re'log' value
 link[2]=alog10(link[2])
 link[8]=alog10(link[8])
 
@@ -371,7 +400,8 @@ link[8]=alog10(link[8])
   ;print,'chisq :',chisq/dof1
   ;print, 'link :', link
 ;endif
-  
+
+; return the likelyhood value (i.e. fitness of link)
 return, like_func
 end
 
