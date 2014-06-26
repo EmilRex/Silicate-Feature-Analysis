@@ -6,16 +6,19 @@
 ;  Add new data to old data savefiles
 ;
 ; INPUTS:
-;   SOURCE: Data source identifier
+;   SOURCE_NAME: Data source identifier
 ;           - SpitzerIRS_[SL,LL,SH,LH]
 ;           - SpitzerMIPS_[PHOT,SED]
 ;           - Herschel_PACS_[PHOT,SPEC]
 ;           - Herschel_SPIRE
 ;   DIR_IN: Directory containing input files
 ;   DIR_OUT: Directory for output files
+;   NEW_DIR: Directory containing new data to be added
 ;
 ; KEYWORDS
 ;   INITIAL: Take in old data and add MIPS_70 value to data array
+;   NEW_DATA: Add new data to old, re-formatted data
+;   PLOT: Plot object spectrum
 ;
 ; OUTPUTS:
 ;   *NAME*.sav - IDL save file with updated data file sorted by wavelength
@@ -61,7 +64,7 @@ END
 pro udpdate_data_structure_v1,$
   dir_in=dir_in, dir_out=dir_out, new_dir=new_dir,$
   initial=initial, new_data=new_data,$
-  source_name=source_name
+  source_name=source_name, plot=plot
 
 ; Set iterators
 loop_one = 1
@@ -172,8 +175,11 @@ FOR i=0, (n_elements(name_list)-1) DO BEGIN
         
         ; Mark that one object has been modified
         new_count = new_count + 1
-
+        
+        ; Make a plot of the new spectrum
+        IF KEYWORD_SET(plot) THEN BEGIN
         plot_spectrum,new_name[j],FINAL_WAVE,FINAL_SPEC,FINAL_SPECERR,FINAL_SOURCE
+        ENDIF
         BREAK
         
       ENDIF

@@ -63,7 +63,7 @@ MIPS_SED_psym = 5 ; triangle
 
 ; *************************************************** ;
 ; Plot    
-plot,wave,spec,title=name,ystyle=1,xstyle=1,xtitle=('Wavelength (\mum)'),ytitle=('F_\nu (Jy)'),charthick=1, thick=1, xthick=2, ythick=2,psym=0, charsize=1,color=0
+plot,wave,spec,title=name,ystyle=1,xstyle=1,xtitle='Wavelength ('+cggreek('mu')+'m)',ytitle='F'+cggreek('nu')+' (Jy)',charthick=1, thick=1, xthick=2, ythick=2,psym=0, charsize=1,color=0
 
 ; Overlay data with different colors and markers
 oplot,IRS_wave,IRS_spec,color=IRS_color,psym=IRS_psym
@@ -71,8 +71,7 @@ oplot,MIPS70_wave,MIPS70_spec,color=MIPS70_color,psym=MIPS70_psym
 oplot,MIPS_SED_wave,MIPS_SED_spec,color=MIPS_SED_color,psym=MIPS_SED_psym
 oploterr,wave,spec,specerr,0
 
-
-;LEGEND, /best, color=1, linestyle=lines[1]
+;LEGEND, /best, color=1
 
 ; *************************************************** ;
 ; End

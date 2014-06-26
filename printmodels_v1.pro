@@ -8,20 +8,20 @@
 ;
 ; INPUTS:
 ;  NAME1:  Name of object to be analyzed. Main identifier.
-;  FITTYPE: Model to be fitted:
-;          1) 'single' - Single grain model
-;          2) 'disk' - Continuous radial distribution of particles
-;          3) 'disk_mips' -
-;          4) 'ring' - Gaussian ring
-;          5) 'multi' - Two discrete grain populations, (T1,a1), (T2,a2)
-;          6) 'multi_mips' -
+;  FITTYPE: Model to be fitted (in order of appearance below)
+;          3) 'single' - Single grain model
+;          0) 'disk' - Continuous radial distribution of particles 
+;          7) 'disk_mips' -  
+;          4) 'ring' - Gaussian ring 
+;          1) 'multi' - Two discrete grain populations, (T1,a1), (T2,a2)
+;          6) 'multi_mips' - 
 ;  PS:
 ;  NSTEP:
 ;  THIN_VAL:
-;  TEFF:
+;  TEFF: 
 ;  DIST:
 ;  AMIN: Minimum grain size (units?)
-;  SEED:
+;  SEED: 
 ;  CNT:
 ;  SCALE_VAL:
 ;  NUM_CHAINS: Number of MCMC chains to run
@@ -41,7 +41,7 @@
 ;  is included unchanged.
 ;
 ; MODIFICATION HISTORY:
-;  Written by TM (June 2013)
+;  Written by TM (June 2013) as printmodels_new.pro
 ;  Organized and commented by EC (6/24/2014)
 ; -
 ; *************************************************** ;
@@ -53,7 +53,7 @@ pro printmodels_v1, name1, fittype=fittype,ps=ps,nstep=nstep,$
 if not keyword_set(fittype) then fittype=[0]
 
 ; Load object data from IDL savefile
-restore,'savfiles_mcmc/'+name1+'.sav'
+restore,'old_savfiles_mcmc/'+name1+'.sav' ; Changed to new directory name for the time being
 
 ; Fill 'params' structure with data passed by fits
 ; and with data from object savefile
@@ -78,7 +78,7 @@ params={distval:dist,$
 print,fittype
 
 ; Pass 'params' to modelfit
-modelfit_new,param_struc=params,fittype=fittype
+modelfit_v1,param_struc=params,fittype=fittype
 
 ; End program
 return

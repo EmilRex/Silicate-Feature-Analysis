@@ -1,0 +1,11 @@
+README.txt
+
+NAME:
+plots/
+	
+CONTENTS:
+.ps plot files of various sorts:
+	- *name*_spectrum.ps are plots of IRS+MIPS70+MIPS_SED data spectra 
+
+HISTORY:
+Created via plot_spectrum.pro by EC on 6/26/14

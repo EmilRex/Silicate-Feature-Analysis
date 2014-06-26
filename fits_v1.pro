@@ -7,12 +7,12 @@
 ;
 ; INPUTS:
 ;  NAME:  Name of object to be analyzed. Main identifier.
-;  FITTYPE: Model to be fitted: 
-;          1) 'single' - Single grain model
-;          2) 'disk' - Continuous radial distribution of particles 
-;          3) 'disk_mips' -  
+;  FITTYPE: Model to be fitted (in order of appearance below)
+;          3) 'single' - Single grain model
+;          0) 'disk' - Continuous radial distribution of particles 
+;          7) 'disk_mips' -  
 ;          4) 'ring' - Gaussian ring 
-;          5) 'multi' - Two discrete grain populations, (T1,a1), (T2,a2)
+;          1) 'multi' - Two discrete grain populations, (T1,a1), (T2,a2)
 ;          6) 'multi_mips' - 
 ;
 ; KEYWORDS:
@@ -33,7 +33,7 @@
 ;  is included unchanged.
 ;
 ; MODIFICATION HISTORY:
-;  Written by TM (June 2013)
+;  Written by TM (June 2013) as fits_new.pro
 ;  Organized and commented by EC (6/23/2014)
 ; -
 ; *************************************************** ;
@@ -139,7 +139,7 @@ case fittype of
              dist=dist_val,amin=amin,seed=best_val1[0:5],cnt=1,scale_val=0,num_chains=10
 
              ; Read in and store data from printmodels_v1 called just above
-             data = readfits('output_fin_new/'+name+'_chn_mcmc_single_part.fits',EXTEN_NO=1)
+             data = readfits('output_v1/'+name+'_chn_mcmc_single_part.fits',EXTEN_NO=1)
 
              ; ???
              if ( min(-2.*data(6,99,*)) le 5.0) then begin
@@ -230,7 +230,7 @@ case fittype of
             dist=dist_val,amin=amin,seed=best_val2[0:9],cnt=1,scale_val=0,num_chains=15
 
             ; Read in and store data from printmodels_v1 called just above
-            data = readfits('output_fin_new/'+name+'_chn_mcmc_disk_part.fits',EXTEN_NO=1)
+            data = readfits('output_v1/'+name+'_chn_mcmc_disk_part.fits',EXTEN_NO=1)
 
             ; ???
              if ( min(-2.*data(10,99,*)) le 5.0) then begin
@@ -319,7 +319,7 @@ case fittype of
               printmodels_v1,name,fittype=[7],ps='X',nstep=100,thin_val=1,teff=Teff,$
               dist=dist_val,amin=amin,seed=best_val2[0:9],cnt=1,scale_val=0,num_chains=15
 
-              data = readfits('output_fin_new/'+name+'_chn_mcmc_disk_part.fits',EXTEN_NO=1)
+              data = readfits('output_v1/'+name+'_chn_mcmc_disk_part.fits',EXTEN_NO=1)
 
               if ( min(-2.*data(10,99,*)) le 5.0) then begin
                 yes = 1.0
@@ -401,7 +401,7 @@ case fittype of
               printmodels_v1,name,fittype=[4],ps='X',nstep=100,thin_val=1,teff=Teff,$
               dist=dist_val,amin=amin,seed=best_val3[0:8],cnt=1,scale_val=0,num_chains=15
 
-              data = readfits('output_fin_new/'+name+'_chn_mcmc_ring_part.fits',EXTEN_NO=1)
+              data = readfits('output_v1/'+name+'_chn_mcmc_ring_part.fits',EXTEN_NO=1)
 
               if ( min(-2.*data(9,99,*)) le 5.0) then begin
                 yes=1.0
@@ -484,7 +484,7 @@ case fittype of
               printmodels_v1,name,fittype=[1],ps='X',nstep=100,thin_val=1,teff=Teff,$
               dist=dist_val,amin=amin,seed=best_val4[0:11],cnt=1,scale_val=0,num_chains=20
 
-              data = readfits('output_fin_new/'+name+'_chn_mcmc_multi_part.fits',EXTEN_NO=1)
+              data = readfits('output_v1/'+name+'_chn_mcmc_multi_part.fits',EXTEN_NO=1)
 
              if ( min(-2.*data(12,99,*)) le 5.0) then begin
                 yes=1.0
@@ -582,7 +582,7 @@ case fittype of
               printmodels_v1,name,fittype=[6],ps='X',nstep=100,thin_val=1,teff=Teff,$
               dist=dist_val,amin=amin,seed=best_val4[0:11],cnt=1,scale_val=0,num_chains=20
 
-              data = readfits('output_fin_new/'+name+'_chn_mcmc_multi_part.fits',EXTEN_NO=1)
+              data = readfits('output_v1/'+name+'_chn_mcmc_multi_part.fits',EXTEN_NO=1)
 
               if ( min(-2.*data(12,99,*)) le 5.0) then begin
                 yes=1.0
@@ -663,17 +663,6 @@ case fittype of
       end
 endcase
 
+; End Program
 return
-
 end
-
-
-
-
-
-
-
-
-
-
-
