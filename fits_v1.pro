@@ -22,8 +22,8 @@
 ;   NONE
 ;
 ; AUTHORS:
-;  Tushar Mittal - mittal.tushar22@gmail.com
-;  Christine Chen - cchen@stsci.edu
+;  Tushar Mittal
+;  Christine Chen
 ;  Emil Christensen - chris2er@dukes.jmu.edu
 ;
 ; DISCLAIMER

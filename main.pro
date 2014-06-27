@@ -8,8 +8,8 @@ CD, home_dir
 !PATH=!PATH+':'+Expand_Path('+'+home_dir)
 
 ; Run program
-name = 'Test1'
-fittype = 'single'
+name = 'HD105857'
+fittype = 'multi_mips'
 fits_v1, name=name, fittype=fittype
 
 ; Get Data
