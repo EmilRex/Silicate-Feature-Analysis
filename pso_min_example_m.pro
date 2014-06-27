@@ -160,7 +160,7 @@ functargs =  {  wave:final_wave,    $
 Teff=teff_val
 effectiveTemp = Teff
 
-cmd = 'ls /modelgrids/Teff*grains.sav'
+cmd = 'ls modelgrids/Teff*grains.sav'
 spawn, cmd, grainfiles
 
 ; read in temperatures                                                                                                     
