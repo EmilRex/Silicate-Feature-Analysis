@@ -9,7 +9,7 @@ CD, home_dir
 
 ; Run program
 name = 'HD105857'
-fittype = 'multi_mips'
+fittype = 'disk_mips' ;'multi_mips'
 fits_v1, name=name, fittype=fittype
 
 ; Get Data
