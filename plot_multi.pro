@@ -35,25 +35,20 @@ pro plot_multi, object_name
 ; -------------------------------------------------- ;
 ; Replace with new structure for reading in data. 
 ; Take from _chn_mcmc_multi_part.fits, extension = final output
-generated through mcmc_m_mips_v1
-fmt='a,a,f,f,f,f,f,f,f,f,f,f,f,f,f'
-readcol,'~/plot_dustmodel/all_multi.txt',F=fmt,catalog_name,tmp1,chi,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12
-object_name_all = catalog_name
+; generated through mcmc_m_mips_v1
 
+; Get result of simulation to plot model
+mcmc_result = readfits('output_v1/'+object_name+'_chn_mcmc_multi_part.fits',EXTEN_NO=51)
+link=mcmc_result[0:11]
+chisq_best = mcmc_result[12]
 
-for i = 0, size(catalog_name,/n_elements)-1 do begin
-  if (catalog_name[i] eq object_name) then begin
-    link=[v1[i],v2[i],v3[i],v4[i],v5[i],v6[i],v7[i],v8[i],v9[i],v10[i],v11[i],v12[i]]
-    chisq_best = chi[i]
-  endif
-endfor
-; -------------------------------------------------- ;
-
+print, mcmc_result
 
 ; Get Teff, amin and dist_val for the object
 fmt='a,f,f,f'
-readcol,'/input_files/input_param_file.txt',F=fmt,catalog_nameA,c_teff,c_amin,c_dist_val
+readcol,'input_files/input_param_file.txt',F=fmt,catalog_nameA,c_teff,c_amin,c_dist_val
   
+ 
 for i = 0, size(catalog_nameA,/n_elements)-1 do begin
   if (catalog_nameA[i] eq object_name) then begin
     Teff=c_teff[i]
@@ -77,7 +72,7 @@ effectiveTemp = Teff
 
 ; Calculate based on masses based on Isochrones etc
 ; find the right grain model for calculating temperatures             
-cmd = 'ls /modelgrids/Teff*grains.sav'
+cmd = 'ls modelgrids/Teff*grains.sav'
 spawn, cmd, grainfiles
   
 ; read in temperatures                                                
@@ -104,9 +99,9 @@ ki = round(kuruczindex) < (n_elements(tarray)-1) > 0
 restore, grainfiles[ki]
 restore,'old_savfiles_mcmc/'+object_name+'.sav'
       
-wave_irs =final_wave
-fl_diff = final_spec;
-uncer_irs = final_specerr;
+wave_irs = [final_wave,71.42]
+fl_diff = [final_spec,mips70_val]
+uncer_irs = [final_specerr,mips70_error]
 
 ; *************************************************** ;
 ; Begin plotting
@@ -121,13 +116,16 @@ loadct,39
 TVLCT,[0,255,0,0],[0,0,255,0],[0,0,0,255]
 
 ; Plot data points
-plot,wave_irs,fl_diff,title=object_name+' (Two-Grain Model)',ystyle=1,psym=4,xstyle=1,xtitle=TEXTOIDL('Wavelength (\mum)'),ytitle=TEXTOIDL('F_\nu (Jy)'),charthick=1, thick=1, xthick=2, ythick=2, charsize=1,color=0
+plot,wave_irs,fl_diff,title=object_name+' (Two-Grain Model)', $
+     ystyle=1,psym=4,xstyle=1,xtitle='Wavelength ('+cggreek('mu')+'m)', $
+     ytitle='F'+cggreek('nu')+' (Jy)',charthick=1, thick=1, $
+     xthick=2, ythick=2, charsize=1,color=0
 
 ; Connect the points
 oplot,wave_irs,fl_diff,color=0
 
 ; Add error bars
-oploterror,wave_irs,fl_diff,uncer_irs,psym=1,color=0
+oploterr,wave_irs,fl_diff,uncer_irs;,psym=1;,color=0
 
 ; Calculate model spectrum
 link[2]=10^(link[2])
@@ -140,12 +138,9 @@ tmp1 = round(chisq_best*100.)/100.
 oplot,wave_irs,out_model,color=1, thick=5,linestyle=lines[1]
 
 ; Create legend
-LEGEND,TEXTOIDL('\chi^{2}/d.o.f. : ')+  strtrim(string(tmp1,format='(f18.2)'),1), /top, /left,color=1,linestyle=lines[1]
+;LEGEND,TEXTOIDL('\chi^{2}/d.o.f. : ')+  strtrim(string(tmp1,format='(f18.2)'),1), /top, /left,color=1,linestyle=lines[1]
 
 device,/close
 set_plot,'x'
 
-
-
-stop
 end
