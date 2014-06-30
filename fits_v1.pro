@@ -582,7 +582,7 @@ case fittype of
               printmodels_v1,name,fittype=[6],ps='X',nstep=100,thin_val=1,teff=Teff,$
               dist=dist_val,amin=amin,seed=best_val4[0:11],cnt=1,scale_val=0,num_chains=20
 
-              data = readfits('output_v1/'+name+'_chn_mcmc_multi_part.fits',EXTEN_NO=1)
+              data = readfits('output_v2/'+name+'_chn_mcmc_multi_part.fits',EXTEN_NO=1)
 
               if ( min(-2.*data(12,99,*)) le 5.0) then begin
                 yes=1.0

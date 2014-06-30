@@ -52,7 +52,7 @@ restore, 'qtables_withcrys2.sav' ; qastrosil, qolivine, qpyroxene
 COMMON mcmc_common, seed1  ;- save the random seed value
 COMMON input_var,params,param_bnd,mcmc_res,num_parameter
 COMMON trial_slct,current,curr_all,numb_shft
-COMMON fnc_name,mips70_val,mips70_error,dof1,use_mips70      ;- save the function_name value   
+COMMON fnc_name,dof1      ;- save the function_name value   
 
 ; *************************************************** ;
 ; Extract data from params and initialize result storage
@@ -65,7 +65,7 @@ header_lines = strarr(2)
 header_lines[0] = '/  MCMC Fit - Dust Model - Jang Condell et al. 2013, Mittal et al. 2013'
 header_lines[1] = '/  Spitzer IRS spectrum, Chen et al. 2013'
 sxaddhist, header_lines,header1
-file='output_v1/'+params.name_obj+'_chn_mcmc_multi_part.fits'
+file='output_v2/'+params.name_obj+'_chn_mcmc_multi_part.fits'
 FITS_WRITE,file,data_base,header1
 
 ; Initialize MCMC chain storage
@@ -242,7 +242,7 @@ for i = 1, params.nstep - 1, 1 do begin ; iterate through nsteps
   ;save, file='output_fin_new/'+params.name_obj+'_chn_mcmc_multi_part.sav',i,nsuccess,nfail,num_chains,param_bnd,data_base,mcmc_res 
   ;print,'Number: ',i
   count++
-  file='output_v1/'+params.name_obj+'_chn_mcmc_multi_part.fits'
+  file='output_v2/'+params.name_obj+'_chn_mcmc_multi_part.fits'
   FITS_OPEN,file,fcb,/append
   fxhmake,header1,mcmc_res,/date
   fxaddpar,header1,'total_num_chains',num_chains
@@ -277,7 +277,7 @@ if (((-1.)*min_val) le ((-1.)*min_val_glb)) then begin
 endif
 
 ; Write final best value as last extension of associated FITS file
-file='output_v1/'+params.name_obj+'_chn_mcmc_multi_part.fits'
+file='output_v2/'+params.name_obj+'_chn_mcmc_multi_part.fits'
 FITS_OPEN,file,fcb,/append
 fxhmake,header1,elements,/date
 fxaddpar,header1,'total_num_chains',num_chains
@@ -349,7 +349,7 @@ function logTargetDistribution,link,result
 ; ****************************************************************************************************** ;
 ; Take current 'link' in current 'chain', model the spectrum and compare to actual 'result'
 
-COMMON fnc_name,mips70_val,mips70_error,dof1,use_mips70 
+COMMON fnc_name,dof1 
 COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
 COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, effectiveTempArray, stellar_emit
 
@@ -372,25 +372,29 @@ link[8]=10^(link[8])
 ; component besides the one modeled here contributing principally only
 ; to the mips70 flux, all models which either fit mips70 flux or
 ; under-represent the flux are considered equally likely
-if (use_mips70 gt 0) then begin
 
-  spectra1 = modeltwograin([[result[0,*]],[71.42]], link) ;                                                                             
-  mips70 = spectra1[n_elements(result[0,*])]
-  spectra= spectra1[0:n_elements(result[0,*])-1]
+; !!!!!!!!!!!!!!!!!!! Changed for SED data !!!!!!!!!!!!!!!!!!!!!!
+; !!!!!!!!!!!!!!!!!!! Still needs weightings !!!!!!!!!!!!!!!!!!!!!!
 
-  chisq = TOTAL ( ((result[1,*]-spectra)^2.0)/((.05*result[2,*])^2.0+(result[2,*])^2.0))
-  chisq2 = ((mips70_val-mips70)^2.0)/((mips70_error)^2.0)
-  like_func  = -(chisq+chisq2)/(2.0*dof1) 
+;if (use_mips70 gt 0) then begin
+
+;  spectra1 = modeltwograin([[result[0,*]],[71.42]], link) ;                                                                             
+;  mips70 = spectra1[n_elements(result[0,*])]
+;  spectra= spectra1[0:n_elements(result[0,*])-1]
+
+;  chisq = TOTAL ( ((result[1,*]-spectra)^2.0)/((.05*result[2,*])^2.0+(result[2,*])^2.0))
+;  chisq2 = ((mips70_val-mips70)^2.0)/((mips70_error)^2.0)
+;  like_func  = -(chisq+chisq2)/(2.0*dof1) 
 
 ; *************************************************** ;
 ; If not using MIPS, avoid the mess above
-endif else begin
+;endif else begin
 
   spectra = modeltwograin(result[0,*], link)
   chisq = TOTAL ( ((result[1,*]-spectra)^2.0)/((.05*result[2,*])^2.0+(result[2,*])^2.0))
   like_func = -(chisq)/(2.0*dof1)
 
-endelse
+;endelse
 
 ; re'log' value
 link[2]=alog10(link[2])
@@ -414,7 +418,7 @@ pro mcmc_m_mips_v1,par_bound=param_bnd_inp,parameter=params_inp
 compile_opt idl2
 
 ; Create global variables relating to input data
-common fnc_name,mips70_val,mips70_error,dof1,use_mips70      ;- save the function_name value   
+common fnc_name,dof1      ;- save the function_name value   
 common input_var,params,param_bnd,mcmc_res,num_parameter
 
 ; Rename data structure and extract number of variables
@@ -438,13 +442,13 @@ dof1 = n_elements(params.lambdafit) - num_parameter
 
 ; -------------------------------------------------- ;
 ; Below determines whether to include mips... delete when changing code
-use_mips70=0
-if(params.mips70_val gt 0.0) then begin 
-   dof1 = dof1 + 1.0 ; Add 1 for mips 70 value 
-   use_mips70 = 1
-endif
-mips70_val=params.mips70_val ; This is the photosphere subtracted MIPS70 value
-mips70_error=params.mips70_error
+;use_mips70=0
+;if(params.mips70_val gt 0.0) then begin 
+;   dof1 = dof1 + 1.0 ; Add 1 for mips 70 value 
+;   use_mips70 = 1
+;endif
+;mips70_val=params.mips70_val ; This is the photosphere subtracted MIPS70 value
+;mips70_error=params.mips70_error
 ; -------------------------------------------------- ;
 
 ; Setup complete -> run program
