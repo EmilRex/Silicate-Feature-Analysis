@@ -51,29 +51,29 @@ COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_em
 link=[p[0],p[1],10^(p[2]),p[3],p[4],p[5],p[6],p[7],10^(p[8]),p[9],p[10],p[11]]
 
 ; Model spectrum with current parameter values
-spectra1 = modeltwograin(transpose([extra.wave,71.42]),link )
+spectra = modeltwograin(transpose([extra.wave,71.42]),link ) ; changed from spectra1 to spectra
 
 ; Separate MIPS from IRS
-mips70 = spectra1[n_elements(extra.wave)]
-spectra= spectra1[0:n_elements(extra.wave)-1]
+;mips70 = spectra1[n_elements(extra.wave)]
+;spectra= spectra1[0:n_elements(extra.wave)-1]
 
 ; *************************************************** ;
 ; Compute chisq without MIPS
 chisq = TOTAL ( ((extra.spec-spectra)^2.0)/((.05*extra.error)^2.0+(extra.error)^2.0))
 
 ; Compute chisq with MIPS
-if (extra.mips70_val gt 0) then begin
-  if (mips70 le extra.mips70_val) then begin
-    z = (chisq)/(extra.dof)   ; Log of likelihood func - where likelihood funct is exp(-chisq/2 )                                     
-  endif else begin
-    chisq2 = ((extra.mips70_val-mips70)^2.0)/((extra.mips70_error)^2.0)
-    z = (chisq+chisq2)/(extra.dof) ; Log of likelihood func - where likelihood funct is exp(-chisq/2 )                                
-  endelse
+;if (extra.mips70_val gt 0) then begin
+;  if (mips70 le extra.mips70_val) then begin
+;    z = (chisq)/(extra.dof)   ; Log of likelihood func - where likelihood funct is exp(-chisq/2 )                                     
+;  endif else begin
+;    chisq2 = ((extra.mips70_val-mips70)^2.0)/((extra.mips70_error)^2.0)
+;    z = (chisq+chisq2)/(extra.dof) ; Log of likelihood func - where likelihood funct is exp(-chisq/2 )                                
+;  endelse
   
 ; Compute likelihood function
-endif else begin
+;endif else begin
     z = (chisq)/(extra.dof - 1.)   ; Log of likelihood func - where likelihood funct is exp(-chisq/2 )                                
-endelse
+;endelse
  
 ; Print to txt file if desired
 ;openw, 1, 'output_v1/'+extra.name+'_fit_multi_pso.txt',/append
@@ -94,7 +94,7 @@ compile_opt hidden,idl2
 opso->get_property,fresult=fresult
 
 ; Write current PSO result to txt file
-openw, 1, 'output_v1/'+functargs.name+'_fit_multi_pso_best_'+strtrim(fix(functargs.sequence),2)+'.txt',/append
+openw, 1, 'output_v2/'+functargs.name+'_fit_multi_pso_best_'+strtrim(fix(functargs.sequence),2)+'.txt',/append
 writeu,1,'Iteration: '+strtrim(string(iter),2)
 writeu,1,'fresult : ',fresult
 
@@ -126,20 +126,18 @@ n = 40 ; Number of agents in the swarm
 ; *************************************************** ;
 ; Store data 
 
-restore,'old_savfiles_mcmc/'+name1+'.sav'
+restore,'savfiles_MIPS_SED/'+name1+'.sav'
 
 err_chk=where( final_specerr le .01*final_spec)
 final_specerr(err_chk)=.01*final_spec[err_chk]
 ;data_base=[transpose(final_wave),transpose(final_spec),transpose(final_specerr)]
-dof=n_elements(final_wave)-n_elements(prange(0,*)) + 1.0  ; Added 1 to account for the extra degree due to mips70
+dof=n_elements(final_wave)-n_elements(prange(0,*)); + 1.0  ; Added 1 to account for the extra degree due to mips70
 
 functargs =  {  wave:final_wave,    $
-               spec:final_spec,    $
-               error:final_specerr,$
-                dof:dof,$
-                name:name1,$
-                mips70_val:mips70_val,$
-                mips70_error:mips70_error,$
+                spec:final_spec,    $
+                error:final_specerr,$
+                dof:dof,            $
+                name:name1,         $
                 sequence: sequence }
 
 ; Store desired outcome (i.e. actual spectrum)
@@ -149,7 +147,7 @@ functargs =  {  wave:final_wave,    $
  header_lines[0] = '/  PSO Fit -  Dust Model - Jang Condell et al. 2013, Mittal et al. 2013'
  header_lines[1] = '/  Spitzer IRS spectrum, Chen et al. 2013'
  sxaddhist, header_lines,header1
- file='output_v1/'+name1+'_chn_pso_multi_part_'+strtrim(fix(sequence),1)+'.fits'
+ file='output_v2/'+name1+'_chn_pso_multi_part_'+strtrim(fix(sequence),1)+'.fits'
  FITS_WRITE,file,data_base,header1
  undefine,data_base;
 

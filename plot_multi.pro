@@ -38,7 +38,7 @@ pro plot_multi, object_name
 ; generated through mcmc_m_mips_v1
 
 ; Get result of simulation to plot model
-mcmc_result = readfits('output_v1/'+object_name+'_chn_mcmc_multi_part.fits',EXTEN_NO=51)
+mcmc_result = readfits('output_v2/'+object_name+'_chn_mcmc_multi_part.fits',EXTEN_NO=51)
 link=mcmc_result[0:11]
 chisq_best = mcmc_result[12]
 
@@ -97,18 +97,36 @@ ki = round(kuruczindex) < (n_elements(tarray)-1) > 0
 ; folivine = [0.0, 1.0]                                               
 
 restore, grainfiles[ki]
-restore,'old_savfiles_mcmc/'+object_name+'.sav'
+restore,'savfiles_MIPS_SED/'+object_name+'.sav'
       
-wave_irs = [final_wave,71.42]
-fl_diff = [final_spec,mips70_val]
-uncer_irs = [final_specerr,mips70_error]
+wave_irs = final_wave ;[final_wave,71.42]
+fl_diff = final_spec ;[final_spec,mips70_val]
+uncer_irs = final_specerr ;[final_specerr,mips70_error]
+
+; *************************************************** ;
+; Separate out data types and set colors/markers
+
+IRS_wave = wave_irs[where(strmatch(final_source, 'SpitzerIRS') EQ 1)]
+IRS_spec = fl_diff[where(strmatch(final_source, 'SpitzerIRS') EQ 1)]
+IRS_color = 1 ; red
+IRS_psym = 1 ; plus
+
+MIPS70_wave = wave_irs[where(strmatch(final_source, 'Spitzer_MIPS_Phot') EQ 1)]
+MIPS70_spec = fl_diff[where(strmatch(final_source, 'Spitzer_MIPS_Phot') EQ 1)]
+MIPS70_color = 2 ; red
+MIPS70_psym = 6 ; square
+
+MIPS_SED_wave = wave_irs[where(strmatch(final_source, 'SpitzerMIPS_SED') EQ 1)]
+MIPS_SED_spec = fl_diff[where(strmatch(final_source, 'SpitzerMIPS_SED') EQ 1)]
+MIPS_SED_color = 3 ; blue
+MIPS_SED_psym = 5 ; triangle
 
 ; *************************************************** ;
 ; Begin plotting
 
 ; Set up device
 set_plot,'PS'
-device, filename ='plots/'+object_name+'_multi.ps',/COLOR,/HELVETICA,XSIZE=15,YSIZE=12.5 & !p.font =0
+device, filename ='plots/MIPS_SED'+object_name+'_multi.ps',/COLOR,/HELVETICA,XSIZE=15,YSIZE=12.5 & !p.font =0
 loadct,39
 !p.background=16777215
 
@@ -123,6 +141,11 @@ plot,wave_irs,fl_diff,title=object_name+' (Two-Grain Model)', $
 
 ; Connect the points
 oplot,wave_irs,fl_diff,color=0
+
+; Overlay data with different colors and markers
+oplot,IRS_wave,IRS_spec,color=IRS_color,psym=IRS_psym
+oplot,MIPS70_wave,MIPS70_spec,color=MIPS70_color,psym=MIPS70_psym
+oplot,MIPS_SED_wave,MIPS_SED_spec,color=MIPS_SED_color,psym=MIPS_SED_psym
 
 ; Add error bars
 oploterr,wave_irs,fl_diff,uncer_irs;,psym=1;,color=0

@@ -10,7 +10,12 @@ CD, home_dir
 ; Run program
 name = 'HD105857'
 fittype = 'disk_mips' ;'multi_mips'
+
 fits_v1, name=name, fittype=fittype
+
+; Print plot of result
+plot_multi, name
+
 
 ; Get Data
 ; Gives error for cggreek - variable undefined - when run from command line, but not GUI

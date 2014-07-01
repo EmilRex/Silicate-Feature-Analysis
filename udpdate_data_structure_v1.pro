@@ -64,7 +64,8 @@ END
 pro udpdate_data_structure_v1,$
   dir_in=dir_in, dir_out=dir_out, new_dir=new_dir,$
   initial=initial, new_data=new_data,$
-  source_name=source_name, plot=plot
+  source_name=source_name, plot=plot,$
+  scale_MIPS70=scale_MIPS70
 
 ; Set iterators
 loop_one = 1
@@ -129,7 +130,7 @@ FOR i=0, (n_elements(name_list)-1) DO BEGIN
 ; *************************************************** ;
   ; If not first time, merely update data 
   ; Call Example:
-  ;udpdate_data_structure_v1, dir_in='savfiles',new_dir='new_MIPS_data',dir_out='savfiles_MIPS_SED', /new_data,source_name = 'SpitzerMIPS_SED'
+  ;udpdate_data_structure_v1, dir_in='savfiles',new_dir='new_MIPS_data',dir_out='savfiles_MIPS_SED', /new_data,source_name = 'SpitzerMIPS_SED', /scale_MIPS70
   
   IF KEYWORD_SET(new_data) THEN BEGIN
     
@@ -155,11 +156,38 @@ FOR i=0, (n_elements(name_list)-1) DO BEGIN
           NEW_SOURCE = MAKE_ARRAY(n_elements(NEW_WAVE), 1, /STRING, VALUE = source_name)
         ENDELSE
         
-        ; Append data structure
-        FINAL_WAVE = [FINAL_WAVE, NEW_WAVE]
-        FINAL_SPEC = [FINAL_SPEC, NEW_SPEC]
-        FINAL_SPECERR = [FINAL_SPECERR, NEW_SPECERR]
-        FINAL_SOURCE = [FINAL_SOURCE, NEW_SOURCE]
+        ; Find scale/weighting for data points by looking at their spread
+        IRS_wave = FINAL_WAVE[where(strmatch(FINAL_SOURCE, 'SpitzerIRS') EQ 1)] 
+        IRS_density = n_elements(FINAL_WAVE)/(max(FINAL_WAVE)-min(FINAL_WAVE))
+        NEW_density = n_elements(NEW_WAVE)/(max(NEW_WAVE)-min(NEW_WAVE))
+        scale = FLOOR(IRS_density/NEW_density)
+        
+        ;print, new_name[j]+' IRS points: ', n_elements(FINAL_WAVE)
+        ;print, new_name[j]+' NEW points: ', n_elements(NEW_WAVE)
+        ;print, new_name[j]+' scaled by: ',scale
+        
+        ; Append data structure recursively to account for data scale
+        FOR k = 0, scale-1 DO BEGIN
+          FINAL_WAVE = [FINAL_WAVE, NEW_WAVE]
+          FINAL_SPEC = [FINAL_SPEC, NEW_SPEC]
+          FINAL_SPECERR = [FINAL_SPECERR, NEW_SPECERR]
+          FINAL_SOURCE = [FINAL_SOURCE, NEW_SOURCE]
+        ENDFOR
+        
+        ; Scale MIPS70 point if desired
+        IF KEYWORD_SET(scale_MIPS70) THEN BEGIN
+          MIPS70_wave = FINAL_WAVE[where(strmatch(FINAL_SOURCE, 'Spitzer_MIPS_Phot') EQ 1)]
+          MIPS70_spec = FINAL_SPEC[where(strmatch(FINAL_SOURCE, 'Spitzer_MIPS_Phot') EQ 1)]
+          MIPS70_specerr = FINAL_SPECERR[where(strmatch(FINAL_SOURCE, 'Spitzer_MIPS_Phot') EQ 1)]
+          MIPS70_source = 'Spitzer_MIPS_Phot'
+          
+          FOR k = 0, scale-2 DO BEGIN ; -2 because already in there once
+            FINAL_WAVE = [FINAL_WAVE, MIPS70_wave]
+            FINAL_SPEC = [FINAL_SPEC, MIPS70_spec]
+            FINAL_SPECERR = [FINAL_SPECERR, MIPS70_specerr]
+            FINAL_SOURCE = [FINAL_SOURCE, MIPS70_source]
+          ENDFOR
+        ENDIF
         
         ; Sort arrays by wavelength
         order = SORT(FINAL_WAVE)

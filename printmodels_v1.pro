@@ -53,7 +53,7 @@ pro printmodels_v1, name1, fittype=fittype,ps=ps,nstep=nstep,$
 if not keyword_set(fittype) then fittype=[0]
 
 ; Load object data from IDL savefile
-restore,'old_savfiles_mcmc/'+name1+'.sav' ; Changed to new directory name for the time being
+restore,'savfiles_MIPS_SED/'+name1+'.sav' ; Changed to new directory name for the time being
 
 ; Fill 'params' structure with data passed by fits
 ; and with data from object savefile
@@ -63,8 +63,6 @@ params={distval:dist,$
         lambdafit:final_wave,$
         diskfit:final_spec,$
         errfit:final_specerr,$
-        mips70_val:mips70_val,$
-        mips70_error:mips70_error,$
         name_obj:name1,$
         seed : seed,$
         nstep :nstep,$
