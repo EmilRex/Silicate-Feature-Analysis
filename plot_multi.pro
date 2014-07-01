@@ -104,6 +104,24 @@ fl_diff = final_spec ;[final_spec,mips70_val]
 uncer_irs = final_specerr ;[final_specerr,mips70_error]
 
 ; *************************************************** ;
+; Separate out data types and set colors/markers
+
+IRS_wave = wave_irs[where(strmatch(final_source, 'SpitzerIRS') EQ 1)]
+IRS_spec = fl_diff[where(strmatch(final_source, 'SpitzerIRS') EQ 1)]
+IRS_color = 1 ; red
+IRS_psym = 1 ; plus
+
+MIPS70_wave = wave_irs[where(strmatch(final_source, 'Spitzer_MIPS_Phot') EQ 1)]
+MIPS70_spec = fl_diff[where(strmatch(final_source, 'Spitzer_MIPS_Phot') EQ 1)]
+MIPS70_color = 2 ; red
+MIPS70_psym = 6 ; square
+
+MIPS_SED_wave = wave_irs[where(strmatch(final_source, 'SpitzerMIPS_SED') EQ 1)]
+MIPS_SED_spec = fl_diff[where(strmatch(final_source, 'SpitzerMIPS_SED') EQ 1)]
+MIPS_SED_color = 3 ; blue
+MIPS_SED_psym = 5 ; triangle
+
+; *************************************************** ;
 ; Begin plotting
 
 ; Set up device
@@ -123,6 +141,11 @@ plot,wave_irs,fl_diff,title=object_name+' (Two-Grain Model)', $
 
 ; Connect the points
 oplot,wave_irs,fl_diff,color=0
+
+; Overlay data with different colors and markers
+oplot,IRS_wave,IRS_spec,color=IRS_color,psym=IRS_psym
+oplot,MIPS70_wave,MIPS70_spec,color=MIPS70_color,psym=MIPS70_psym
+oplot,MIPS_SED_wave,MIPS_SED_spec,color=MIPS_SED_color,psym=MIPS_SED_psym
 
 ; Add error bars
 oploterr,wave_irs,fl_diff,uncer_irs;,psym=1;,color=0
