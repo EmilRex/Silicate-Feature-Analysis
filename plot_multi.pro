@@ -32,13 +32,15 @@
 ; *************************************************** ;
 pro plot_multi, object_name
 
+COMMON file_path, in_dir, out_dir
+
 ; -------------------------------------------------- ;
 ; Replace with new structure for reading in data. 
 ; Take from _chn_mcmc_multi_part.fits, extension = final output
 ; generated through mcmc_m_mips_v1
 
 ; Get result of simulation to plot model
-mcmc_result = readfits('output_v2/'+object_name+'_chn_mcmc_multi_part.fits',EXTEN_NO=51)
+mcmc_result = readfits(out_dir+'/'+object_name+'_chn_mcmc_multi_part.fits',EXTEN_NO=51)
 link=mcmc_result[0:11]
 chisq_best = mcmc_result[12]
 
@@ -97,7 +99,7 @@ ki = round(kuruczindex) < (n_elements(tarray)-1) > 0
 ; folivine = [0.0, 1.0]                                               
 
 restore, grainfiles[ki]
-restore,'savfiles_MIPS_SED/'+object_name+'.sav'
+restore,in_dir+'/'+object_name+'.sav'
       
 wave_irs = final_wave ;[final_wave,71.42]
 fl_diff = final_spec ;[final_spec,mips70_val]

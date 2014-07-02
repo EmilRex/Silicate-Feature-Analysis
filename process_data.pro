@@ -1,5 +1,35 @@
-
-  ; *************************************************** ;
+; +
+; NAME:
+;  process_data
+;
+; PURPOSE:
+;  Join Spitzer IRS data with Spitzer MIPS SED data. Scales MIPS SED
+;  data through comparison of integrated emission with MIPS 70 point.
+;  Also weights the MIPS SED data by looking at data/wavelength density.
+;
+; INPUTS:
+;   NONE
+;
+; KEYWORDS
+;   PLOT: Plot object spectrum
+;
+; OUTPUTS:
+;   *NAME*.sav - IDL save file with updated data file sorted by wavelength
+;
+; AUTHORS:
+;  Emil Christensen - chris2er@dukes.jmu.edu
+;  Christine Chen - cchen@stsci.edu
+;
+; DISCLAIMER
+;  This software is provided as is without any warranty whatsoever.
+;  Permission to use, copy, modify, and distribute modified or
+;  unmodified copies is granted, provided this disclaimer
+;  is included unchanged.
+;
+; MODIFICATION HISTORY:
+;  Written by EC (7/2/2014)
+; -
+; *************************************************** ;
   
 FUNCTION strip_ext, dir, ext
   ; ext - sav,dat,etc
@@ -20,11 +50,6 @@ FUNCTION strip_ext, dir, ext
   
   return, names
 END
-
-
-
-
-
 
 
 ; *************************************************** ;

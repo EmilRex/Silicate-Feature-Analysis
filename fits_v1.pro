@@ -39,6 +39,8 @@
 ; *************************************************** ;
 pro fits_v1, name=name,fittype=fittype,DO_OLD = do_old
 
+COMMON file_path, in_dir, out_dir
+
 ; Load text file with names, Teff, amin and dist
 fmt='a,f,f,f'
 readcol,'input_files/input_param_file.txt',F=fmt,catalog_name,c_teff,c_amin,c_dist_val
@@ -139,7 +141,7 @@ case fittype of
              dist=dist_val,amin=amin,seed=best_val1[0:5],cnt=1,scale_val=0,num_chains=10
 
              ; Read in and store data from printmodels_v1 called just above
-             data = readfits('output_v1/'+name+'_chn_mcmc_single_part.fits',EXTEN_NO=1)
+             data = readfits(out_dir+'/'+name+'_chn_mcmc_single_part.fits',EXTEN_NO=1)
 
              ; ???
              if ( min(-2.*data(6,99,*)) le 5.0) then begin
@@ -230,7 +232,7 @@ case fittype of
             dist=dist_val,amin=amin,seed=best_val2[0:9],cnt=1,scale_val=0,num_chains=15
 
             ; Read in and store data from printmodels_v1 called just above
-            data = readfits('output_v1/'+name+'_chn_mcmc_disk_part.fits',EXTEN_NO=1)
+            data = readfits(out_dir+'/'+name+'_chn_mcmc_disk_part.fits',EXTEN_NO=1)
 
             ; ???
              if ( min(-2.*data(10,99,*)) le 5.0) then begin
@@ -319,7 +321,7 @@ case fittype of
               printmodels_v1,name,fittype=[7],ps='X',nstep=100,thin_val=1,teff=Teff,$
               dist=dist_val,amin=amin,seed=best_val2[0:9],cnt=1,scale_val=0,num_chains=15
 
-              data = readfits('output_v1/'+name+'_chn_mcmc_disk_part.fits',EXTEN_NO=1)
+              data = readfits(out_dir+'/'+name+'_chn_mcmc_disk_part.fits',EXTEN_NO=1)
 
               if ( min(-2.*data(10,99,*)) le 5.0) then begin
                 yes = 1.0
@@ -401,7 +403,7 @@ case fittype of
               printmodels_v1,name,fittype=[4],ps='X',nstep=100,thin_val=1,teff=Teff,$
               dist=dist_val,amin=amin,seed=best_val3[0:8],cnt=1,scale_val=0,num_chains=15
 
-              data = readfits('output_v1/'+name+'_chn_mcmc_ring_part.fits',EXTEN_NO=1)
+              data = readfits(out_dir+'/'+name+'_chn_mcmc_ring_part.fits',EXTEN_NO=1)
 
               if ( min(-2.*data(9,99,*)) le 5.0) then begin
                 yes=1.0
@@ -484,7 +486,7 @@ case fittype of
               printmodels_v1,name,fittype=[1],ps='X',nstep=100,thin_val=1,teff=Teff,$
               dist=dist_val,amin=amin,seed=best_val4[0:11],cnt=1,scale_val=0,num_chains=20
 
-              data = readfits('output_v1/'+name+'_chn_mcmc_multi_part.fits',EXTEN_NO=1)
+              data = readfits(out_dir+'/'+name+'_chn_mcmc_multi_part.fits',EXTEN_NO=1)
 
              if ( min(-2.*data(12,99,*)) le 5.0) then begin
                 yes=1.0
@@ -582,7 +584,7 @@ case fittype of
               printmodels_v1,name,fittype=[6],ps='X',nstep=100,thin_val=1,teff=Teff,$
               dist=dist_val,amin=amin,seed=best_val4[0:11],cnt=1,scale_val=0,num_chains=20
 
-              data = readfits('output_v2/'+name+'_chn_mcmc_multi_part.fits',EXTEN_NO=1)
+              data = readfits(out_dir+'/'+name+'_chn_mcmc_multi_part.fits',EXTEN_NO=1)
 
               if ( min(-2.*data(12,99,*)) le 5.0) then begin
                 yes=1.0

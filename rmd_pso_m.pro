@@ -416,9 +416,11 @@ while (ftol gt self.ftol) and (i lt self.niter) do begin
 ; (*self.fbest_ptr)[j]
 ; (*self.p_ptr)[*,j]
 
+COMMON file_path, in_dir, out_dir
+
       pso_res = [*self.p_ptr,transpose(*self.f_ptr)]
       tpp = *self.functargs_ptr
-        file='output_v2/'+tpp.name+'_chn_pso_multi_part_'+strtrim(fix(tpp.sequence),2)+'.fits'
+        file=out_dir+'/'+tpp.name+'_chn_pso_multi_part_'+strtrim(fix(tpp.sequence),2)+'.fits'
         FITS_OPEN,file,fcb,/append
         fxhmake,header1,pso_res,/date
         fxaddpar,header1,'total_num_particles',self.num_particles

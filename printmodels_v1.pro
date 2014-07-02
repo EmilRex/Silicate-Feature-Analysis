@@ -49,11 +49,13 @@ pro printmodels_v1, name1, fittype=fittype,ps=ps,nstep=nstep,$
   thin_val=thin_val,teff=teff,dist=dist,amin=amin,seed=seed,$
   cnt=cnt,scale_val =scale_val,num_chains=num_chains
 
+COMMON file_path, in_dir, out_dir
+
 ; Assign default if fit type not set
 if not keyword_set(fittype) then fittype=[0]
 
 ; Load object data from IDL savefile
-restore,'savfiles_MIPS_SED/'+name1+'.sav' ; Changed to new directory name for the time being
+restore,in_dir+'/'+name1+'.sav' ; Changed to new directory name for the time being
 
 ; Fill 'params' structure with data passed by fits
 ; and with data from object savefile
