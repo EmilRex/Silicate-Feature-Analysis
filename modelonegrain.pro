@@ -42,7 +42,7 @@ COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_em
        enstatite_emit, effectiveTempArray, stellar_emit
 
 ;restore, 'graintempdata.sav'
-;restore, 'qtables_withcrys.sav' ; qastrosil, qolivine, qpyroxene                                                                                                                                                                   
+;restore, 'qtables_withcrys2.sav' ; qastrosil, qolivine, qpyroxene                                                                                                                                                                   
  
 ; Define paramters passed = [T1, a1, f1, scale1]                                                                                                                                                                                                    
 temp1     = params[0]
@@ -76,6 +76,8 @@ scale2 = 0.0
 spect1 = !pi*blackbody(lambda,temp1)* $
          ( reform(qabs1,n_elements(lambda))*scale1 + $
            reform(abscoeff,n_elements(lambda))*scale2 )
+
+stop
 
 ; Return the flux and exit
 flux = spect1

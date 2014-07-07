@@ -110,26 +110,37 @@ FOR i=0, (n_elements(name_list)-1) DO BEGIN
       ENDIF
       
       ; *************************************************** ;
-      ; Correct MIPS SED data by comparing with MIPS70
+      ; Normalize MIPS SED data by comparing with MIPS70
       
-      ; Define arrays
-      expected_flux = fltarr(n_elements(mips_sed_wave))
+;      c = 3.0e10 ; cm/s
+;      to_cm = 1.0e-4
       
+      ; Find delta lambda
+;      dlambda = (max(mips_sed_wave)-min(mips_sed_wave))*to_cm
+;      nu_to_lambda = c/(mips_sed_wave*to_cm)^2
+
       ; Interpolate responses at MIPS SED wavelengths
-      interpolated_response = interpol(response,resp_wave,mips_sed_wave)
-    
+;      interpolated_response = interpol(response,resp_wave,mips_sed_wave)
+
       ; Adjust
-      expected_flux = interpolated_response*mips_sed_spec
-      actual = INT_TABULATED(mips_sed_wave,expected_flux)
-      ; Sum across elements
-      tot_expected_flux = TOTAL(expected_flux)
-    
+;      synthetic_F70 = interpolated_response*mips_sed_spec*nu_to_lambda
+;      tot_expected_flux = INT_TABULATED(mips_sed_wave,synthetic_F70)/dlambda
+
+;      MIPS70_lambda = float((MIPS70_VAL*(c/(71.42*to_cm)^2)))
+
       ; Find scaling factor
-      scale_factor = MIPS70_VAL/tot_expected_flux
-     stop      
+;      scale_factor = MIPS70_lambda/tot_expected_flux
+
+      intflux=10^(interpol(alog10(mips_sed_spec),alog10(mips_sed_wave*1.0e-4),alog10(resp_wave)))
+      flux70=int_tabulated(resp_wave,intflux*response)/int_tabulated(resp_wave,response)*1.0e26
+
+      scale_factor = MIPS70_VAL/flux70
+      
+
+stop
       ; Scale
       mips_sed_spec = scale_factor*mips_sed_spec
-
+        
       ; *************************************************** ;
       ; Concatenate and save
       mips_sed_source = MAKE_ARRAY(n_elements(mips_sed_wave), 1, /STRING, VALUE = 'SpitzerMIPS_SED')

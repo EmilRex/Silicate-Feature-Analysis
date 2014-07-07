@@ -7,7 +7,7 @@ pro dist
 readcol,'qabs/qabs_pyrmg50_1p5.txt',wave,qabs
 ;readcol,'bhmie/qabs_olivine5_1p7.dat',wave,qabs
 
-tlambda=wave*1.0e-4 ; convert from microns to 
+tlambda=wave*1.0e-4 ; convert from microns to ?
 r=findgen(500)*1.5d13
 tlambdap=[tlambda,0,0]
 tlambdam=[0,0,tlambda]
