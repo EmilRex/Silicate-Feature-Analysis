@@ -90,13 +90,13 @@ end
 pro pso_test_iterproc,  func, p, iter, interrupt, functargs = functargs, oref = opso, _Extra = extra
 ; ****************************************************************************************************** ;
 
-COMMON file_path, in_dir, out_dir
+COMMON file_path, in_dir, out_dir, fit_name
 
 compile_opt hidden,idl2
 opso->get_property,fresult=fresult
 
 ; Write current PSO result to txt file
-openw, 1, out_dir+'/'+functargs.name+'_fit_multi_pso_best_'+strtrim(fix(functargs.sequence),2)+'.txt',/append
+openw, 1, out_dir+'/'+functargs.name+'_fit_'+fit_name+'_pso_best_'+strtrim(fix(functargs.sequence),2)+'.txt',/append
 writeu,1,'Iteration: '+strtrim(string(iter),2)
 writeu,1,'fresult : ',fresult
 
@@ -114,7 +114,7 @@ end
 pro pso_min_example_m,amin=amin,Teff=teff_val,name=name1,output=output1,out_par=functargs,sequence=sequence
 ; ****************************************************************************************************** ;
 
-COMMON file_path, in_dir, out_dir
+COMMON file_path, in_dir, out_dir, fit_name
 
 ; Uses files listed above such as LINSPACE, F1_EVAL,
 ; F1_PLOT, PSO_TEST_CONVERT, PSO_TEST_ITERPROC
@@ -150,7 +150,7 @@ functargs =  {  wave:final_wave,    $
  header_lines[0] = '/  PSO Fit -  Dust Model - Jang Condell et al. 2013, Mittal et al. 2013'
  header_lines[1] = '/  Spitzer IRS spectrum, Chen et al. 2013'
  sxaddhist, header_lines,header1
- file=out_dir+'/'+name1+'_chn_pso_multi_part_'+strtrim(fix(sequence),1)+'.fits'
+ file=out_dir+'/'+name1+'_chn_pso_'+fit_name+'_part_'+strtrim(fix(sequence),1)+'.fits'
  FITS_WRITE,file,data_base,header1
  undefine,data_base;
 

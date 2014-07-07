@@ -120,16 +120,16 @@ FOR i=0, (n_elements(name_list)-1) DO BEGIN
     
       ; Adjust
       expected_flux = interpolated_response*mips_sed_spec
-    
+      actual = INT_TABULATED(mips_sed_wave,expected_flux)
       ; Sum across elements
       tot_expected_flux = TOTAL(expected_flux)
     
       ; Find scaling factor
       scale_factor = MIPS70_VAL/tot_expected_flux
-      
+     stop      
       ; Scale
       mips_sed_spec = scale_factor*mips_sed_spec
-     
+
       ; *************************************************** ;
       ; Concatenate and save
       mips_sed_source = MAKE_ARRAY(n_elements(mips_sed_wave), 1, /STRING, VALUE = 'SpitzerMIPS_SED')

@@ -32,7 +32,7 @@
 ; *************************************************** ;
 pro plot_multi, object_name
 
-COMMON file_path, in_dir, out_dir
+COMMON file_path, in_dir, out_dir, fit_name
 
 ; -------------------------------------------------- ;
 ; Replace with new structure for reading in data. 
@@ -40,7 +40,7 @@ COMMON file_path, in_dir, out_dir
 ; generated through mcmc_m_mips_v1
 
 ; Get result of simulation to plot model
-mcmc_result = readfits(out_dir+'/'+object_name+'_chn_mcmc_multi_part.fits',EXTEN_NO=51)
+mcmc_result = readfits(out_dir+'/'+object_name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=51)
 link=mcmc_result[0:11]
 chisq_best = mcmc_result[12]
 
@@ -113,10 +113,10 @@ IRS_spec = fl_diff[where(strmatch(final_source, 'SpitzerIRS') EQ 1)]
 IRS_color = 1 ; red
 IRS_psym = 1 ; plus
 
-MIPS70_wave = wave_irs[where(strmatch(final_source, 'Spitzer_MIPS_Phot') EQ 1)]
-MIPS70_spec = fl_diff[where(strmatch(final_source, 'Spitzer_MIPS_Phot') EQ 1)]
-MIPS70_color = 2 ; red
-MIPS70_psym = 6 ; square
+;MIPS70_wave = wave_irs[where(strmatch(final_source, 'Spitzer_MIPS_Phot') EQ 1)]
+;MIPS70_spec = fl_diff[where(strmatch(final_source, 'Spitzer_MIPS_Phot') EQ 1)]
+;MIPS70_color = 2 ; red
+;MIPS70_psym = 6 ; square
 
 MIPS_SED_wave = wave_irs[where(strmatch(final_source, 'SpitzerMIPS_SED') EQ 1)]
 MIPS_SED_spec = fl_diff[where(strmatch(final_source, 'SpitzerMIPS_SED') EQ 1)]
@@ -128,7 +128,7 @@ MIPS_SED_psym = 5 ; triangle
 
 ; Set up device
 set_plot,'PS'
-device, filename ='plots/MIPS_SED'+object_name+'_multi.ps',/COLOR,/HELVETICA,XSIZE=15,YSIZE=12.5 & !p.font =0
+device, filename ='plots/MIPS_SED'+object_name+'_'+fit_name+'.ps',/COLOR,/HELVETICA,XSIZE=15,YSIZE=12.5 & !p.font =0
 loadct,39
 !p.background=16777215
 
@@ -146,7 +146,7 @@ oplot,wave_irs,fl_diff,color=0
 
 ; Overlay data with different colors and markers
 oplot,IRS_wave,IRS_spec,color=IRS_color,psym=IRS_psym
-oplot,MIPS70_wave,MIPS70_spec,color=MIPS70_color,psym=MIPS70_psym
+;oplot,MIPS70_wave,MIPS70_spec,color=MIPS70_color,psym=MIPS70_psym
 oplot,MIPS_SED_wave,MIPS_SED_spec,color=MIPS_SED_color,psym=MIPS_SED_psym
 
 ; Add error bars

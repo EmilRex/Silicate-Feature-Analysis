@@ -39,7 +39,7 @@ function run_fit_prg
 
 compile_opt idl2
 
-COMMON file_path, in_dir, out_dir
+COMMON file_path, in_dir, out_dir, fit_name
 
 ; Create global variables relating to silicate features
 COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
@@ -66,7 +66,7 @@ header_lines = strarr(2)
 header_lines[0] = '/  MCMC Fit - Dust Model - Jang Condell et al. 2013, Mittal et al. 2013'
 header_lines[1] = '/  Spitzer IRS spectrum, Chen et al. 2013'
 sxaddhist, header_lines,header1
-file=out_dir+'/'+params.name_obj+'_chn_mcmc_multi_part.fits'
+file=out_dir+'/'+params.name_obj+'_chn_mcmc_'+fit_name+'_part.fits'
 FITS_WRITE,file,data_base,header1
 
 ; Initialize MCMC chain storage
@@ -243,7 +243,7 @@ for i = 1, params.nstep - 1, 1 do begin ; iterate through nsteps
   ;save, file='output_fin_new/'+params.name_obj+'_chn_mcmc_multi_part.sav',i,nsuccess,nfail,num_chains,param_bnd,data_base,mcmc_res 
   ;print,'Number: ',i
   count++
-  file=out_dir+'/'+params.name_obj+'_chn_mcmc_multi_part.fits'
+  file=out_dir+'/'+params.name_obj+'_chn_mcmc_'+fit_name+'_part.fits'
   FITS_OPEN,file,fcb,/append
   fxhmake,header1,mcmc_res,/date
   fxaddpar,header1,'total_num_chains',num_chains
@@ -278,7 +278,7 @@ if (((-1.)*min_val) le ((-1.)*min_val_glb)) then begin
 endif
 
 ; Write final best value as last extension of associated FITS file
-file=out_dir+'/'+params.name_obj+'_chn_mcmc_multi_part.fits'
+file=out_dir+'/'+params.name_obj+'_chn_mcmc_'+fit_name+'_part.fits'
 FITS_OPEN,file,fcb,/append
 fxhmake,header1,elements,/date
 fxaddpar,header1,'total_num_chains',num_chains

@@ -11,18 +11,19 @@ CD, home_dir
 !PATH=!PATH+':'+Expand_Path('+'+home_dir)
 
 ; Functional directories
-COMMON file_path, in_dir, out_dir
+COMMON file_path, in_dir, out_dir, fit_name
 in_dir = 'savfiles_MIPS_SED_corrected'
 out_dir = 'output_v2'
 
 ; *************************************************** ;
 ; Select object and fit model
 name = 'HD117214'
-fittype = 'multi_mips' ;'multi_mips'
+
+fit_name = 'multi_mips' ;
 
 ; *************************************************** ;
 ; Run program
-fits_v1, name=name, fittype=fittype
+fits_v1, name=name, fittype=fit_name
 
 ; Print plot of result
 plot_multi, name
@@ -30,7 +31,7 @@ plot_multi, name
 ; *************************************************** ;
 ; Print results
 
-mcmc_result = readfits(out_dir+'/'+name+'_chn_mcmc_multi_part.fits',EXTEN_NO=51)
+mcmc_result = readfits(out_dir+'/'+name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=51)
 
 print, 'Parameter results: '
 print, ' '
