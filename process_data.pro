@@ -112,24 +112,28 @@ FOR i=0, (n_elements(name_list)-1) DO BEGIN
       ; *************************************************** ;
       ; Normalize MIPS SED data by comparing with MIPS70
       
+      ; Define constants
       c = 3.0e10 ; cm/s
       to_cm = 1.0e-4
       
-      int1 = (c*1.0e-23*mips_sed_spec)/(mips_sed_wave*to_cm)^2
+      ;Define integrand
+      int1 = (c*1.0e-23*mips_sed_spec)/(mips_sed_wave*to_cm)^2 ; convert units
+      int2 = interpol(int1,mips_sed_wave*to_cm,resp_wave*to_cm) ; get flux at right spots
+      int3 = int2*response ; multiply flux and response
       
-      int2 = interpol(int1,mips_sed_wave*to_cm,resp_wave*to_cm)
-      
-      int3 = int2*response
-      
+      ; Find integral of filter
       int_filter = int_tabulated(resp_wave*to_cm,response)
       
+      ; Integrate the MIPS SED over the bandpass
       synth_f70 = int_tabulated(resp_wave*to_cm,int3)/int_filter
       
+      ; Convert MIPS 70 to proper units
       MIPS_as_flambda = (MIPS70_VAL*c*1.0e-23)/(71.42*to_cm)^2
 
+      ; Find the normalization constant
       norm = MIPS_as_flambda/synth_f70
 
-      ; Scale
+      ; Normalize
       mips_sed_spec = norm*mips_sed_spec
         
       ; *************************************************** ;
@@ -140,7 +144,7 @@ FOR i=0, (n_elements(name_list)-1) DO BEGIN
       ; Find weighting for data points by looking at their spread
       IRS_density = n_elements(FINAL_WAVE)/(max(FINAL_WAVE)-min(FINAL_WAVE))
       mips_sed_density = n_elements(mips_sed_wave)/(max(mips_sed_wave)-min(mips_sed_wave))
-      weight = FLOOR(IRS_density/mips_sed_density)
+      weight = round(IRS_density/mips_sed_density)
       
       ; Append data structure recursively to account for data weight
       FOR k = 0, weight-1 DO BEGIN
