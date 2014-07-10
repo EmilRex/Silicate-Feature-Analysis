@@ -123,12 +123,23 @@ MIPS_SED_spec = fl_diff[where(strmatch(final_source, 'SpitzerMIPS_SED') EQ 1)]
 MIPS_SED_color = 3 ; blue
 MIPS_SED_psym = 5 ; triangle
 
+; Calculate model spectrum
+link[2]=10^(link[2])
+link[8]=10^(link[8])
+lines = [1,2,3,4]
+
+x_start = min(wave_irs)
+x_range = max(wave_irs)-min(wave_irs)
+model_x = (findgen(round(x_range)*100)/100 + x_start)
+out_model = modeltwograin(model_x, link)
+tmp1 = round(chisq_best*100.)/100.
+
 ; *************************************************** ;
 ; Begin plotting
 
 ; Set up device
 set_plot,'PS'
-device, filename ='plots/MIPS_SED'+object_name+'_'+fit_name+'.ps',/COLOR,/HELVETICA,XSIZE=15,YSIZE=12.5 & !p.font =0
+device, filename ='plots/MIPS_SED_'+object_name+'_'+fit_name+'.ps',/COLOR,/HELVETICA,XSIZE=15,YSIZE=12.5 & !p.font =0
 loadct,39
 !p.background=16777215
 
@@ -139,7 +150,8 @@ TVLCT,[0,255,0,0],[0,0,255,0],[0,0,0,255]
 plot,wave_irs,fl_diff,title=object_name+' (Two-Grain Model)', $
      ystyle=1,psym=4,xstyle=1,xtitle='Wavelength ('+cggreek('mu')+'m)', $
      ytitle='F'+cggreek('nu')+' (Jy)',charthick=1, thick=1, $
-     xthick=2, ythick=2, charsize=1,color=0
+     xthick=2, ythick=2, charsize=1,color=0, $
+     yrange=[min([out_model,fl_diff]),max([out_model,fl_diff])]
 
 ; Connect the points
 oplot,wave_irs,fl_diff,color=0
@@ -152,15 +164,8 @@ oplot,MIPS_SED_wave,MIPS_SED_spec,color=MIPS_SED_color,psym=MIPS_SED_psym
 ; Add error bars
 oploterr,wave_irs,fl_diff,uncer_irs;,psym=1;,color=0
 
-; Calculate model spectrum
-link[2]=10^(link[2])
-link[8]=10^(link[8])
-lines = [1,2,3,4]
-out_model = modeltwograin(wave_irs, link)
-tmp1 = round(chisq_best*100.)/100.
-
 ; Plot the model
-oplot,wave_irs,out_model,color=1, thick=5,linestyle=lines[1]
+oplot,model_x,out_model,color=1, thick=5,linestyle=lines[1]
 
 ; Create legend
 ;LEGEND,TEXTOIDL('\chi^{2}/d.o.f. : ')+  strtrim(string(tmp1,format='(f18.2)'),1), /top, /left,color=1,linestyle=lines[1]

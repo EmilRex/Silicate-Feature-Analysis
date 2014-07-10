@@ -1,0 +1,1559 @@
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote
+END
+cgobj_isa.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgobj_isa.pro
+END
+cgzplot.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgzplot.pro
+END
+cgmap_gshhs.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgmap_gshhs.pro
+END
+cgappendtofilename.pro
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgappendtofilename.pro
+END
+cglayout.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cglayout.pro
+END
+setdefaultvalue.pro
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/setdefaultvalue.pro
+END
+cgwindow_setdefs.pro
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgwindow_setdefs.pro
+END
+clipboard.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/clipboard.pro
+END
+cgpickfile.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgpickfile.pro
+END
+contrastzoom.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/contrastzoom.pro
+END
+cgcbar2kml.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgcbar2kml.pro
+END
+sort_nd.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/sort_nd.pro
+END
+ps_end.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/ps_end.pro
+END
+cgtaylordiagram.pro
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgtaylordiagram.pro
+END
+getprimaryscreensize.pro
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/getprimaryscreensize.pro
+END
+cgresizeimage.pro
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgresizeimage.pro
+END
+cgimagegroup__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgimagegroup__define.pro
+END
+whocalledme.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/whocalledme.pro
+END
+cgwarptomap.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgwarptomap.pro
+END
+ncdf_dimension__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/ncdf_dimension__define.pro
+END
+cgtext.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgtext.pro
+END
+cgfindcoyotefiles.pro
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgfindcoyotefiles.pro
+END
+cglegenditem__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cglegenditem__define.pro
+END
+fsc_plotwindow.pro
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/fsc_plotwindow.pro
+END
+cgkml2kmz.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgkml2kmz.pro
+END
+cw_spacer.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cw_spacer.pro
+END
+cgpixmapwindow__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgpixmapwindow__define.pro
+END
+image_dimensions.pro
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/image_dimensions.pro
+END
+cindex.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cindex.pro
+END
+linkedlist__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/linkedlist__define.pro
+END
+README.txt
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/README.txt
+END
+cgwindow.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgwindow.pro
+END
+imageselect.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/imageselect.pro
+END
+logscl.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/logscl.pro
+END
+hcolorbar__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/hcolorbar__define.pro
+END
+ncdf_isvalidfile.pro
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/ncdf_isvalidfile.pro
+END
+cgpercentiles.pro
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgpercentiles.pro
+END
+cgplot.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgplot.pro
+END
+clipscl.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/clipscl.pro
+END
+dirpath.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/dirpath.pro
+END
+cgzplot__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgzplot__define.pro
+END
+cgshade_surf.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgshade_surf.pro
+END
+cghistoplot.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cghistoplot.pro
+END
+help_var.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/help_var.pro
+END
+cgset_ttfont.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgset_ttfont.pro
+END
+resolve_object.pro
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/resolve_object.pro
+END
+savetomain.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/savetomain.pro
+END
+fsc_colorbar__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/fsc_colorbar__define.pro
+END
+texture_surface.pro
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/texture_surface.pro
+END
+psconfig.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/psconfig.pro
+END
+cgdrawshapes.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgdrawshapes.pro
+END
+cggeomosaic.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cggeomosaic.pro
+END
+ps_background.pro
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/ps_background.pro
+END
+program.documentation.html
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/program.documentation.html
+END
+find_resource_file.pro
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/find_resource_file.pro
+END
+cgzimage.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgzimage.pro
+END
+cgstretch.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgstretch.pro
+END
+cgcoord__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgcoord__define.pro
+END
+reverse_axes.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/reverse_axes.pro
+END
+hdfread.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/hdfread.pro
+END
+histomatch.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/histomatch.pro
+END
+cgcontour.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgcontour.pro
+END
+idl_object__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/idl_object__define.pro
+END
+colorbuttonbitmap.pro
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/colorbuttonbitmap.pro
+END
+arcsample.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/arcsample.pro
+END
+fsc_colorselect.pro
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/fsc_colorselect.pro
+END
+fsccleanup7.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/fsccleanup7.pro
+END
+list_selector.pro
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/list_selector.pro
+END
+floats_equal.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/floats_equal.pro
+END
+cgquery.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgquery.pro
+END
+precipmap.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/precipmap.pro
+END
+name_selector.pro
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/name_selector.pro
+END
+cgshapepointfile.pro
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgshapepointfile.pro
+END
+cgimgscl.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgimgscl.pro
+END
+maxmin.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/maxmin.pro
+END
+cgsurf.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgsurf.pro
+END
+cgimageinfodescribevalues.pro
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgimageinfodescribevalues.pro
+END
+cgdefaultcolor.pro
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgdefaultcolor.pro
+END
+cgrootname.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgrootname.pro
+END
+setdecomposedstate.pro
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/setdecomposedstate.pro
+END
+cgsurface.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgsurface.pro
+END
+sdevscl.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/sdevscl.pro
+END
+cgwindrose.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgwindrose.pro
+END
+cgkml_file__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgkml_file__define.pro
+END
+ncdf_file_examples.pro
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/ncdf_file_examples.pro
+END
+cghistogram.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cghistogram.pro
+END
+cggreek.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cggreek.pro
+END
+bitget.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/bitget.pro
+END
+decomposedcolor.pro
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/decomposedcolor.pro
+END
+getimage.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/getimage.pro
+END
+cgmonths.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgmonths.pro
+END
+gaussscl.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/gaussscl.pro
+END
+pwd.pro
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/pwd.pro
+END
+loglevels.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/loglevels.pro
+END
+cgcolorfill.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgcolorfill.pro
+END
+cgboxplot.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgboxplot.pro
+END
+transform_volume.pro
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/transform_volume.pro
+END
+cgmap_set.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgmap_set.pro
+END
+cgarrow.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgarrow.pro
+END
+asinhscl.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/asinhscl.pro
+END
+.idlwave_catalog
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/.idlwave_catalog
+END
+cgmapgrid__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgmapgrid__define.pro
+END
+cgcheckforsymbols.pro
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgcheckforsymbols.pro
+END
+windowavailable.pro
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/windowavailable.pro
+END
+cggraphicskeywords__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cggraphicskeywords__define.pro
+END
+cgcolorbar.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgcolorbar.pro
+END
+cggoogle_metersperpixel.pro
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cggoogle_metersperpixel.pro
+END
+cgmapplots__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgmapplots__define.pro
+END
+scalemodis.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/scalemodis.pro
+END
+pickcolor.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/pickcolor.pro
+END
+cgsetintersection.pro
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgsetintersection.pro
+END
+error_message.pro
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/error_message.pro
+END
+fpufix.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/fpufix.pro
+END
+checkerboard.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/checkerboard.pro
+END
+cgbarplot.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgbarplot.pro
+END
+cgaddtopath.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgaddtopath.pro
+END
+cgaspect.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgaspect.pro
+END
+xcolors.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/xcolors.pro
+END
+cgkml_object__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgkml_object__define.pro
+END
+fsc_inputfield.pro
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/fsc_inputfield.pro
+END
+cgcolor24.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgcolor24.pro
+END
+cggooglemapmarker__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cggooglemapmarker__define.pro
+END
+cgdefcharsize.pro
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgdefcharsize.pro
+END
+str_size.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/str_size.pro
+END
+cgfixps.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgfixps.pro
+END
+cgdbltostr.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgdbltostr.pro
+END
+cgoplot.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgoplot.pro
+END
+leftjustify.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/leftjustify.pro
+END
+randomnumbergenerator__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/randomnumbergenerator__define.pro
+END
+fsccleanup8.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/fsccleanup8.pro
+END
+ncdf_data__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/ncdf_data__define.pro
+END
+stationplot.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/stationplot.pro
+END
+cgwindow_getdefs.pro
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgwindow_getdefs.pro
+END
+getdecomposedstate.pro
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/getdecomposedstate.pro
+END
+cgtasseledcapcoeffs.pro
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgtasseledcapcoeffs.pro
+END
+cgdemodata.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgdemodata.pro
+END
+cgcolor.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgcolor.pro
+END
+cgmap_continents.pro
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgmap_continents.pro
+END
+textbox.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/textbox.pro
+END
+cgoverplot__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgoverplot__define.pro
+END
+errorlogger__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/errorlogger__define.pro
+END
+cgrandomwald.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgrandomwald.pro
+END
+cghasimagemagick.pro
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cghasimagemagick.pro
+END
+cgcontainer__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgcontainer__define.pro
+END
+cgcoyotegraphic.pro
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgcoyotegraphic.pro
+END
+fsc_psconfig__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/fsc_psconfig__define.pro
+END
+cgprogressbar__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgprogressbar__define.pro
+END
+cgtransparentimage.pro
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgtransparentimage.pro
+END
+cgdisplay.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgdisplay.pro
+END
+ncdf_castdatatype.pro
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/ncdf_castdatatype.pro
+END
+cgdraw_roi.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgdraw_roi.pro
+END
+cgotsu_threshold.pro
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgotsu_threshold.pro
+END
+cgmapvector__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgmapvector__define.pro
+END
+cgreverseindices.pro
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgreverseindices.pro
+END
+cgdcbar.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgdcbar.pro
+END
+cgloggen.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgloggen.pro
+END
+cgkml_groundoverlay__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgkml_groundoverlay__define.pro
+END
+repmat.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/repmat.pro
+END
+cgdotplot.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgdotplot.pro
+END
+fsc_brewer.tbl
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/fsc_brewer.tbl
+END
+cgkml_overlay__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgkml_overlay__define.pro
+END
+cgimageinfo.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgimageinfo.pro
+END
+cgps2pdf.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgps2pdf.pro
+END
+pswindow.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/pswindow.pro
+END
+aspect.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/aspect.pro
+END
+adjustposition.pro
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/adjustposition.pro
+END
+cgkml_lookat__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgkml_lookat__define.pro
+END
+cgncdfmap.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgncdfmap.pro
+END
+scrollwindow.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/scrollwindow.pro
+END
+fit_ellipse.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/fit_ellipse.pro
+END
+cgpolygon.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgpolygon.pro
+END
+vcolorbar__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/vcolorbar__define.pro
+END
+cgconlevels.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgconlevels.pro
+END
+gmascl.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/gmascl.pro
+END
+fsc_ps_setup__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/fsc_ps_setup__define.pro
+END
+cgsnapshot.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgsnapshot.pro
+END
+cgerase.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgerase.pro
+END
+cgplots.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgplots.pro
+END
+cgloadct.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgloadct.pro
+END
+cgshow.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgshow.pro
+END
+cgchangemapprojection.pro
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgchangemapprojection.pro
+END
+cgimage.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgimage.pro
+END
+undefine.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/undefine.pro
+END
+cgpickcolorname.pro
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgpickcolorname.pro
+END
+cgminmax.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgminmax.pro
+END
+cgscatter2d.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgscatter2d.pro
+END
+cgkml_screenoverlay__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgkml_screenoverlay__define.pro
+END
+themonths.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/themonths.pro
+END
+programrootdir.pro
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/programrootdir.pro
+END
+cgjulian2date.pro
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgjulian2date.pro
+END
+fsc_field.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/fsc_field.pro
+END
+cggeomap.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cggeomap.pro
+END
+cgimage2kml.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgimage2kml.pro
+END
+convert_to_type.pro
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/convert_to_type.pro
+END
+binary.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/binary.pro
+END
+image_blend.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/image_blend.pro
+END
+ansi_value.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/ansi_value.pro
+END
+cgshapeinfo.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgshapeinfo.pro
+END
+select_objects.pro
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/select_objects.pro
+END
+ncdf_variable__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/ncdf_variable__define.pro
+END
+jd2time.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/jd2time.pro
+END
+ps_start.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/ps_start.pro
+END
+sharpen.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/sharpen.pro
+END
+fixed_map_grid.pro
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/fixed_map_grid.pro
+END
+cgcleanup.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgcleanup.pro
+END
+cgfileselect__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgfileselect__define.pro
+END
+cgset.pro
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgset.pro
+END
+colorsareidentical.pro
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/colorsareidentical.pro
+END
+maxwindowsize.pro
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/maxwindowsize.pro
+END
+cgpixmap.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgpixmap.pro
+END
+windowimage.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/windowimage.pro
+END
+hdfwrite.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/hdfwrite.pro
+END
+cgscalevector.pro
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgscalevector.pro
+END
+cw_drawcolor.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cw_drawcolor.pro
+END
+cgnumber_formatter.pro
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgnumber_formatter.pro
+END
+cggooglemapwidget.pro
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cggooglemapwidget.pro
+END
+windbarb.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/windbarb.pro
+END
+capfirstletter.pro
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/capfirstletter.pro
+END
+blob_analyzer__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/blob_analyzer__define.pro
+END
+cgps2raster.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgps2raster.pro
+END
+cgmapcontinents__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgmapcontinents__define.pro
+END
+cgsetdifference.pro
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgsetdifference.pro
+END
+rangeof.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/rangeof.pro
+END
+get_object_id.pro
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/get_object_id.pro
+END
+ncdf_file__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/ncdf_file__define.pro
+END
+printwindow.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/printwindow.pro
+END
+ncdf_container__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/ncdf_container__define.pro
+END
+cgrandomindices.pro
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgrandomindices.pro
+END
+cgfindmapboundary.pro
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgfindmapboundary.pro
+END
+cgcentertlb.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgcentertlb.pro
+END
+cgmap_grid.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgmap_grid.pro
+END
+cgmap__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgmap__define.pro
+END
+cgerrplot.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgerrplot.pro
+END
+cgblendimage.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgblendimage.pro
+END
+cgtasseledcap.pro
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgtasseledcap.pro
+END
+textlineformat.pro
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/textlineformat.pro
+END
+scale_vector.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/scale_vector.pro
+END
+printpath.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/printpath.pro
+END
+fsc_fileselect.pro
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/fsc_fileselect.pro
+END
+cgsymcat.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgsymcat.pro
+END
+cgdelete.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgdelete.pro
+END
+ncdf_browser.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/ncdf_browser.pro
+END
+cgtimestamp.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgtimestamp.pro
+END
+cgaxis.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgaxis.pro
+END
+cgcmdwindow__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgcmdwindow__define.pro
+END
+cgsetunion.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgsetunion.pro
+END
+cgsymbol.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgsymbol.pro
+END
+cgkml_feature__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgkml_feature__define.pro
+END
+find_boundary.pro
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/find_boundary.pro
+END
+whoami.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/whoami.pro
+END
+cgshaperange.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgshaperange.pro
+END
+cgcontrol.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgcontrol.pro
+END
+fsc_droplist.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/fsc_droplist.pro
+END
+cggooglemapwidget__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cggooglemapwidget__define.pro
+END
+cgcliptomap.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgcliptomap.pro
+END
+ncdf_attribute__define.pro
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/ncdf_attribute__define.pro
+END
+cgnormalize.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgnormalize.pro
+END
+inside.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/inside.pro
+END
+cgutmzone.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/EPSIG/!svn/ver/251/idl_lib/coyote/cgutmzone.pro
+END

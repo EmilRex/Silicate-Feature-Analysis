@@ -77,7 +77,7 @@ spect1 = !pi*blackbody(lambda,temp1)* $
          ( reform(qabs1,n_elements(lambda))*scale1 + $
            reform(abscoeff,n_elements(lambda))*scale2 )
 
-stop
+;stop
 
 ; Return the flux and exit
 flux = spect1

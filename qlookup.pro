@@ -142,6 +142,6 @@ qscat = reform( qscatall[*,*,0]*olivratio*(1.0-crysfrac) + $
 
 qabs = qext-qscat
 
-stop
+;stop
 return
 end

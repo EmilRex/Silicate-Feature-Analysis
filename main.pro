@@ -17,7 +17,7 @@ out_dir = 'output_v2'
 
 ; *************************************************** ;
 ; Select object and fit model
-name = 'HD117214'
+name = 'HD117214' ; Remember to comment out bad new data points for new runs
 
 fit_name = 'multi_mips' ;
 
@@ -27,6 +27,9 @@ fits_v1, name=name, fittype=fit_name
 
 ; Print plot of result
 plot_multi, name
+
+; See how well mcmc did
+;mcmc_analytics, name
 
 ; *************************************************** ;
 ; Print results
