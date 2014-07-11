@@ -13,11 +13,13 @@ CD, home_dir
 ; Functional directories
 COMMON file_path, in_dir, out_dir, fit_name
 in_dir = 'savfiles_MIPS_SED_corrected'
-out_dir = 'output_v2'
+out_dir = '../Silicate_Feature_Analysis_output'
 
 ; *************************************************** ;
 ; Select object and fit model
-name = 'HD117214' ; Remember to comment out bad new data points for new runs
+; Remember to comment out bad new data points for new runs
+;name = 'HD117214' 
+name = 'HD106906'
 
 fit_name = 'multi_mips' ;
 

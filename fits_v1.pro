@@ -637,8 +637,8 @@ case fittype of
         ; *************************************************** ;
         ; MCMC Routine
           if (yes eq 1.0) then begin
-              printmodels_v1,name,fittype=[6],ps='X',nstep=2000,thin_val=1,teff=Teff,$
-              dist=dist_val,amin=amin,seed=best_val4[0:11],cnt=1,scale_val=0,num_chains=50
+              printmodels_v1,name,fittype=[6],ps='X',nstep=5000,thin_val=1,teff=Teff,$
+              dist=dist_val,amin=amin,seed=best_val4[0:11],cnt=1,scale_val=0,num_chains=20
           endif
 
              
