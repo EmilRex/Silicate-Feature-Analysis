@@ -19,7 +19,8 @@ out_dir = '../Silicate_Feature_Analysis_output'
 ; Select object and fit model
 ; Remember to comment out bad new data points for new runs
 ;name = 'HD117214' 
-name = 'HD106906'
+name = 'HD114082'
+;name = 'HD106906'
 
 fit_name = 'multi_mips' ;
 

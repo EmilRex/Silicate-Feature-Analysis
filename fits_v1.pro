@@ -603,6 +603,9 @@ case fittype of
              pso_min_example_m,name=name,teff=Teff,amin=amin,output= value,sequence = i
              val[*,i]=value
              
+             print,i
+             print,'Chisq: '+string(value[12])
+             
              if(( min(val[12,0:3]) le 1.00) and ( i eq 3)) then begin
                  go = -1.0
                  yes =1.0
