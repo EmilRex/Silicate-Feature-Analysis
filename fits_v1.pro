@@ -159,7 +159,7 @@ case fittype of
           ; *************************************************** ;
           ; PSO Routine
           while (go gt 0.0) and ( i lt 7.0) do begin
-             pso_min_example_s,name=name,teff=Teff,amin=amin,output= value,sequence = i ; Call PSO
+             pso_min_example,name=name,teff=Teff,amin=amin,output= value,sequence = i ; Call PSO
              val[*,i]=value ; Save PSO's optimized values for the run
 
              ; If ??? proceed to MCMC             
@@ -338,7 +338,7 @@ case fittype of
           ; *************************************************** ;
           ; PSO Routine
           while (go gt 0.0) and ( i lt 6.0) do begin
-             pso_min_example_sd,name=name,teff=Teff,amin=amin,output= value,sequence = i
+             pso_min_example,name=name,teff=Teff,amin=amin,output= value,sequence = i
              val[*,i]=value
              
              if(val[10,i] le 1.00) and ( i le 2.0) then begin

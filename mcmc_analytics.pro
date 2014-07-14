@@ -2,7 +2,7 @@ pro mcmc_analytics,object_name
 
 COMMON file_path, in_dir, out_dir, fit_name
 
-for i=1,50 do begin
+for i=1,10 do begin
   ; Look at final chisq values for all links
   data = readfits(out_dir+'/'+object_name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=i,/silent)
   last_link = -2*data[12,99,*]

@@ -1,9 +1,9 @@
 ; +
 ; NAME
-;  mcmc_m_mips_v1
+;  mcmc_general
 ;
 ; PURPOSE
-;  Perform MCMC routine for the given model: 2 grain
+;  Perform MCMC routine for the given model
 ;
 ; INPUTS
 ;  PARAM_BND_INP: Structure containing parameter bounds
@@ -29,6 +29,7 @@
 ; MODIFICATION HISTORY
 ;  Written by TM (June 2013) as mcmc_m_mips.pro
 ;  Organized and commented by EC (6/26/2014)
+;  Generalized and renamed by EC (7/14/14)
 ; -
 ; *************************************************** ;
 
@@ -268,8 +269,9 @@ endfor
 ; *************************************************** ;
 ; End main loop
 
-k =1 ; Reset k
-min_val = max(mcmc_res[num_parameter,k-1,*],ind) ; The min_val here is actaully log(exp(-chisq/2/dof))
+; Edited two lines below!!! 99 was k-1 (which is then 0)
+;k =1 ; Reset k
+min_val = max(mcmc_res[num_parameter,99,*],ind) ; The min_val here is actaully log(exp(-chisq/2/dof))
 
 ; Update best value if needed
 if (((-1.)*min_val) le ((-1.)*min_val_glb)) then begin
@@ -353,58 +355,47 @@ function logTargetDistribution,link,result
 COMMON fnc_name,dof1 
 COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
 COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, effectiveTempArray, stellar_emit
+COMMON file_path, in_dir, out_dir, fit_name
 
-;stop
-;'modeltwograin': begin
-;link=[113.575,5.38780,19.2318,0.263435,0.0392570,0.299372,333.999,26.3491,18.2289,0.862035,0.00286000,0.419083]
 
+; *************************************************** ;
+; ONE GRAIN MODEL
+;
+;temp1, grain1, scale1, olivine/pyroxene, crystalline, enstatite/fosterite,
+
+IF (fit_name eq 'single') THEN BEGIN
+
+  link[2]=10^(link[2])
+  
+  spectra = modelonegrain(result[0,*], link)
+  chisq = TOTAL ( ((result[1,*]-spectra)^2.0)/((.05*result[2,*])^2.0+(result[2,*])^2.0))
+  like_func = -(chisq)/(2.0*dof1)
+  
+  link[2]=alog10(link[2])
+  
+ENDIF
+
+; *************************************************** ;
+; TWO GRAIN MODEL
+;
 ;temp1, grain1, scale1, olivine/pyroxene, crystalline, enstatite/fosterite,  
 ;temp2, grain2, scale2, olivine/pyroxene2, crystalline2, enstatite/fosterite2 
 
+IF (fit_name eq 'multi_mips') THEN BEGIN
+
 ; un'log' value
-link[2]=10^(link[2])
-link[8]=10^(link[8])
-
-; *************************************************** ;
-; If using MIPS70, calculate the chi squared values seperately then combine.
-; In this case the two values are weighted differently as described:
-; 
-; The assumption here is that since there can exist an additional dust
-; component besides the one modeled here contributing principally only
-; to the mips70 flux, all models which either fit mips70 flux or
-; under-represent the flux are considered equally likely
-
-; !!!!!!!!!!!!!!!!!!! Changed for SED data !!!!!!!!!!!!!!!!!!!!!!
-; !!!!!!!!!!!!!!!!!!! Still needs weightings !!!!!!!!!!!!!!!!!!!!!!
-
-;if (use_mips70 gt 0) then begin
-
-;  spectra1 = modeltwograin([[result[0,*]],[71.42]], link) ;                                                                             
-;  mips70 = spectra1[n_elements(result[0,*])]
-;  spectra= spectra1[0:n_elements(result[0,*])-1]
-
-;  chisq = TOTAL ( ((result[1,*]-spectra)^2.0)/((.05*result[2,*])^2.0+(result[2,*])^2.0))
-;  chisq2 = ((mips70_val-mips70)^2.0)/((mips70_error)^2.0)
-;  like_func  = -(chisq+chisq2)/(2.0*dof1) 
-
-; *************************************************** ;
-; If not using MIPS, avoid the mess above
-;endif else begin
+  link[2]=10^(link[2])
+  link[8]=10^(link[8])
 
   spectra = modeltwograin(result[0,*], link)
   chisq = TOTAL ( ((result[1,*]-spectra)^2.0)/((.05*result[2,*])^2.0+(result[2,*])^2.0))
   like_func = -(chisq)/(2.0*dof1)
 
-;endelse
-
 ; re'log' value
-link[2]=alog10(link[2])
-link[8]=alog10(link[8])
+  link[2]=alog10(link[2])
+  link[8]=alog10(link[8])
 
-;if (chisq/dof1 le 5.) then begin
-  ;print,'chisq :',chisq/dof1
-  ;print, 'link :', link
-;endif
+ENDIF
 
 ; return the likelyhood value (i.e. fitness of link)
 return, like_func
@@ -412,7 +403,7 @@ end
 
 
 ; ****************************************************************************************************** ;
-pro mcmc_m_mips_v1,par_bound=param_bnd_inp,parameter=params_inp
+pro mcmc_general,par_bound=param_bnd_inp,parameter=params_inp
 ; ****************************************************************************************************** ;
 
 

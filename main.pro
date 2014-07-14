@@ -22,14 +22,15 @@ out_dir = '../Silicate_Feature_Analysis_output'
 name = 'HD114082'
 ;name = 'HD106906'
 
-fit_name = 'multi_mips' ;
+;fit_name = 'multi_mips' ;
+fit_name = 'single'
 
 ; *************************************************** ;
 ; Run program
-fits_v1, name=name, fittype=fit_name
+;fits_v1, name=name, fittype=fit_name
 
 ; Print plot of result
-plot_multi, name
+plot_result, name
 
 ; See how well mcmc did
 ;mcmc_analytics, name
@@ -37,12 +38,12 @@ plot_multi, name
 ; *************************************************** ;
 ; Print results
 
-mcmc_result = readfits(out_dir+'/'+name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=51)
+mcmc_result = readfits(out_dir+'/'+name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=61)
 
 print, 'Parameter results: '
 print, ' '
 print, mcmc_result[0:(n_elements(mcmc_result)-2)]
 print, ' '
-print, 'Chisq: ', -2.0*mcmc_result[12]
+print, 'Chisq: ', -2.0*mcmc_result[(n_elements(mcmc_result)-1)]
 
 end

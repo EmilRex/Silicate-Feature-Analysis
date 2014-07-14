@@ -189,10 +189,7 @@ endif else begin
   ; params = [Temperature, agrain, folivine, fcrystal, scale]
   3: begin
     
-    ; Work in progress
-    print, 'Fit type not currenly available...'
-    print, 'Please check back later.'
-    return
+    print, 'Fitting single grain model...'
     
 	  param_bnd = dblarr(3,6)
  		param_bnd[*,0]= [10.0, 1000.0,0] ; Temperatures limited to reasonable values
@@ -203,8 +200,7 @@ endif else begin
 		param_bnd[*,5]= [0, 1.0,0] ; forsterite/enstatite composition 
 
 
-    mcmc_s,par_bound=param_bnd,parameter=params
-    ;mcmc__define_s,'modelonegrain',par_bound=param_bnd,parameter=params,scale_val=scale_val[*,params.scale_val]
+    mcmc_general,par_bound=param_bnd,parameter=params
          
   end
 
@@ -300,6 +296,8 @@ endif else begin
   ;           T2, a2, scale2, fo2, fc2, ff2]
   6: begin
 
+    print, 'Fitting two grain model...'
+
 	  param_bnd = dblarr(3,12)
  		param_bnd[*,0]= [30.0, 300.0,0] ; Temp limited to reasonable values
 		param_bnd[*,1]= [amin, 100.0,0] ; blowout radius as lower bound
@@ -324,8 +322,8 @@ endif else begin
     endif
 
     ;scale_val=[1.010,.70, .0220, .0150, .0150, .0150,  1.50, .530,  .0120, .0150, .0150, .0150]
-    ;mcmc__define_m,'modeltwograin',par_bound=param_bnd,parameter=params,scale_val=scale_val
-     mcmc_m_mips_v1,par_bound=param_bnd,parameter=params
+
+     mcmc_general,par_bound=param_bnd,parameter=params
 
   end
 
