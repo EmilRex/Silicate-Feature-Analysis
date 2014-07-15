@@ -87,6 +87,25 @@ IF (fit_name eq 'multi_mips') THEN BEGIN
 ENDIF
 
 ; *************************************************** ;
+; MODEL: CONTINUOUS DISK
+
+IF (fit_name eq 'disk_mips') THEN BEGIN
+
+  ; Rename parameters
+  link=[10^p[0],p[1],p[2],p[3],p[4],p[5],10^p[6],p[7],p[8],p[9]]
+  
+  ; Model spectrum with current parameter values
+  spectra = modelsinglespectrum(transpose(extra.wave),link ) 
+  
+  ; Compute chisq without MIPS
+  chisq = TOTAL ( ((extra.spec-spectra)^2.0)/((.05*extra.error)^2.0+(extra.error)^2.0))
+  
+  ; Compute likelihood function
+  z = (chisq)/(extra.dof - 1.)   ; Log of likelihood func - where likelihood funct is exp(-chisq/2 )
+  
+ENDIF
+
+; *************************************************** ;
 
 ; Print to txt file if desired
 ;openw, 1, 'output_v1/'+extra.name+'_fit_multi_pso.txt',/append
@@ -134,11 +153,13 @@ ENDIF
 
 
 IF (fit_name eq 'multi_mips') THEN BEGIN
-; Range of the two parameters
-prange = [[30.0, 300.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0],$
-         [100.0, 1000.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0]]
+  prange = [[30.0, 300.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0],$
+           [100.0, 1000.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0]]
 ENDIF
 
+IF (fit_name eq 'disk_mips') THEN BEGIN
+  prange = [[1.0, 5.0],[0.0, 10.0],[-5., 5.],[amin, 30.0],[0.0, 7.0],[1.5, 5.5],[16.5, 23.5],[0.0, 1.0],[0.0, 1.0],[0.0, 1.0]]
+ENDIF
 
 func = 'f1_eval' ; Function to be minimized
 n = 40 ; Number of agents in the swarm
@@ -170,6 +191,20 @@ functargs =  {  wave:final_wave,    $
  file=out_dir+'/'+name1+'_chn_pso_'+fit_name+'_part_'+strtrim(fix(sequence),1)+'.fits'
  FITS_WRITE,file,data_base,header1
  undefine,data_base;
+
+ ; *************************************************** ;
+
+ ; Create global variables relating to silicate features
+ COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
+ COMMON stellarprops, temptable, folivine, effectiveTemp, lambdastar, fluxstar
+ COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, effectiveTempArray, stellar_emit
+ 
+ ; Fill the above global variables
+ restore, 'graintempdata.sav'
+ restore, 'qtables_withcrys2.sav' ; qastrosil, qolivine, qpyroxene
+
+ rho_s = 3.3
+ AU_in_cm = 1.496e13
 
 ; *************************************************** ;
 ; Restore silicate features data                                              
@@ -203,15 +238,7 @@ restore, grainfiles[ki]
 
 ; *************************************************** ;
 
-; Create global variables relating to silicate features
-COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
-COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, effectiveTempArray, stellar_emit
 
-; Fill the above global variables
-restore, 'graintempdata.sav'
-restore, 'qtables_withcrys2.sav' ; qastrosil, qolivine, qpyroxene
-
- 
 ; Call the PSO minimization routine
 p = rmd_pso(       ftol = .8,                             $
                      function_name = func,                  $

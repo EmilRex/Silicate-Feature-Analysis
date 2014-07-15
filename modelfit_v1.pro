@@ -364,7 +364,7 @@ endif else begin
     ;[.050,.050,.0350,1.60,.050,.0350, .0420, .0350, .0325, .0150],$
     ;[.080,.080,.0350,1.80,.080,.0350, .0620, .0350, .0325, .0150]]
 
-    mcmc_sd_mips,par_bound=param_bnd,parameter=params
+    mcmc_general,par_bound=param_bnd,parameter=params
     ;mcmc__define_sd,'modelsinglespectrum',par_bound=param_bnd,parameter=params,scale_val=scale_val[*,params.scale_val]
 
   end

@@ -202,7 +202,7 @@ case fittype of
           ; MCMC Routine
           if (yes eq 1.0) then begin
               ; Call MCMC routine with 6000 steps of 10 chains
-              printmodels_v1,name,fittype=[3],ps='X',nstep=6000,thin_val=1,teff=Teff,$
+              printmodels_v1,name,fittype=[3],ps='X',nstep=5000,thin_val=1,teff=Teff,$
               dist=dist_val,amin=amin,seed=best_val1[0:5],cnt=1,scale_val=0,num_chains=10
           endif
 
@@ -250,7 +250,7 @@ case fittype of
           ; *************************************************** ;
           ; PSO Routine
           while (go gt 0.0) and ( i lt 6.0) do begin
-             pso_min_example_sd,name=name,teff=Teff,amin=amin,output= value,sequence = i ; Call PSO
+             pso_min_example,name=name,teff=Teff,amin=amin,output= value,sequence = i ; Call PSO
              val[*,i] = value ; Save PSO's optimized values for the run
              
              ; If ??? proceed to MCMC
@@ -503,7 +503,7 @@ case fittype of
           ; *************************************************** ;
           ; PSO Routine
           while (go gt 0.0) and ( i lt 9.0) do begin
-             pso_min_example_m,name=name,teff=Teff,amin=amin,output= value,sequence = i
+             pso_min_example,name=name,teff=Teff,amin=amin,output= value,sequence = i
              val[*,i]=value
              
              if(( min(val[12,0:3]) le 1.00) and ( i eq 3)) then begin
@@ -600,7 +600,7 @@ case fittype of
           ; *************************************************** ;
           ; PSO Routine
           while (go gt 0.0) and ( i lt 9.0) do begin
-             pso_min_example_m,name=name,teff=Teff,amin=amin,output= value,sequence = i
+             pso_min_example,name=name,teff=Teff,amin=amin,output= value,sequence = i
              val[*,i]=value
              
              print,i

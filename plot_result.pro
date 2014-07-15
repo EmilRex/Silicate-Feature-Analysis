@@ -112,7 +112,7 @@ uncer_irs = final_specerr ;[final_specerr,mips70_error]
 IRS_wave = wave_irs[where(strmatch(final_source, 'SpitzerIRS') EQ 1)]
 IRS_spec = fl_diff[where(strmatch(final_source, 'SpitzerIRS') EQ 1)]
 IRS_color = 1 ; red
-IRS_psym = 1 ; plus
+IRS_psym = 2 ; asterisk
 
 ;MIPS70_wave = wave_irs[where(strmatch(final_source, 'Spitzer_MIPS_Phot') EQ 1)]
 ;MIPS70_spec = fl_diff[where(strmatch(final_source, 'Spitzer_MIPS_Phot') EQ 1)]
@@ -122,24 +122,61 @@ IRS_psym = 1 ; plus
 MIPS_SED_wave = wave_irs[where(strmatch(final_source, 'SpitzerMIPS_SED') EQ 1)]
 MIPS_SED_spec = fl_diff[where(strmatch(final_source, 'SpitzerMIPS_SED') EQ 1)]
 MIPS_SED_color = 3 ; blue
-MIPS_SED_psym = 5 ; triangle
+MIPS_SED_psym = 6 ; square
 
 x_start = min(wave_irs)
 x_range = max(wave_irs)-min(wave_irs)
 model_x = (findgen(round(x_range)*100)/100 + x_start)
 lines = [1,2,3,4]
 
+; *************************************************** ;
+; Fittype specifics
 ; Calculate model spectrum
 IF (fit_name eq 'single') THEN BEGIN
   link[2]=10^(link[2])
   out_model = modelonegrain(model_x, link)
+  
+  ; Load Tushar's data from input_files
+  data_dir = '/Users/echristensen/Summer2014/dust_fit/hannah_model/pro/output_fin_new2/output_fin_new'
+  data1 = readfits(data_dir+'/'+object_name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=61)
+  data2=data1[0:(n_elements(data1)-2)]
+  data2[2]=10^(data2[2])
+  tushar_model = modelonegrain(model_x, data2)
+
 ENDIF
 
 IF (fit_name eq 'multi_mips') THEN BEGIN
   link[2]=10^(link[2])
   link[8]=10^(link[8])
   out_model = modeltwograin(model_x, link)
+  
+  ; Load Tushar's data from input_files
+  data_dir = '/Users/echristensen/Summer2014/dust_fit/hannah_model/pro/output_fin_new2/output_fin_new'
+  data1 = readfits(data_dir+'/'+object_name+'_chn_mcmc_'+'multi'+'_part.fits',EXTEN_NO=51)
+  data2=data1[0:(n_elements(data1)-2)]
+  data2[2]=10^(data2[2])
+  data2[8]=10^(data2[8])
+  tushar_model = modeltwograin(model_x, data2)
+  
 ENDIF 
+
+IF (fit_name eq 'disk_mips') THEN BEGIN
+  
+  link[0]=10^(link[0])
+  link[6]=10^(link[6])
+  out_model = modelsinglespectrum(model_x, link)
+  
+  ; Load Tushar's data from input_files
+  data_dir = '/Users/echristensen/Summer2014/dust_fit/hannah_model/pro/output_fin_new2/output_fin_new'
+  data1 = readfits(data_dir+'/'+object_name+'_chn_mcmc_'+'disk'+'_part.fits',EXTEN_NO=51)
+  data2=data1[0:(n_elements(data1)-2)]
+  
+  data2[0]=10^(data2[0])
+  data2[6]=10^(data2[6])
+  
+  tushar_model = modelonegrain(model_x, data2)
+  
+ENDIF
 
 tmp1 = round(chisq_best*100.)/100.
 
@@ -157,13 +194,13 @@ TVLCT,[0,255,0,0],[0,0,255,0],[0,0,0,255]
 
 ; Plot data points
 plot,wave_irs,fl_diff,title=object_name+' ('+fit_name+' Model)', $
-     ystyle=1,psym=4,xstyle=1,xtitle='Wavelength ('+cggreek('mu')+'m)', $
+     ystyle=1,psym=0,xstyle=1,xtitle='Wavelength ('+cggreek('mu')+'m)', $
      ytitle='F'+cggreek('nu')+' (Jy)',charthick=1, thick=1, $
      xthick=2, ythick=2, charsize=1,color=0, $
      yrange=[min([out_model,fl_diff]),max([out_model,fl_diff])]
 
 ; Connect the points
-oplot,wave_irs,fl_diff,color=0
+;oplot,wave_irs,fl_diff,color=0
 
 ; Overlay data with different colors and markers
 oplot,IRS_wave,IRS_spec,color=IRS_color,psym=IRS_psym
@@ -171,11 +208,15 @@ oplot,IRS_wave,IRS_spec,color=IRS_color,psym=IRS_psym
 oplot,MIPS_SED_wave,MIPS_SED_spec,color=MIPS_SED_color,psym=MIPS_SED_psym
 
 ; Add error bars
-oploterr,wave_irs,fl_diff,uncer_irs;,psym=1;,color=0
+oploterr,wave_irs,fl_diff,uncer_irs,0;,psym=1;,color=0
 
-; Plot the model
+; Plot the models
 oplot,model_x,out_model,color=1, thick=5,linestyle=lines[1]
+oplot,model_x,tushar_model,color=2, thick=5,linestyle=lines[2]
 
+legend,['IRS','MIPS SED','New Model','Old Model'],psym=[2,6,0,0],$
+  colors=[1,3,1,2],linestyle=[0,0,2,3],textcolors=[0,0,0,0]
+; ,'New Model','Old Model'
 ; Create legend
 ;LEGEND,TEXTOIDL('\chi^{2}/d.o.f. : ')+  strtrim(string(tmp1,format='(f18.2)'),1), /top, /left,color=1,linestyle=lines[1]
 

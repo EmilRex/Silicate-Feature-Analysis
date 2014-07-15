@@ -275,7 +275,7 @@ min_val = max(mcmc_res[num_parameter,99,*],ind) ; The min_val here is actaully l
 
 ; Update best value if needed
 if (((-1.)*min_val) le ((-1.)*min_val_glb)) then begin
-  elements = mcmc_res[*,k-1,ind]
+  elements = mcmc_res[*,99,ind]
   min_val_glb = min_val
 endif
 
@@ -395,6 +395,34 @@ IF (fit_name eq 'multi_mips') THEN BEGIN
   link[2]=alog10(link[2])
   link[8]=alog10(link[8])
 
+ENDIF
+
+; *************************************************** ;
+; CONTINUOUS DISK MODEL
+;
+;   rin  = 10^fitparam[0]
+;   rout = exp(fitparam[1])*rin
+;   sigmalaw = fitparam[2]
+;   amin = fitparam[3]
+;   amax = exp(fitparam[4])*amin
+;   grainlaw = fitparam[5]
+;   diskmass = 10^(fitparam[6]) * massscale
+;   fo = fitparam[7]
+;   fc = fitparam[8]
+;   ff = fitparam[9]
+
+IF (fit_name eq 'disk_mips') THEN BEGIN
+  
+  link[0]=10^(link[0])
+  link[6]=10^(link[6])
+  
+  spectra =  modelsinglespectrum(result[0,*], link)
+  chisq = TOTAL ( ((result[1,*]-spectra)^2.0)/((.05*result[2,*])^2.0+(result[2,*])^2.0))
+  like_func = -(chisq)/(2.0*dof1)
+  
+  link[6]=alog10(link[6])
+  link[0]=alog10(link[0])
+  
 ENDIF
 
 ; return the likelyhood value (i.e. fitness of link)
