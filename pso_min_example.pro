@@ -254,6 +254,7 @@ p = rmd_pso(       ftol = .8,                             $
                      vel_decrement = .729,                  $
                      prange = prange                        )
 
+print, systime()
 print,'Result: ',p
 print,'Value: ',(fval)
 print,'# function calls: ',ncalls

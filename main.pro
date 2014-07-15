@@ -4,6 +4,7 @@ function display_results,name
   mcmc_result = readfits(out_dir+'/'+name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=51,/silent)
 
   print, ' '  
+  print, systime()
   print, 'Parameter results for: '
   print, [name,fit_name]
   print, mcmc_result[0:(n_elements(mcmc_result)-2)]
@@ -64,7 +65,7 @@ fit_names = ['single','multi_mips', 'disk_mips']
 FOREACH name, names DO BEGIN
   FOREACH fit_name, fit_names DO BEGIN
     fits_v1, name=name, fittype=fit_name
-    plot_result, name
+    ;plot_result, name
     null = display_results(name)
   ENDFOREACH
 ENDFOREACH
