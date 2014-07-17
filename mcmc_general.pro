@@ -196,6 +196,8 @@ for i = 1, params.nstep - 1, 1 do begin ; iterate through nsteps
   
     ; *************************************************** ;
     ; Evaluate and store new position
+    ;print, 'Iteration: '+strcompress(string(k))
+    
     newValue = logTargetDistribution(trial,data_base)
     
     ; Determine acceptance probability via MH algorithm
@@ -416,6 +418,7 @@ IF (fit_name eq 'disk_mips') THEN BEGIN
   link[0]=10^(link[0])
   link[6]=10^(link[6])
   
+  print, 
   spectra =  modelsinglespectrum(result[0,*], link)
   chisq = TOTAL ( ((result[1,*]-spectra)^2.0)/((.05*result[2,*])^2.0+(result[2,*])^2.0))
   like_func = -(chisq)/(2.0*dof1)

@@ -252,7 +252,9 @@ case fittype of
           while (go gt 0.0) and ( i lt 6.0) do begin
              pso_min_example,name=name,teff=Teff,amin=amin,output= value,sequence = i ; Call PSO
              val[*,i] = value ; Save PSO's optimized values for the run
-             
+             COMMON disk_benchmarking, run, times
+             save,times,filename='disk_benchmark_data'+names+'.sav'
+             stop
              ; If ??? proceed to MCMC
              if(val[10,i] le 1.00) and ( i le 2.0) then begin
                  go = -1.0 ; Exit PSO routine

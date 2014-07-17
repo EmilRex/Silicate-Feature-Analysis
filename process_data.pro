@@ -145,7 +145,10 @@ FOR i=0, (n_elements(name_list)-1) DO BEGIN
       IRS_density = n_elements(FINAL_WAVE)/(max(FINAL_WAVE)-min(FINAL_WAVE))
       mips_sed_density = n_elements(mips_sed_wave)/(max(mips_sed_wave)-min(mips_sed_wave))
       weight = round(IRS_density/mips_sed_density)/2
-      print,name_list[i],weight
+      print,string(name_list[i])+' Weight = '+strcompress(string(weight))
+      print,string(name_list[i])+' MIPS70 Value = '+strcompress(string(MIPS70_VAL))+' Jy'
+      print,string(name_list[i])+' MIPS70 Error = '+strcompress(string(MIPS70_ERROR))+' Jy'
+      print,""
       
       ; Append data structure recursively to account for data weight
       FOR k = 0, weight-1 DO BEGIN
