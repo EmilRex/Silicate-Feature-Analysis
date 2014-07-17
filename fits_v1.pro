@@ -60,7 +60,7 @@ endfor
 
 if (name eq 'Test1') or (name eq 'Test2') or (name eq 'Test3') or (name eq 'Test4') or (name eq 'Test5')  then begin
     Teff=8750
-    amin =1.049
+    amin = 1.049
     dist_val=114.5
  endif
 

@@ -151,7 +151,6 @@ IF (fit_name eq 'single') THEN BEGIN
   prange = [[30.0, 800.0],[amin, 30.0],[16.5, 23.5],[0, 1.0],[0, 1.0],[0, 1.0]]
 ENDIF
 
-
 IF (fit_name eq 'multi_mips') THEN BEGIN
   prange = [[30.0, 300.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0],$
            [100.0, 1000.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0]]
@@ -254,6 +253,7 @@ p = rmd_pso(       ftol = .8,                             $
                      vel_decrement = .729,                  $
                      prange = prange                        )
 
+print, ''
 print, systime()
 print,'Result: ',p
 print,'Value: ',(fval)

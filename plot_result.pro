@@ -164,7 +164,7 @@ IF (fit_name eq 'disk_mips') THEN BEGIN
   
   link[0]=10^(link[0])
   link[6]=10^(link[6])
-  out_model = modelsinglespectrum(model_x, link)
+  out_model = modelsinglespectrum(transpose(model_x), link)
   
   ; Load Tushar's data from input_files
   data_dir = '/Users/echristensen/Summer2014/dust_fit/hannah_model/pro/output_fin_new2/output_fin_new'
@@ -174,7 +174,7 @@ IF (fit_name eq 'disk_mips') THEN BEGIN
   data2[0]=10^(data2[0])
   data2[6]=10^(data2[6])
   
-  tushar_model = modelonegrain(model_x, data2)
+  tushar_model = modelsinglespectrum(transpose(model_x), data2)
   
 ENDIF
 
@@ -211,14 +211,16 @@ oplot,MIPS_SED_wave,MIPS_SED_spec,color=MIPS_SED_color,psym=MIPS_SED_psym
 oploterr,wave_irs,fl_diff,uncer_irs,0;,psym=1;,color=0
 
 ; Plot the models
-oplot,model_x,out_model,color=1, thick=5,linestyle=lines[1]
+oplot,model_x,out_model,color=3, thick=5,linestyle=lines[1]
 oplot,model_x,tushar_model,color=2, thick=5,linestyle=lines[2]
 
-legend,['IRS','MIPS SED','New Model','Old Model'],psym=[2,6,0,0],$
-  colors=[1,3,1,2],linestyle=[0,0,2,3],textcolors=[0,0,0,0]
-; ,'New Model','Old Model'
 ; Create legend
-;LEGEND,TEXTOIDL('\chi^{2}/d.o.f. : ')+  strtrim(string(tmp1,format='(f18.2)'),1), /top, /left,color=1,linestyle=lines[1]
+legend,['IRS','MIPS SED','New Model','Old Model'],psym=[2,6,0,0],$
+  colors=[1,3,3,2],linestyle=[0,0,2,3],textcolors=[0,0,0,0]
+
+xyouts,35,0.1,cggreek('chi')+'!E2!N!X / d.o.f. : '+strtrim(string(-2.0*chisq_best,format='(f18.2)'),1),/data
+
+;LEGEND,cggreek('chi')+'^{2}/d.o.f. : '+strtrim(string(chisq_best,format='(f18.2)'),1),color=1,linestyle=lines[1],textcolor
 
 device,/close
 set_plot,'x'
