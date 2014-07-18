@@ -1,25 +1,63 @@
+; +
+; NAME
+;  diskspectrum
+;
+; PURPOSE
+;  Computes the spectrum of a circumstellar dust disk 
+;   with grain arranged in a continuous disk
+;
+; INPUTS
+;   RIN: Disk inner radius (stellar radii)
+;   ROUT: Disk outer radius (stellar radii)
+;   AMIN: Minimum grain size (microns)
+;   AMAX: Maximum grain size (microns)
+;   TEFF: Effective temperature of star (Kelvin)
+;   DISKMASS: Normalized mass of dust disk
+;   FOLIVINE = olivine fraction - folivine*(1-fcrystalline)
+;   FCRYSTALLINE: crystalline fraction
+;   FFORST fraction - fforst*fcrystalline
+;     enstatite fraction = (1-fforst)*fcrystalline
+;     pyroxene fraction = (1-folivine)*(1-fcrystalline)
+;   RLAW: Disk radius size power law
+;   ALAW: Grain size power law
+;   LAMBDA: Wavelengths for which to model the flux
+;
+; KEYWORDS
+;   VERBOSE: Set to run additional diagnostics
+;   RING: Calculate for ring layout
+;   MIE: Set to use MIE theory
+;
+; OUTPUTS
+;   FLUX: array of fluxes corresponding to given wavelengths for the modeled spectrum
+;
+; AUTHORS
+;  Tushar Mittal - mittal.tushar22@gmail.com
+;  Christine Chen - cchen@stsci.edu
+;  Emil Christensen - chris2er@dukes.jmu.edu
+;
+; DISCLAIMER
+;  This software is provided as is without any warranty whatsoever.
+;  Permission to use, copy, modify, and distribute modified or
+;  unmodified copies is granted, provided this disclaimer
+;  is included unchanged.
+;
+; MODIFICATION HISTORY
+; Written by HJ-C ???
+;  Adapted by TM (June 2013) as diskspectrum.pro
+;  Organized and commented by EC (7/18/2014)
+;  Added comprehensive computation time diagnostics
+;   see test_disk_benchmarks.pro for analysis
+; -
+; *************************************************** ;
 pro diskspectrum, rin, rout, amin, amax, Teff, diskmass, $ 
                      folivine, fcrystalline, fforst, $
                   rlaw=rlaw, alaw=alaw, verbose=verbose, $
                   lambda, flux, $
                   ring=ring, mie=mie
-; rin, rout in units of stellar radius
-; if ring keyword parameter set, then rin is ring position, rout is width
-; amin, amax in units of microns
-; Teff = effective temperature of star
-; diskmass = normalized disk mass 
-; folivine = olivine fraction
-; olivine fraction = folivine*(1-fcrystalline)
-; pyroxene fraction = (1-folivine)*(1-fcrystalline)
-; forsterite fraction = fforst*fcrystalline
-; enstatite fraction = (1-fforst)*fcrystalline
-; lambda = input wavelengths at which to look up spectrum
-; OUTPUTS:
-; lambda, flux
 
 ;COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
 
-COMMON disk_benchmarking, run, times
+COMMON disk_benchmarking, run, times, lines
 print, run
 
 
@@ -148,52 +186,56 @@ crysnorm = diskmass/totsigma/total(crosssection)
 
 t4 = systime(1)
 
+
 ttrans_1_1 = systime(1)
    temp_t1 =reform(transpose(tempr),NA*NR) ; Not an issue
 ttrans_1_2 = systime(1)
 
+lines_start = systime(1)
    wave_new1= (REBIN(lambda,NA*NR,NL))*1.d-4
+lines1 = systime(1)
    temp_t2= (REBIN(temp_t1,NA*NR,NL))
-
+lines2 = systime(1)
 t5 = systime(1)
 
    hnukT = ((h*c/k)/wave_new1)/temp_t2
+lines3 = systime(1)
    tmp_p1 = (2.0*h*c)/(wave_new1)^3
+lines4 = systime(1)
    brightness = (tmp_p1*(1.d23/206265.0^2))/(exp(hnukT)-1.0)
-
+lines5 = systime(1)
     ; include dust sublimation
     subl = where(temp_t2 gt 1000.0)
+lines6 = systime(1)
     if subl[0] ne -1 then brightness[subl] = 0.0
-
+lines7 = systime(1)
 ;    tmp_p1 = REBIN(rintegrand,1,n_elements(rintegrand)*n_elements(tempr[*,0]))
 ;    rintegrand2 = REBIN(tmp_p1,n_elements(tmp_p1),n_elements(lambda))
 ;  brightness2 = reform(brightness,NR,NA,NL)
 
 ttrans_2_1 = systime(1)
-  brightness = transpose(brightness) ; Takes ~10-15% of time - alternatives?
+brightness = transpose(brightness) ; Takes ~10-15% of time - alternatives?
 ttrans_2_2 = systime(1)
-
+lines8 = systime(1)
 ;  brightness2 = (brightness)*abscoeff
-  tmp_p1 = FLTARR(NA,NL) 
+tmp_p1 = FLTARR(NA,NL) 
 
 t6 = systime(1)
 
 for i=0,NA-1 do begin
-
     intFdr = (matrix_multiply(brightness[*,0+NR*(i):NR-1+NR*(i)], rintegrand)*qabsall[i,*])*(crosssection[i]*amorphnorm)
-;    intFdr2 = matrix_multiply(brightness2[*,0+NR*(i):NR-1+NR*(i)], rintegrand)*(crosssection[i]*crysnorm)
+    ;intFdr2 = matrix_multiply(brightness2[*,0+NR*(i):NR-1+NR*(i)], rintegrand)*(crosssection[i]*crysnorm)
     tmp_p1[i,*] = intFdr;*(1.0-fcrystalline)+intFdr2*fcrystalline
-
-;stop 
 endfor
 
 t7 = systime(1)
 
-    flux = total(tmp_p1,1)
-;PRINT, SYSTIME(1) - T4,   ' Seconds - A2c2 '
+flux = total(tmp_p1,1)
+
 flux = flux/AU_in_cm^2
 
 t8 = systime(1)
+
 
 ; *************************************************** ;
 ; Do benchmarking
@@ -218,13 +260,13 @@ p5 = round(100*(t5-t4)/(t8-t0))
 print,'Reform/Rebin: '+string(p5)+'%'
 
   ttr1=round(100*(ttrans_1_2-ttrans_1_1)/(t8-t0))
-  print,'Transform 1: '+string(ttr1)+'%'
+  print,'Transpose 1: '+string(ttr1)+'%'
 
 p6 = round(100*(t6-t5)/(t8-t0))
 print,'Blackbody: '+string(p6)+'%'
 
   ttr2=round(100*(ttrans_2_2-ttrans_2_1)/(t8-t0))
-  print,'Transform 2: '+string(ttr2)+'%'
+  print,'Transpose 2: '+string(ttr2)+'%'
 
 p7 = round(100*(t7-t6)/(t8-t0))
 print,'Matrix Mult For: '+string(p7)+'%'
@@ -234,18 +276,21 @@ print,'End: '+string(p8)+'%'
 
 times[run,*] = [total_time, p1, p2, p3, p4, p5, p6, p7, p8, ttr1, ttr2]
 
+
+tot = lines8-lines_start
+lp1 = round(100*(lines1-lines_start)/tot)
+lp2 = round(100*(lines2-lines1)/tot)
+lp3 = round(100*(lines3-lines2)/tot)
+lp4 = round(100*(lines4-lines3)/tot)
+lp5 = round(100*(lines5-lines4)/tot)
+lp6 = round(100*(lines6-lines5)/tot)
+lp7 = round(100*(lines7-lines6)/tot)
+lp8 = round(100*(lines8-lines7)/tot)
+
+lines[run,*] = [lp1, lp2, lp3, lp4, lp5, lp6, lp7, lp8]
+
 run = run+1
 
-
-;    if keyword_set(mie) then $
-;       flux[i] = amorphflux $
-;    else begin
-
-;t1 = systime(1)
-;if keyword_set(verbose) then begin
-;   plot, lambda, flux, /xlog, /ylog
-;   print, 'run time (new):', t1-t0
-;endif
 
 return
 end

@@ -252,9 +252,7 @@ case fittype of
           while (go gt 0.0) and ( i lt 6.0) do begin
              pso_min_example,name=name,teff=Teff,amin=amin,output= value,sequence = i ; Call PSO
              val[*,i] = value ; Save PSO's optimized values for the run
-             COMMON disk_benchmarking, run, times
-             save,times,filename='disk_benchmark_data'+names+'.sav'
-             stop
+
              ; If ??? proceed to MCMC
              if(val[10,i] le 1.00) and ( i le 2.0) then begin
                  go = -1.0 ; Exit PSO routine
@@ -322,7 +320,7 @@ case fittype of
 
               printmodels_v1,name,fittype=[7],ps='X',nstep=100,thin_val=1,teff=Teff,$
               dist=dist_val,amin=amin,seed=best_val2[0:9],cnt=1,scale_val=0,num_chains=15
-
+              
               data = readfits(out_dir+'/'+name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=1)
 
               if ( min(-2.*data(10,99,*)) le 5.0) then begin
@@ -341,8 +339,11 @@ case fittype of
           ; PSO Routine
           while (go gt 0.0) and ( i lt 6.0) do begin
              pso_min_example,name=name,teff=Teff,amin=amin,output= value,sequence = i
+             COMMON disk_benchmarking, run, times, lines
              val[*,i]=value
-             
+             save,times,filename='disk_benchmark_data_HD146897.sav'
+             save,lines,filename='disk_benchmark_lines_HD146897.sav'
+             stop
              if(val[10,i] le 1.00) and ( i le 2.0) then begin
                  go = -1.0
                  yes = 1.0 
