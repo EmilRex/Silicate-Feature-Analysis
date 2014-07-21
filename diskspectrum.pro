@@ -58,7 +58,7 @@ pro diskspectrum, rin, rout, amin, amax, Teff, diskmass, $
 ;COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
 
 COMMON disk_benchmarking, run, times, lines
-print, run
+;print, run
 
 
 t0 = systime(1)
@@ -241,38 +241,38 @@ t8 = systime(1)
 ; Do benchmarking
 
 total_time = (t8-t0)
-print,'Total: ',total_time
-print,''
+;print,'Total: ',total_time
+;print,''
 
 p1 = round(100*(t1-t0)/(t8-t0))
-print,'Setup: '+string(p1)+'%'
+;print,'Setup: '+string(p1)+'%'
 
 p2 = round(100*(t2-t1)/(t8-t0))
-print,'equiltemplookup: '+string(p2)+'%'
+;print,'equiltemplookup: '+string(p2)+'%'
 
 p3 = round(100*(t3-t2)/(t8-t0))
-print,'qlookup: '+string(p3)+'%'
+;print,'qlookup: '+string(p3)+'%'
 
 p4 = round(100*(t4-t3)/(t8-t0))
-print,'integrand: '+string(p4)+'%'
+;print,'integrand: '+string(p4)+'%'
 
 p5 = round(100*(t5-t4)/(t8-t0))
-print,'Reform/Rebin: '+string(p5)+'%'
+;print,'Reform/Rebin: '+string(p5)+'%'
 
   ttr1=round(100*(ttrans_1_2-ttrans_1_1)/(t8-t0))
-  print,'Transpose 1: '+string(ttr1)+'%'
+;  print,'Transpose 1: '+string(ttr1)+'%'
 
 p6 = round(100*(t6-t5)/(t8-t0))
-print,'Blackbody: '+string(p6)+'%'
+;print,'Blackbody: '+string(p6)+'%'
 
   ttr2=round(100*(ttrans_2_2-ttrans_2_1)/(t8-t0))
-  print,'Transpose 2: '+string(ttr2)+'%'
+;  print,'Transpose 2: '+string(ttr2)+'%'
 
 p7 = round(100*(t7-t6)/(t8-t0))
-print,'Matrix Mult For: '+string(p7)+'%'
+;print,'Matrix Mult For: '+string(p7)+'%'
 
 p8 = round(100*(t8-t7)/(t8-t0))
-print,'End: '+string(p8)+'%'
+;print,'End: '+string(p8)+'%'
 
 times[run,*] = [total_time, p1, p2, p3, p4, p5, p6, p7, p8, ttr1, ttr2]
 

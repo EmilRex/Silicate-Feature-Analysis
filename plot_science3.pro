@@ -1,22 +1,3 @@
-; *************************************************** ;
-function display_results,name
-
-  COMMON file_path, in_dir, out_dir, fit_name
-  mcmc_result = readfits(out_dir+'/'+name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=51,/silent)
-  
-  print, ' '
-  print, systime()
-  print, 'Parameter results for: '
-  print, [name,fit_name]
-  print, mcmc_result[0:(n_elements(mcmc_result)-2)]
-  print, ' '
-  print, 'Chisq: ', -2.0*mcmc_result[(n_elements(mcmc_result)-1)]
-  print, ' '
-  
-end
-; *************************************************** ;
-
-
 pro plot_science3
 
   ; *************************************************** ;
@@ -33,6 +14,11 @@ pro plot_science3
   COMMON file_path, in_dir, out_dir, fit_name
   in_dir = 'savfiles_MIPS_SED_corrected'
   out_dir = '../Science3_output'
+
+  COMMON disk_benchmarking, run, times, lines
+  run = 0
+  times = dblarr(8000,11)
+  lines = dblarr(8000,8)
   
   ; *************************************************** ;
   ;RUN MULTIPLE
@@ -46,6 +32,7 @@ pro plot_science3
       ;fits_v1, name=name, fittype=fit_name
       plot_result, name
       null = display_results(name)
+      null = display_historic(name)
     ENDFOREACH
   ENDFOREACH
 

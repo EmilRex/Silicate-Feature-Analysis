@@ -41,7 +41,7 @@ COMMON file_path, in_dir, out_dir, fit_name
 ; generated through mcmc_m_mips_v1
 
 ; Get result of simulation to plot model
-mcmc_result = readfits(out_dir+'/'+object_name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=51)
+mcmc_result = readfits(out_dir+'/'+object_name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=51,/silent)
 link=mcmc_result[0:(n_elements(mcmc_result)-2)]
 chisq_best = mcmc_result[(n_elements(mcmc_result)-1)]
 
@@ -138,7 +138,7 @@ IF (fit_name eq 'single') THEN BEGIN
   
   ; Load Tushar's data from input_files
   data_dir = '/Users/echristensen/Summer2014/dust_fit/hannah_model/pro/output_fin_new2/output_fin_new'
-  data1 = readfits(data_dir+'/'+object_name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=61)
+  data1 = readfits(data_dir+'/'+object_name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=61,/silent)
   data2=data1[0:(n_elements(data1)-2)]
   data2[2]=10^(data2[2])
   tushar_model = modelonegrain(model_x, data2)
@@ -152,7 +152,7 @@ IF (fit_name eq 'multi_mips') THEN BEGIN
   
   ; Load Tushar's data from input_files
   data_dir = '/Users/echristensen/Summer2014/dust_fit/hannah_model/pro/output_fin_new2/output_fin_new'
-  data1 = readfits(data_dir+'/'+object_name+'_chn_mcmc_'+'multi'+'_part.fits',EXTEN_NO=51)
+  data1 = readfits(data_dir+'/'+object_name+'_chn_mcmc_'+'multi'+'_part.fits',EXTEN_NO=51,/silent)
   data2=data1[0:(n_elements(data1)-2)]
   data2[2]=10^(data2[2])
   data2[8]=10^(data2[8])
@@ -168,7 +168,7 @@ IF (fit_name eq 'disk_mips') THEN BEGIN
   
   ; Load Tushar's data from input_files
   data_dir = '/Users/echristensen/Summer2014/dust_fit/hannah_model/pro/output_fin_new2/output_fin_new'
-  data1 = readfits(data_dir+'/'+object_name+'_chn_mcmc_'+'disk'+'_part.fits',EXTEN_NO=51)
+  data1 = readfits(data_dir+'/'+object_name+'_chn_mcmc_'+'disk'+'_part.fits',EXTEN_NO=51,/silent)
   data2=data1[0:(n_elements(data1)-2)]
   
   data2[0]=10^(data2[0])
