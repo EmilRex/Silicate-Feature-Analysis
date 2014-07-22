@@ -36,7 +36,7 @@
 ; -
 ; *************************************************** ;
 
-function modelonegrain, lambda, params, mie=mie
+function modelonegrain, lambda, params, mie=mie, temp=temp
 ; 2-population single-component grain model                                                                                                          
 
 ; Carry global variables relating to silicate features
@@ -51,32 +51,86 @@ COMMON file_path, in_dir, out_dir, fit_name, object_name
 
 ; Define constants
 rho_s = 3.3
+pc_in_AU = 2.0626e5
 AU_in_cm = 1.496e13
+mm_to_cm = 1.0e-4
 c = 2.998d10
 h = 6.626d-27
 k = 1.381d-16
 
 ; Define paramters passed                                                                                                                                                                                                 
-temp     = params[0] ; set to dist
+dist     = params[0] ; remember to update bounds
 agr      = params[1]
 dustmass = params[2]
 foliv    = params[3]
 fcrys    = params[4]
 ffors    = params[5]
 
-
+; *************************************************** ;
+; Look up relevant data
+; 
 ; Lookup qabs (not it will return a [1,n(lambda),4] array)
 ;   use keyword /separate to return qabs for each graintype individually
+;   Order: olivine, pyroxene, forsterite, enstatite
 qlookup, [agr], lambda, foliv, fcrys, ffors, qabs, /separate
+
+; Load stellar photosphere model data
+restore,in_dir+'/'+object_name+'.sav'
+
+; Load star system parameters: Teff and dist
+fmt='a,f,f,f'
+readcol,'input_files/input_param_file.txt',F=fmt,catalog_name,c_teff,c_amin,c_dist_val
+
+for i = 0, size(catalog_name,/n_elements)-1 do begin
+  if (catalog_name[i] eq object_name) then begin
+    Teff=c_teff[i]
+    dist_val=c_dist_val[i]
+  endif
+endfor
+
+; *************************************************** ;
+; Begin calculation
+
+; Define arrays
+flux = dblarr(n_elements(lambda),4)
+lhs = dblarr(n_elements(lambda),4)
+dlambda = dblarr(n_elements(t),n_elements(lambda))
+rhs = dblarr(n_elements(t))
+tot_flux = dblarr(n_elements(lambda))
+temp = dblarr(4)
 
 ; Define scales
 scale = dustmass*0.75/(rho_s*agr*1e-4)/AU_in_cm^2
 
+; Convert distance in parsecs to au
+dist_val_AU = dist_val*pc_in_AU
+
+; Calculate LHS integration constant
+int_const = (c*(dist_val_AU^2))/((lambda*mm_to_cm^2)*(dist^2))
 
 FOR i = 0, 3 DO BEGIN
   
+  ; ******************************** ;
+  ; Calculate LHS: Heating from star
+  
+  ; Put photosphere model in terms of data lambda
+  phot_spec = 10^interpol(alog10(final_phot_spec),alog10(final_phot_wave*mm_to_cm),alog10(lambda*mm_to_cm))
+  lhs = INT_TABULATED(lambda*mm_to_cm,qabs[*,*,i]*int_const*phot_spec)
+  
+  ; ******************************** ;
+  ; Calculate RHS: Cooling from dust
+  
+  ; Define temperature range
+  t = 3.0*(findgen(1000) + 1.0)
+  
+  ; Iterate for each temperature
+  FOR j=0,(n_elements(t)-1) DO BEGIN
+    blambda[j,*] = ( (2.0*h*(c^2))/((lambda*mm_to_cm)^5) )/( exp( (h*c)/((lambda*mm_to_cm)*k*t[j]) ) -1.0 )
+    rhs[j] = 4.0*INT_TABULATED((lambda*mm_to_cm),qabs[*,*,i]*blambda[j,*])
+  ENDFOR
+  
   ; Calculate Temperature
-  temp = f(dist)
+  temp[i] = 10^interpol(alog10(t),alog10(rhs),alog10(lhs))
   
   ; Compute spectrum
   flux[*,i] = !pi*blackbody(lambda,temp)*(reform(qabs[*,*,i],n_elements(lambda))*scale)
@@ -84,12 +138,9 @@ FOR i = 0, 3 DO BEGIN
 ENDFOR
 
 ; Sum the fluxs over graintypes
-tot_flux = dblarr(n_elements(lambda))
-
 FOR j=0,n_elements(lambda) DO BEGIN
   tot_flux[i] = total(flux[i,*]) 
 ENDFOR
 
-; Return the flux and exit
 return, tot_flux
 end
