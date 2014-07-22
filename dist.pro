@@ -9,19 +9,19 @@ FUNCTION tempfunc, r, qabs
   
   blambda=2.0*h*(c)^2/lambda^5/ $
     (exp(h*c/lambda/k/10000.0)-1.0)
-  lhs = (2.5*6.96e10/r)^2*total(qabs*blambda*dlambda)
-  
+  lhs = (2.5*6.96e10/r)^2*total(qabs*blambda*dlambda) ; get rid of first stellar term. Use the kurzz stellar atmosphere model instead of blamda  
   t=3.0*(findgen(1000) + 1.0)
   n=size(qabs,/n_elements)
   blambdad=dblarr(1000,n)
   rhs=dblarr(1000)
+  
   for j=0,999 do begin
     blambdad[j,*]=2.0*h*(c)^2/lambda^5/ $
       (exp(h*c/lambda/k/t[j])-1.0)
     rhs[j] = total(4.0*qabs*blambdad[j,*]*dlambda)
   endfor
   
-  tdust=interpol(t,rhs,lhs,/spline)
+  tdust=interpol(t,rhs,lhs,/spline) ; keep
   return,tdust
 end
 
