@@ -44,6 +44,8 @@ COMMON stellarprops, temptable, folivine, effectiveTemp, lambdastar, fluxstar
 COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
 COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, $ 
        enstatite_emit, effectiveTempArray, stellar_emit
+COMMON file_path, in_dir, out_dir, fit_name, object_name
+       
 ;restore, 'graintempdata.sav'
 ;restore, 'qtables_withcrys2.sav' ; qastrosil, qolivine, qpyroxene
 

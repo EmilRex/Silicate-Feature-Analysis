@@ -416,7 +416,7 @@ while (ftol gt self.ftol) and (i lt self.niter) do begin
 ; (*self.fbest_ptr)[j]
 ; (*self.p_ptr)[*,j]
 
-COMMON file_path, in_dir, out_dir, fit_name
+COMMON file_path, in_dir, out_dir, fit_name, object_name
 
       pso_res = [*self.p_ptr,transpose(*self.f_ptr)]
       tpp = *self.functargs_ptr

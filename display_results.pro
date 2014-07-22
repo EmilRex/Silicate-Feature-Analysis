@@ -4,7 +4,7 @@ function display_results,name
   ; ****************************************************************************************************** ;
   ; Print simulation results to CL
   
-  COMMON file_path, in_dir, out_dir, fit_name
+  COMMON file_path, in_dir, out_dir, fit_name, object_name
   mcmc_result = readfits(out_dir+'/'+name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=51,/silent)
   
   print, ' '

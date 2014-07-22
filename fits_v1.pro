@@ -39,7 +39,7 @@
 ; *************************************************** ;
 pro fits_v1, name=name,fittype=fittype,DO_OLD = do_old
 
-COMMON file_path, in_dir, out_dir, fit_name
+COMMON file_path, in_dir, out_dir, fit_name, object_name
 
 ; Load text file with names, Teff, amin and dist
 fmt='a,f,f,f'

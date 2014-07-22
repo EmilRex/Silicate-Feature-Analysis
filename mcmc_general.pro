@@ -40,7 +40,7 @@ function run_fit_prg
 
 compile_opt idl2
 
-COMMON file_path, in_dir, out_dir, fit_name
+COMMON file_path, in_dir, out_dir, fit_name, object_name
 
 ; Create global variables relating to silicate features
 COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
@@ -357,7 +357,7 @@ function logTargetDistribution,link,result
 COMMON fnc_name,dof1 
 COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
 COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, effectiveTempArray, stellar_emit
-COMMON file_path, in_dir, out_dir, fit_name
+COMMON file_path, in_dir, out_dir, fit_name, object_name
 
 
 ; *************************************************** ;

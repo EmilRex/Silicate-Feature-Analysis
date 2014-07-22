@@ -33,7 +33,7 @@
 ; *************************************************** ;
 pro plot_result, object_name
 
-COMMON file_path, in_dir, out_dir, fit_name
+COMMON file_path, in_dir, out_dir, fit_name, object_name
 
 ; -------------------------------------------------- ;
 ; Replace with new structure for reading in data. 
