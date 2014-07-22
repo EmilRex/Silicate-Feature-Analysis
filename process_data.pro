@@ -93,16 +93,18 @@ FOR i=0, (n_elements(name_list)-1) DO BEGIN
       c = 3.0e10 ; cm/s
       to_cm = 1.0e-4
       
-      ;Define integrand
+      ; Interpolate response curve at mips sed wavelengths
+      response_int = 10^(interpol(alog10(response),alog10(resp_wave*to_cm),alog10(mips_sed_wave*to_cm)))
+      
+      ; Define integrand
       int1 = (c*1.0e-23*mips_sed_spec)/(mips_sed_wave*to_cm)^2 ; convert units
-      int2 = interpol(int1,mips_sed_wave*to_cm,resp_wave*to_cm) ; get flux at right spots
-      int3 = int2*response ; multiply flux and response
+      int2 = int1*response_int ; multiply flux and response
       
       ; Find integral of filter
-      int_filter = int_tabulated(resp_wave*to_cm,response)
+      int_filter = int_tabulated(mips_sed_wave*to_cm,response_int)
       
       ; Integrate the MIPS SED over the bandpass
-      synth_f70 = int_tabulated(resp_wave*to_cm,int3)/int_filter
+      synth_f70 = int_tabulated(mips_sed_wave*to_cm,int2)/int_filter
       
       ; Convert MIPS 70 to proper units
       MIPS_as_flambda = (MIPS70_VAL*c*1.0e-23)/(71.42*to_cm)^2
