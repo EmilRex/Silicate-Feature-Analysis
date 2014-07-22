@@ -79,7 +79,7 @@ restore,in_dir+'/'+object_name+'.sav'
 
 ; Load star system parameters: Teff and dist
 fmt='a,f,f,f'
-readcol,'input_files/input_param_file.txt',F=fmt,catalog_name,c_teff,c_amin,c_dist_val
+readcol,'input_files/input_param_file.txt',F=fmt,catalog_name,c_teff,c_amin,c_dist_val, /silent
 
 for i = 0, size(catalog_name,/n_elements)-1 do begin
   if (catalog_name[i] eq object_name) then begin
@@ -91,11 +91,20 @@ endfor
 ; *************************************************** ;
 ; Begin calculation
 
+; Find uniqe lambdas and qabs for integration purposes
+uniq_lambda = lambda[uniq(lambda)]
+uniq_qabs = dblarr(1,n_elements(uniq_lambda),4)
+
+FOR i=0,3 DO BEGIN
+  uniq_qabs[*,*,i] = qabs[*,uniq(qabs[*,*,i]),i]
+ENDFOR
+
+; Lambdas are not unique because of the weighting process
+; In the end it should not matter since we only need to integrate to find the temp
+
 ; Define arrays
 flux = dblarr(n_elements(lambda),4)
-lhs = dblarr(n_elements(lambda),4)
-dlambda = dblarr(n_elements(t),n_elements(lambda))
-rhs = dblarr(n_elements(t))
+lhs = dblarr(n_elements(uniq_lambda),4)
 tot_flux = dblarr(n_elements(lambda))
 temp = dblarr(4)
 
@@ -106,7 +115,7 @@ scale = dustmass*0.75/(rho_s*agr*1e-4)/AU_in_cm^2
 dist_val_AU = dist_val*pc_in_AU
 
 ; Calculate LHS integration constant
-int_const = (c*(dist_val_AU^2))/((lambda*mm_to_cm^2)*(dist^2))
+int_const = (c*(dist_val_AU^2))/((uniq_lambda*mm_to_cm^2)*(dist^2))
 
 FOR i = 0, 3 DO BEGIN
   
@@ -114,8 +123,9 @@ FOR i = 0, 3 DO BEGIN
   ; Calculate LHS: Heating from star
   
   ; Put photosphere model in terms of data lambda
-  phot_spec = 10^interpol(alog10(final_phot_spec),alog10(final_phot_wave*mm_to_cm),alog10(lambda*mm_to_cm))
-  lhs = INT_TABULATED(lambda*mm_to_cm,qabs[*,*,i]*int_const*phot_spec)
+  phot_spec = 10^interpol(alog10(final_phot_fnu*1.0e-23),alog10(final_phot_wave*mm_to_cm),alog10(uniq_lambda*mm_to_cm))
+
+  lhs = INT_TABULATED(uniq_lambda*mm_to_cm,uniq_qabs[*,*,i]*int_const*phot_spec)
   
   ; ******************************** ;
   ; Calculate RHS: Cooling from dust
@@ -123,20 +133,23 @@ FOR i = 0, 3 DO BEGIN
   ; Define temperature range
   t = 3.0*(findgen(1000) + 1.0)
   
+  blambda = dblarr(n_elements(t),n_elements(uniq_lambda))
+  rhs = dblarr(n_elements(t))
+  
   ; Iterate for each temperature
   FOR j=0,(n_elements(t)-1) DO BEGIN
-    blambda[j,*] = ( (2.0*h*(c^2))/((lambda*mm_to_cm)^5) )/( exp( (h*c)/((lambda*mm_to_cm)*k*t[j]) ) -1.0 )
-    rhs[j] = 4.0*INT_TABULATED((lambda*mm_to_cm),qabs[*,*,i]*blambda[j,*])
+    blambda[j,*] = ( (2.0*h*(c^2))/((uniq_lambda*mm_to_cm)^5) )/( exp( (h*c)/((uniq_lambda*mm_to_cm)*k*t[j]) ) -1.0 )
+    rhs[j] = 4.0*INT_TABULATED((uniq_lambda*mm_to_cm),uniq_qabs[*,*,i]*blambda[j,*])
   ENDFOR
   
   ; Calculate Temperature
   temp[i] = 10^interpol(alog10(t),alog10(rhs),alog10(lhs))
-  
+
   ; Compute spectrum
-  flux[*,i] = !pi*blackbody(lambda,temp)*(reform(qabs[*,*,i],n_elements(lambda))*scale)
+  flux[*,i] = !pi*blackbody(lambda,temp[i])*(reform(qabs[*,*,i],n_elements(lambda))*scale)
   
 ENDFOR
-
+print, temp
 ; Sum the fluxs over graintypes
 FOR j=0,n_elements(lambda) DO BEGIN
   tot_flux[i] = total(flux[i,*]) 

@@ -99,7 +99,7 @@ FOR i=0, (n_elements(name_list)-1) DO BEGIN
       ; Define integrand
       int1 = (c*1.0e-23*mips_sed_spec)/(mips_sed_wave*to_cm)^2 ; convert units
       int2 = int1*response_int ; multiply flux and response
-      
+
       ; Find integral of filter
       int_filter = int_tabulated(mips_sed_wave*to_cm,response_int)
       

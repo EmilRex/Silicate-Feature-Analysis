@@ -43,7 +43,7 @@ COMMON file_path, in_dir, out_dir, fit_name, object_name
 
 ; Load text file with names, Teff, amin and dist
 fmt='a,f,f,f'
-readcol,'input_files/input_param_file.txt',F=fmt,catalog_name,c_teff,c_amin,c_dist_val
+readcol,'input_files/input_param_file.txt',F=fmt,catalog_name,c_teff,c_amin,c_dist_val,/silent
 
 ; Match loaded data names with name of object being analyzed 
 amin = .1

@@ -51,7 +51,7 @@ lines = dblarr(8000,8)
 ; *************************************************** ;
 
 names = ['HD146897','HD117214']
-fit_names = ['single','multi_mips', 'disk_mips']
+fit_names = ['single'];,'multi_mips', 'disk_mips']
 
 FOREACH name, names DO BEGIN
   FOREACH fit_name, fit_names DO BEGIN

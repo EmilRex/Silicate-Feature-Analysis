@@ -145,10 +145,13 @@ IF NOT KEYWORD_SET(separate) THEN BEGIN
                   qscatall[*,*,3]*(1.0-forstfrac)*crysfrac, $
                   n_elements(grainrad), n_elements(wavelength) )
 
-ENDIF
-
 qabs = qext-qscat
 
-stop
+ENDIF ELSE BEGIN
+  qabs = dblarr(n_elements(grainrad),n_elements(wavelength),4)
+  FOR i=0,3 DO qabs[*,*,i] = qextall[*,*,i] - qscatall[*,*,i]
+ENDELSE
+
+
 return
 end
