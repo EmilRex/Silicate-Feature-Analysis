@@ -46,6 +46,9 @@ COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_em
        enstatite_emit, effectiveTempArray, stellar_emit
 COMMON file_path, in_dir, out_dir, fit_name, object_name
 
+; Test
+;object_name = 'HD109573'
+
 ;restore, 'graintempdata.sav'
 ;restore, 'qtables_withcrys2.sav' ; qastrosil, qolivine, qpyroxene
 
@@ -54,9 +57,9 @@ rho_s = 3.3
 pc_in_AU = 2.0626e5
 AU_in_cm = 1.496e13
 mm_to_cm = 1.0e-4
-c = 2.998d10
-h = 6.626d-27
-k = 1.381d-16
+c = 2.998d10 ; cm/s
+h = 6.626d-27 ; erg s
+k = 1.381d-16 ; erg/K
 
 ; Define paramters passed                                                                                                                                                                                                 
 dist     = params[0] ; remember to update bounds
@@ -76,6 +79,7 @@ qlookup, [agr], lambda, foliv, fcrys, ffors, qabs, /separate
 
 ; Load stellar photosphere model data
 restore,in_dir+'/'+object_name+'.sav'
+;restore, 'old_savfiles_mcmc/HD109573.sav'
 
 ; Load star system parameters: Teff and dist
 fmt='a,f,f,f'
@@ -104,18 +108,21 @@ ENDFOR
 
 ; Define arrays
 flux = dblarr(n_elements(lambda),4)
-lhs = dblarr(n_elements(uniq_lambda),4)
+;lhs = dblarr(n_elements(final_phot_wave),4)
 tot_flux = dblarr(n_elements(lambda))
 temp = dblarr(4)
 
-; Define scales
+; Define scale
 scale = dustmass*0.75/(rho_s*agr*1e-4)/AU_in_cm^2
 
 ; Convert distance in parsecs to au
 dist_val_AU = dist_val*pc_in_AU
 
+; Get q_abs over phot lambdas 
+qlookup, [agr], final_phot_wave, foliv, fcrys, ffors, qabs_phot, /separate
+
 ; Calculate LHS integration constant
-int_const = (c*(dist_val_AU^2))/((uniq_lambda*mm_to_cm^2)*(dist^2))
+int_const = (c*(dist_val_AU^2))/(((final_phot_wave*mm_to_cm)^2)*(dist^2)) ; mm->mum
 
 FOR i = 0, 3 DO BEGIN
   
@@ -123,9 +130,9 @@ FOR i = 0, 3 DO BEGIN
   ; Calculate LHS: Heating from star
   
   ; Put photosphere model in terms of data lambda
-  phot_spec = 10^interpol(alog10(final_phot_fnu*1.0e-23),alog10(final_phot_wave*mm_to_cm),alog10(uniq_lambda*mm_to_cm))
+  ;phot_spec = 10^interpol(alog10(final_phot_fnu*1.0e-23),alog10(final_phot_wave*mm_to_cm),alog10(uniq_lambda*mm_to_cm))
 
-  lhs = INT_TABULATED(uniq_lambda*mm_to_cm,uniq_qabs[*,*,i]*int_const*phot_spec)
+  lhs = INT_TABULATED(final_phot_wave*mm_to_cm,qabs_phot[*,*,i]*int_const*final_phot_fnu*1.0e-23)
   
   ; ******************************** ;
   ; Calculate RHS: Cooling from dust
@@ -133,13 +140,13 @@ FOR i = 0, 3 DO BEGIN
   ; Define temperature range
   t = 3.0*(findgen(1000) + 1.0)
   
-  blambda = dblarr(n_elements(t),n_elements(uniq_lambda))
+  blambda = dblarr(n_elements(t),n_elements(final_phot_wave))
   rhs = dblarr(n_elements(t))
   
   ; Iterate for each temperature
   FOR j=0,(n_elements(t)-1) DO BEGIN
-    blambda[j,*] = ( (2.0*h*(c^2))/((uniq_lambda*mm_to_cm)^5) )/( exp( (h*c)/((uniq_lambda*mm_to_cm)*k*t[j]) ) -1.0 )
-    rhs[j] = 4.0*INT_TABULATED((uniq_lambda*mm_to_cm),uniq_qabs[*,*,i]*blambda[j,*])
+    blambda[j,*] = ( (2.0*h*(c^2))/((final_phot_wave*mm_to_cm)^5) )/( exp( (h*c)/((final_phot_wave*mm_to_cm)*k*t[j]) ) -1.0 )
+    rhs[j] = 4.0*INT_TABULATED((final_phot_wave*mm_to_cm),qabs_phot[*,*,i]*blambda[j,*])
   ENDFOR
   
   ; Calculate Temperature
@@ -149,11 +156,16 @@ FOR i = 0, 3 DO BEGIN
   flux[*,i] = !pi*blackbody(lambda,temp[i])*(reform(qabs[*,*,i],n_elements(lambda))*scale)
   
 ENDFOR
-print, temp
+;print, temp
 ; Sum the fluxs over graintypes
-FOR j=0,n_elements(lambda) DO BEGIN
-  tot_flux[i] = total(flux[i,*]) 
+FOR j=0,n_elements(lambda)-1 DO BEGIN
+  tot_flux[j] = total(flux[j,*]) 
 ENDFOR
 
+; test case HR4796, HD109573
+;plot,final_wave,final_spec
+;oplot,lambda,flux,psym=4
+
+;stop
 return, tot_flux
 end
