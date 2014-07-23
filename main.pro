@@ -17,10 +17,10 @@ out_dir = '../Silicate_Feature_Analysis_output'
 
 ; *************************************************** ;
 ;For testing diskspectrum
-COMMON disk_benchmarking, run, times, lines
-run = 0
-times = dblarr(8000,11)
-lines = dblarr(8000,8)
+;COMMON disk_benchmarking, run, times, lines
+;run = 0
+;times = dblarr(8000,11)
+;lines = dblarr(8000,8)
 
 ; *************************************************** ;
 ; RUN SINGLE

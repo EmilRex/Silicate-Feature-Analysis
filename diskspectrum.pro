@@ -57,11 +57,11 @@ pro diskspectrum, rin, rout, amin, amax, Teff, diskmass, $
 
 ;COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
 
-COMMON disk_benchmarking, run, times, lines
+;COMMON disk_benchmarking, run, times, lines
 ;print, run
 
 
-t0 = systime(1)
+;t0 = systime(1)
 ;bulk density of grains in g/cm^3
 rho_s = 3.3
 AU_in_cm = 1.496e13
@@ -133,14 +133,14 @@ endif else begin
       sigma = rall^(-rlaw)
 endelse
 
-t1 = systime(1)
+;t1 = systime(1)
 
 
 ; get temperatures - don't include crystalline silicates
 equiltemplookup, Teff, aall, rall, tempr, $
         folivine, 0.0, 0.0
 
-t2 = systime(1)
+;t2 = systime(1)
 
 
 ;if keyword_set(mie) then $
@@ -148,7 +148,7 @@ t2 = systime(1)
    qlookup, aall, lambda, folivine, fcrystalline, fforst, qabsall 
 ;else begin
 
-t3 = systime(1)
+;t3 = systime(1)
 
 
 ;;;; use powder data for crystalline silicates
@@ -184,43 +184,43 @@ crysnorm = diskmass/totsigma/total(crosssection)
    h = 6.626d-27
    k = 1.381d-16
 
-t4 = systime(1)
+;t4 = systime(1)
 
 
-ttrans_1_1 = systime(1)
+;ttrans_1_1 = systime(1)
    temp_t1 =reform(transpose(tempr),NA*NR) ; Not an issue
-ttrans_1_2 = systime(1)
+;ttrans_1_2 = systime(1)
 
-lines_start = systime(1)
+;lines_start = systime(1)
    wave_new1= (REBIN(lambda,NA*NR,NL))*1.d-4
-lines1 = systime(1)
+;lines1 = systime(1)
    temp_t2= (REBIN(temp_t1,NA*NR,NL))
-lines2 = systime(1)
-t5 = systime(1)
+;lines2 = systime(1)
+;t5 = systime(1)
 
    hnukT = ((h*c/k)/wave_new1)/temp_t2
-lines3 = systime(1)
+;lines3 = systime(1)
    tmp_p1 = (2.0*h*c)/(wave_new1)^3
-lines4 = systime(1)
+;lines4 = systime(1)
    brightness = (tmp_p1*(1.d23/206265.0^2))/(exp(hnukT)-1.0)
-lines5 = systime(1)
+;lines5 = systime(1)
     ; include dust sublimation
     subl = where(temp_t2 gt 1000.0)
-lines6 = systime(1)
+;lines6 = systime(1)
     if subl[0] ne -1 then brightness[subl] = 0.0
-lines7 = systime(1)
+;lines7 = systime(1)
 ;    tmp_p1 = REBIN(rintegrand,1,n_elements(rintegrand)*n_elements(tempr[*,0]))
 ;    rintegrand2 = REBIN(tmp_p1,n_elements(tmp_p1),n_elements(lambda))
 ;  brightness2 = reform(brightness,NR,NA,NL)
 
-ttrans_2_1 = systime(1)
+;ttrans_2_1 = systime(1)
 brightness = transpose(brightness) ; Takes ~10-15% of time - alternatives?
-ttrans_2_2 = systime(1)
-lines8 = systime(1)
+;ttrans_2_2 = systime(1)
+;lines8 = systime(1)
 ;  brightness2 = (brightness)*abscoeff
 tmp_p1 = FLTARR(NA,NL) 
 
-t6 = systime(1)
+;t6 = systime(1)
 
 for i=0,NA-1 do begin
     intFdr = (matrix_multiply(brightness[*,0+NR*(i):NR-1+NR*(i)], rintegrand)*qabsall[i,*])*(crosssection[i]*amorphnorm)
@@ -228,68 +228,68 @@ for i=0,NA-1 do begin
     tmp_p1[i,*] = intFdr;*(1.0-fcrystalline)+intFdr2*fcrystalline
 endfor
 
-t7 = systime(1)
+;t7 = systime(1)
 
 flux = total(tmp_p1,1)
 
 flux = flux/AU_in_cm^2
 
-t8 = systime(1)
+;t8 = systime(1)
 
 
 ; *************************************************** ;
 ; Do benchmarking
 
-total_time = (t8-t0)
+;total_time = (t8-t0)
 ;print,'Total: ',total_time
 ;print,''
 
-p1 = round(100*(t1-t0)/(t8-t0))
+;p1 = round(100*(t1-t0)/(t8-t0))
 ;print,'Setup: '+string(p1)+'%'
 
-p2 = round(100*(t2-t1)/(t8-t0))
+;p2 = round(100*(t2-t1)/(t8-t0))
 ;print,'equiltemplookup: '+string(p2)+'%'
 
-p3 = round(100*(t3-t2)/(t8-t0))
+;p3 = round(100*(t3-t2)/(t8-t0))
 ;print,'qlookup: '+string(p3)+'%'
 
-p4 = round(100*(t4-t3)/(t8-t0))
+;p4 = round(100*(t4-t3)/(t8-t0))
 ;print,'integrand: '+string(p4)+'%'
 
-p5 = round(100*(t5-t4)/(t8-t0))
+;p5 = round(100*(t5-t4)/(t8-t0))
 ;print,'Reform/Rebin: '+string(p5)+'%'
 
-  ttr1=round(100*(ttrans_1_2-ttrans_1_1)/(t8-t0))
+;  ttr1=round(100*(ttrans_1_2-ttrans_1_1)/(t8-t0))
 ;  print,'Transpose 1: '+string(ttr1)+'%'
 
-p6 = round(100*(t6-t5)/(t8-t0))
+;p6 = round(100*(t6-t5)/(t8-t0))
 ;print,'Blackbody: '+string(p6)+'%'
 
-  ttr2=round(100*(ttrans_2_2-ttrans_2_1)/(t8-t0))
+;  ttr2=round(100*(ttrans_2_2-ttrans_2_1)/(t8-t0))
 ;  print,'Transpose 2: '+string(ttr2)+'%'
 
-p7 = round(100*(t7-t6)/(t8-t0))
+;p7 = round(100*(t7-t6)/(t8-t0))
 ;print,'Matrix Mult For: '+string(p7)+'%'
 
-p8 = round(100*(t8-t7)/(t8-t0))
+;p8 = round(100*(t8-t7)/(t8-t0))
 ;print,'End: '+string(p8)+'%'
 
-times[run,*] = [total_time, p1, p2, p3, p4, p5, p6, p7, p8, ttr1, ttr2]
+;times[run,*] = [total_time, p1, p2, p3, p4, p5, p6, p7, p8, ttr1, ttr2]
 
 
-tot = lines8-lines_start
-lp1 = round(100*(lines1-lines_start)/tot)
-lp2 = round(100*(lines2-lines1)/tot)
-lp3 = round(100*(lines3-lines2)/tot)
-lp4 = round(100*(lines4-lines3)/tot)
-lp5 = round(100*(lines5-lines4)/tot)
-lp6 = round(100*(lines6-lines5)/tot)
-lp7 = round(100*(lines7-lines6)/tot)
-lp8 = round(100*(lines8-lines7)/tot)
+;tot = lines8-lines_start
+;lp1 = round(100*(lines1-lines_start)/tot)
+;lp2 = round(100*(lines2-lines1)/tot)
+;lp3 = round(100*(lines3-lines2)/tot)
+;lp4 = round(100*(lines4-lines3)/tot)
+;lp5 = round(100*(lines5-lines4)/tot)
+;lp6 = round(100*(lines6-lines5)/tot)
+;lp7 = round(100*(lines7-lines6)/tot)
+;lp8 = round(100*(lines8-lines7)/tot)
 
-lines[run,*] = [lp1, lp2, lp3, lp4, lp5, lp6, lp7, lp8]
+;lines[run,*] = [lp1, lp2, lp3, lp4, lp5, lp6, lp7, lp8]
 
-run = run+1
+;run = run+1
 
 
 return

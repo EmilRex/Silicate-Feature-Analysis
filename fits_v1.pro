@@ -339,11 +339,11 @@ case fittype of
           ; PSO Routine
           while (go gt 0.0) and ( i lt 6.0) do begin
              pso_min_example,name=name,teff=Teff,amin=amin,output= value,sequence = i
-             COMMON disk_benchmarking, run, times, lines
+             ;COMMON disk_benchmarking, run, times, lines
              val[*,i]=value
-             save,times,filename='disk_benchmark_data_HD146897.sav'
-             save,lines,filename='disk_benchmark_lines_HD146897.sav'
-             stop
+             ;save,times,filename='disk_benchmark_data_HD146897.sav'
+             ;save,lines,filename='disk_benchmark_lines_HD146897.sav'
+             ;stop
              if(val[10,i] le 1.00) and ( i le 2.0) then begin
                  go = -1.0
                  yes = 1.0 
