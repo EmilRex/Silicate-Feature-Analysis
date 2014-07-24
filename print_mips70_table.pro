@@ -5,11 +5,15 @@ pro print_mips70_table
 
 ; *************************************************** ;
 
-; Load Tushar's fit data from db generated csv
-fmt = 's,f,f,f,f,f,f,f,f,f,f,f'
-readcol, 'disk_new.csv',F=fmt,disk_name,chisq,rin,rout,rlaw,amin,amax,alaw,mass,fcryst,foliv,ffost
+; Load R-star values
+fmt = 'a,f'
+readcol, 'r_star.csv',F=fmt,r_star_name,c_r_star
 
-;fmt = 's,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f'
+; Load Tushar's fit data from db generated csv
+fmt = 'a,f,f,f,f,f,f,f,f,f,f,f'
+readcol, 'disk_new.csv',F=fmt,disk_name,chisq,rin,rout,rlaw,amin,amax,alaw,diskmass,fcryst,foliv,ffost
+
+;fmt = 'a,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f'
 ;readcol, 'multi_new.csv',F=fmt,name,chisq,temp1,temp2,Loc,Loc2,amin1,amin2,mass1,mass2,fcryst1,fcryst2,oliv1,oliv2,ffost1,ffost2
 
 ; Get names associated with MIPS70 values
@@ -23,6 +27,10 @@ readcol,'MIPS_SED_response.txt',F=fmt,v1,v2,resp_wave,response,v5,v6, /SILENT
 fmt='a,f,f,f'
 readcol,'input_files/input_param_file.txt',F=fmt,catalog_name,c_teff,c_amin,c_dist_val
 
+
+; Open output file
+close,1
+openw,1,'print_mips70_table.txt'
 
 ; *************************************************** ;
 ; Loop over each object
@@ -42,8 +50,14 @@ FOR i=0, (n_elements(disk_name)-1) DO BEGIN
       for k = 0, size(catalog_name,/n_elements)-1 do begin
         if (catalog_name[k] eq disk_name[i]) then begin
           Teff=c_teff[k]
-          amin=c_amin[k]
           dist_val=c_dist_val[k]
+        endif
+      endfor
+
+      ; Load correct r_star
+      for k=0, n_elements(r_star_name)-1 do begin
+        if (r_star_name[k] eq disk_name[i]) then begin
+          r_star = c_r_star[k]
         endif
       endfor
     
@@ -102,15 +116,17 @@ FOR i=0, (n_elements(disk_name)-1) DO BEGIN
       ;link[6]=10^(link[6])
       
       m_moon = 7.34767309e22 ; in kg, from google
-      fit_rin = 
-      fit_rout = alog(rout/rin)
-      fit_amax = alog(amax)/amin
-      fit_diskmass = alog10(diskmass*m_moon) ; convert m/m_moon to log(mass_in_kg)
-      
+      r_sun = 0.00464913034 ;AU
+      r_star_in_au = r_star*r_sun ; r_star in AU
+      fit_rin = rin[i]*r_star ;for HD3003 ;rin[i]
+      fit_rout = alog(rout[i]/rin[i])
+      fit_amax = alog(amax[i])/amin[i]
+      fit_diskmass = alog10(diskmass[i]*m_moon) ; convert m/m_moon to log(mass_in_kg)
+      stop
       ; ...
       
       ; Define fit parameters
-      params = [fit_rin,fit_rout,rlaw,amin,fit_amax,alaw,fit_diskmass,foliv,fcryst,ffost]
+      params = [10^fit_rin,fit_rout,rlaw[i],amin[i],fit_amax,alaw[i],10^fit_diskmass,foliv[i],fcryst[i],ffost[i]]
       
       ; For reference
       ;rin  = params[0]
@@ -123,7 +139,12 @@ FOR i=0, (n_elements(disk_name)-1) DO BEGIN
       ;foliv = params[7]
       ;fcrys = params[8]
       ;fforst = params[9]
-      
+ 
+      ; Define constants
+      c = 3.0e10 ; cm/s
+      to_cm = 1.0e-4     
+     
+     
      
       ; Sample model on same wavelengths as response curve
       out_model = modelsinglespectrum(transpose(resp_wave), params)
@@ -136,15 +157,15 @@ FOR i=0, (n_elements(disk_name)-1) DO BEGIN
       mips_sed_spec = out_model
       mips_sed_wave = resp_wave
       
-      ; Define constants
-      c = 3.0e10 ; cm/s
-      to_cm = 1.0e-4
-      
+
+
       ;Define integrand
-      int1 = (c*1.0e-23*mips_sed_spec)/(mips_sed_wave*to_cm)^2 ; convert units
+      int1 = (mips_sed_spec*(mips_sed_wave*to_cm)^2)/(c) ; convert units
+      ;int1 = (c*mips_sed_spec)/(mips_sed_wave*to_cm)^2 ; convert units
       ;int2 = interpol(int1,mips_sed_wave*to_cm,resp_wave*to_cm) ; get flux at right spots
-      int2=int1
-      int3 = int2*response ; multiply flux and response
+      ;int2=int1
+      ;int3 = int1*response;int2*response ; multiply flux and response
+      int3=int1*response
       
       ; Find integral of filter
       int_filter = int_tabulated(resp_wave*to_cm,response)
@@ -152,26 +173,32 @@ FOR i=0, (n_elements(disk_name)-1) DO BEGIN
       ; Integrate the MIPS SED over the bandpass
       synth_f70 = int_tabulated(resp_wave*to_cm,int3)/int_filter
       
+      synth_f70_jy = (synth_f70*(71.42*to_cm)^2)/(c*1.0e-23)
+      
       ; Convert MIPS 70 to proper units
       MIPS_as_flambda = (MIPS70_VAL*c*1.0e-23)/(71.42*to_cm)^2
       
       ; Find the normalization constant
       norm = MIPS_as_flambda/synth_f70
-      
+stop      
       ; Normalize
       mips_sed_spec = norm*mips_sed_spec
-      
+
       ; *************************************************** ;
       ; Print output as latex style table
 
-      ; header: [name?], actual mips 70, actual error, mips 70 according to model
-
-      print,format='(%" %f %f %f ")', $
-        MIPS70_VAL, MIPS70_ERR, mips_sed_spec
+      ; header: name, actual mips 70, actual error, mips 70 according to model
+  
+      printf,1,format='(%"%s & %f & %f & %f \\")', $
+      disk_name[i], MIPS70_VAL, MIPS70_ERROR, mips_sed_spec
+      
+      print, string(i)+': '+string(disk_name[i])+' done'
       ; *************************************************** ;
       
     ENDIF
   ENDFOR
 ENDFOR
+
+close,1
 
 END

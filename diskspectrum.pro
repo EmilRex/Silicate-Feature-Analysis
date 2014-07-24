@@ -233,7 +233,7 @@ endfor
 flux = total(tmp_p1,1)
 
 flux = flux/AU_in_cm^2
-
+stop
 ;t8 = systime(1)
 
 

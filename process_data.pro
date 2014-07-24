@@ -99,7 +99,7 @@ FOR i=0, (n_elements(name_list)-1) DO BEGIN
       ; Define integrand
       int1 = (c*1.0e-23*mips_sed_spec)/(mips_sed_wave*to_cm)^2 ; convert units
       int2 = int1*response_int ; multiply flux and response
-
+stop
       ; Find integral of filter
       int_filter = int_tabulated(mips_sed_wave*to_cm,response_int)
       
@@ -114,7 +114,7 @@ FOR i=0, (n_elements(name_list)-1) DO BEGIN
 
       ; Normalize
       mips_sed_spec = norm*mips_sed_spec
-        
+
       ; *************************************************** ;
       ; Concatenate and save
       mips_sed_source = MAKE_ARRAY(n_elements(mips_sed_wave), 1, /STRING, VALUE = 'SpitzerMIPS_SED')
