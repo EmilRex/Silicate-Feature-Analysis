@@ -9,8 +9,8 @@ pro print_mips70_table
 fmt = 's,f,f,f,f,f,f,f,f,f,f,f'
 readcol, 'disk_new.csv',F=fmt,disk_name,chisq,rin,rout,rlaw,amin,amax,alaw,mass,fcryst,foliv,ffost
 
-;fmt = ''
-;readcol, 'multi_new.csv',F=fmt,multi_name;,params
+;fmt = 's,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f'
+;readcol, 'multi_new.csv',F=fmt,name,chisq,temp1,temp2,Loc,Loc2,amin1,amin2,mass1,mass2,fcryst1,fcryst2,oliv1,oliv2,ffost1,ffost2
 
 ; Get names associated with MIPS70 values
 matches = strip_ext('old_savfiles_mcmc','sav')
@@ -100,11 +100,17 @@ FOR i=0, (n_elements(disk_name)-1) DO BEGIN
       ; Convert db data to model data    
       ;link[0]=10^(link[0])
       ;link[6]=10^(link[6])
-      diskmass = f(mass)
+      
+      m_moon = 7.34767309e22 ; in kg, from google
+      fit_rin = 
+      fit_rout = alog(rout/rin)
+      fit_amax = alog(amax)/amin
+      fit_diskmass = alog10(diskmass*m_moon) ; convert m/m_moon to log(mass_in_kg)
+      
       ; ...
       
       ; Define fit parameters
-      params = [rin,rout,rlaw,amin,amax,alaw,diskmass,foliv,fcryst,ffost]
+      params = [fit_rin,fit_rout,rlaw,amin,fit_amax,alaw,fit_diskmass,foliv,fcryst,ffost]
       
       ; For reference
       ;rin  = params[0]

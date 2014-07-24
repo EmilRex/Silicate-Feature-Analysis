@@ -14,7 +14,7 @@
 ;   FORSTFRAC:
 ;
 ; KEYWORDS
-;   NONE
+;   SEPARATE: Keeps graintypes separate instead of mixing
 ;
 ; OUTPUTS
 ;   QABS: Value returned for actual spectrum modeling
@@ -40,7 +40,7 @@
 ; *************************************************** ;
 
 pro qlookup, grainrad, wavelength, olivratio, crysfrac, forstfrac, $
-             qabs, qext=qext, qscat=qscat
+             qabs, qext=qext, qscat=qscat, separate=separate
 
 ; Carry global variables relating to silicate features
 COMMON grainprops, qastrosil, qolivine, qpyroxene, qenstatite, qforsterite, crystallineabs
@@ -128,20 +128,30 @@ qstruct = qenstatite
 ; crysfrac = crystalline/(crystalline+amorphous)
 ; forstfrac = forsterite/(enstatite+forsterite)
 
-qext = reform( qextall[*,*,0]*olivratio*(1.0-crysfrac) + $
-               qextall[*,*,1]*(1.0-olivratio)*(1.0-crysfrac) + $
-               qextall[*,*,2]*forstfrac*crysfrac + $
-               qextall[*,*,3]*(1.0-forstfrac)*crysfrac, $
-               n_elements(grainrad), n_elements(wavelength) )
+; Compresses the 4 *grain* layers into one 2D sheet
+; Can probably work around with a keyword at top: /separate or something
 
-qscat = reform( qscatall[*,*,0]*olivratio*(1.0-crysfrac) + $
-                qscatall[*,*,1]*(1.0-olivratio)*(1.0-crysfrac) + $
-                qscatall[*,*,2]*forstfrac*crysfrac + $
-                qscatall[*,*,3]*(1.0-forstfrac)*crysfrac, $
-                n_elements(grainrad), n_elements(wavelength) )
+IF NOT KEYWORD_SET(separate) THEN BEGIN
+
+  qext = reform( qextall[*,*,0]*olivratio*(1.0-crysfrac) + $
+                 qextall[*,*,1]*(1.0-olivratio)*(1.0-crysfrac) + $
+                 qextall[*,*,2]*forstfrac*crysfrac + $
+                 qextall[*,*,3]*(1.0-forstfrac)*crysfrac, $
+                 n_elements(grainrad), n_elements(wavelength) )
+  
+  qscat = reform( qscatall[*,*,0]*olivratio*(1.0-crysfrac) + $
+                  qscatall[*,*,1]*(1.0-olivratio)*(1.0-crysfrac) + $
+                  qscatall[*,*,2]*forstfrac*crysfrac + $
+                  qscatall[*,*,3]*(1.0-forstfrac)*crysfrac, $
+                  n_elements(grainrad), n_elements(wavelength) )
 
 qabs = qext-qscat
 
-;stop
+ENDIF ELSE BEGIN
+  qabs = dblarr(n_elements(grainrad),n_elements(wavelength),4)
+  FOR i=0,3 DO qabs[*,*,i] = qextall[*,*,i] - qscatall[*,*,i]
+ENDELSE
+
+
 return
 end

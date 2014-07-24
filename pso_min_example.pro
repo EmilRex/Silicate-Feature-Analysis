@@ -48,7 +48,7 @@ function f1_eval,p,_EXTRA = extra
 ; Create global variables relating to silicate features
 COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
 COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, effectiveTempArray, stellar_emit
-COMMON file_path, in_dir, out_dir, fit_name
+COMMON file_path, in_dir, out_dir, fit_name, object_name
 
 ; *************************************************** ;
 ; MODEL: ONE GRAIN
@@ -121,7 +121,7 @@ end
 pro pso_test_iterproc,  func, p, iter, interrupt, functargs = functargs, oref = opso, _Extra = extra
 ; ****************************************************************************************************** ;
 
-COMMON file_path, in_dir, out_dir, fit_name
+COMMON file_path, in_dir, out_dir, fit_name, object_name
 
 compile_opt hidden,idl2
 opso->get_property,fresult=fresult
@@ -145,7 +145,7 @@ end
 pro pso_min_example,amin=amin,Teff=teff_val,name=name1,output=output1,out_par=functargs,sequence=sequence
 ; ****************************************************************************************************** ;
 
-COMMON file_path, in_dir, out_dir, fit_name
+COMMON file_path, in_dir, out_dir, fit_name, object_name
 
 IF (fit_name eq 'single') THEN BEGIN
   prange = [[30.0, 800.0],[amin, 30.0],[16.5, 23.5],[0, 1.0],[0, 1.0],[0, 1.0]]

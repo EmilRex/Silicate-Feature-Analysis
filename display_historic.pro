@@ -4,7 +4,7 @@ function display_historic,name
   ; ****************************************************************************************************** ;
   ; Print Tushar's old simulation results to CL
   
-  COMMON file_path, in_dir, out_dir, fit_name
+  COMMON file_path, in_dir, out_dir, fit_name, object_name
   
   ; To Do: add if statement to deal with non-existent historic data
   ; else print, 'No prior data available'

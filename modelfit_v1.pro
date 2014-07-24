@@ -192,7 +192,8 @@ endif else begin
     print, 'Fitting single grain model...'
     
 	  param_bnd = dblarr(3,6)
- 		param_bnd[*,0]= [10.0, 1000.0,0] ; Temperatures limited to reasonable values
+ 		;param_bnd[*,0]= [10.0, 1000.0,0] ; Temperatures limited to reasonable values
+		param_bnd[*,0]= [0.1, 500.0,0] ; New distance bounds
 		param_bnd[*,1]= [amin, 30.0,0] ; .1 as lower bound
 		param_bnd[*,2]= [16.5, 23.5,0] ; positive scale factors
 		param_bnd[*,3]= [0, 1.0,0] ; olivine/pyroxene composition 
@@ -299,13 +300,15 @@ endif else begin
     print, 'Fitting two grain model...'
 
 	  param_bnd = dblarr(3,12)
- 		param_bnd[*,0]= [30.0, 300.0,0] ; Temp limited to reasonable values
+ 		;param_bnd[*,0]= [30.0, 300.0,0] ; Temp limited to reasonable values
+		param_bnd[*,0]= [0.1, 500.0,0] ; New distance bounds
 		param_bnd[*,1]= [amin, 100.0,0] ; blowout radius as lower bound
 		param_bnd[*,2]= [16.5, 23.5,0] ; positive scale factors
 		param_bnd[*,3]= [0, 1.0,0] ; olivine/pyroxene composition 
 		param_bnd[*,4]= [0, 1.0,0] ; crystalline fraction
 		param_bnd[*,5]= [0, 1.0,0] ; forsterite/enstatite composition 
- 		param_bnd[*,6]= [100.0, 1000.0,0] ; Temp limited to reasonable values
+ 		;param_bnd[*,6]= [100.0, 1000.0,0] ; Temp limited to reasonable values
+		param_bnd[*,6]= [0.1, 500.0,0] ; New distance bounds
 		param_bnd[*,7]= [amin, 100.0,0] ; blowout radius as lower bound
 		param_bnd[*,8]= [16.5, 23.5,0] ; positive scale factors
 		param_bnd[*,9]= [0, 1.0,0] ; olivine/pyroxene composition 

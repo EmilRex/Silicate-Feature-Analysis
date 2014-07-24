@@ -40,7 +40,7 @@ function run_fit_prg
 
 compile_opt idl2
 
-COMMON file_path, in_dir, out_dir, fit_name
+COMMON file_path, in_dir, out_dir, fit_name, object_name
 
 ; Create global variables relating to silicate features
 COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
@@ -357,7 +357,7 @@ function logTargetDistribution,link,result
 COMMON fnc_name,dof1 
 COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
 COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, effectiveTempArray, stellar_emit
-COMMON file_path, in_dir, out_dir, fit_name
+COMMON file_path, in_dir, out_dir, fit_name, object_name
 
 
 ; *************************************************** ;
@@ -417,7 +417,7 @@ IF (fit_name eq 'disk_mips') THEN BEGIN
   
   link[0]=10^(link[0])
   link[6]=10^(link[6])
-  
+
   spectra =  modelsinglespectrum(result[0,*], link)
   chisq = TOTAL ( ((result[1,*]-spectra)^2.0)/((.05*result[2,*])^2.0+(result[2,*])^2.0))
   like_func = -(chisq)/(2.0*dof1)
