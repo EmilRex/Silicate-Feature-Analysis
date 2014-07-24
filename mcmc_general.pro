@@ -418,7 +418,6 @@ IF (fit_name eq 'disk_mips') THEN BEGIN
   link[0]=10^(link[0])
   link[6]=10^(link[6])
   
-  print, 
   spectra =  modelsinglespectrum(result[0,*], link)
   chisq = TOTAL ( ((result[1,*]-spectra)^2.0)/((.05*result[2,*])^2.0+(result[2,*])^2.0))
   like_func = -(chisq)/(2.0*dof1)
