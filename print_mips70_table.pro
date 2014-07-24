@@ -101,16 +101,16 @@ FOR i=0, (n_elements(disk_name)-1) DO BEGIN
       ;link[0]=10^(link[0])
       ;link[6]=10^(link[6])
       
-      m_moon = 7.34767309e22 ; From google
-      
-      rout = 
-      amax = alog(amax)/amin
-      diskmass = alog10(diskmass*m_moon) ; convert m/m_moon to log(mass_in_kg)
+      m_moon = 7.34767309e22 ; in kg, from google
+      fit_rin = 
+      fit_rout = alog(rout/rin)
+      fit_amax = alog(amax)/amin
+      fit_diskmass = alog10(diskmass*m_moon) ; convert m/m_moon to log(mass_in_kg)
       
       ; ...
       
       ; Define fit parameters
-      params = [rin,rout,rlaw,amin,amax,alaw,diskmass,foliv,fcryst,ffost]
+      params = [fit_rin,fit_rout,rlaw,amin,fit_amax,alaw,fit_diskmass,foliv,fcryst,ffost]
       
       ; For reference
       ;rin  = params[0]
