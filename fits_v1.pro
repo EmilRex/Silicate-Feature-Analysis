@@ -40,6 +40,7 @@
 pro fits_v1, name=name,fittype=fittype,DO_OLD = do_old
 
 COMMON file_path, in_dir, out_dir, fit_name, object_name
+COMMON star_params, t_star, dist_to_star, star_lambda, star_fnu
 
 ; Load text file with names, Teff, amin and dist
 fmt='a,f,f,f'
@@ -54,6 +55,14 @@ for i = 0, size(catalog_name,/n_elements)-1 do begin
        dist_val=c_dist_val[i]
     endif
 endfor
+
+; Load stellar photosphere model data
+restore,in_dir+'/'+object_name+'.sav'
+
+t_star = Teff
+dist_to_star = dist_val
+star_lambda = final_phot_wave
+star_fnu = final_phot_fnu
 
 ; *************************************************** ;
 ; If name set as below, run test data
