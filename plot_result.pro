@@ -31,7 +31,7 @@
 ;  Generalized and renamed by EC (7/14/14)
 ; -
 ; *************************************************** ;
-pro plot_result, object_name
+pro plot_result
 
 COMMON file_path, in_dir, out_dir, fit_name, object_name
 

@@ -1,20 +1,30 @@
 ; Written for cchen's reponse to Tushar's paper's review
 ; By EC on 7/21/14
 
-pro print_mips70_table
+pro print_mips70_table, disk=disk, multi=multi
 
 ; *************************************************** ;
+; Load Tushar's fit data from db generated csv
+
+if keyword_set(disk) then begin
+  out_type = 'disk'
+  fmt = 'a,f,f,f,f,f,f,f,f,f,f,f'
+  readcol, 'disk_new.csv',F=fmt,name,chisq,rin,rout,rlaw,amin,amax,alaw,diskmass,fcryst,foliv,ffost
+endif
+
+if keyword_set(multi) then begin
+  out_type = 'multi'
+  fmt = 'a,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f'
+  readcol, 'multi_new.csv',F=fmt,name,chisq,temp1,temp2,Loc,Loc2,amin1,amin2,mass1,mass2,fcryst1,fcryst2,oliv1,oliv2,ffost1,ffost2
+endif
+
+
+; *************************************************** ;
+; Load Stellar parameters
 
 ; Load R-star values
 fmt = 'a,f'
 readcol, 'r_star.csv',F=fmt,r_star_name,c_r_star
-
-; Load Tushar's fit data from db generated csv
-fmt = 'a,f,f,f,f,f,f,f,f,f,f,f'
-readcol, 'disk_new.csv',F=fmt,disk_name,chisq,rin,rout,rlaw,amin,amax,alaw,diskmass,fcryst,foliv,ffost
-
-;fmt = 'a,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f'
-;readcol, 'multi_new.csv',F=fmt,name,chisq,temp1,temp2,Loc,Loc2,amin1,amin2,mass1,mass2,fcryst1,fcryst2,oliv1,oliv2,ffost1,ffost2
 
 ; Get names associated with MIPS70 values
 matches = strip_ext('old_savfiles_mcmc','sav')
@@ -27,28 +37,41 @@ readcol,'MIPS_SED_response.txt',F=fmt,v1,v2,resp_wave,response,v5,v6, /SILENT
 fmt='a,f,f,f'
 readcol,'input_files/input_param_file.txt',F=fmt,catalog_name,c_teff,c_amin,c_dist_val
 
-
 ; Open output file
 close,1
-openw,1,'print_mips70_table.txt'
+openw,1,'print_mips70_table_'+out_type+'.txt'
+
+; Print header
+;out_format='(%"%s & %s & %s & %s \\\\")'
+out_format='(%"%s, %s, %s, %s")'
+printf,1,format=out_format, $
+  'Name', 'Observed MIPS70', 'Observed MIPS70 Error', 'Model MIPS70'
+
+; Define constants
+c = 3.0e10 ; cm/s
+to_cm = 1.0e-4
+m_moon = 7.34767309e22 ; in kg, from google
+r_sun = 0.00464913034 ;AU
+au_in_cm = 1.49597871e13
+pc_in_cm = 3.08567758e18
 
 ; *************************************************** ;
 ; Loop over each object
 
-FOR i=0, (n_elements(disk_name)-1) DO BEGIN
+FOR i=0, (n_elements(name)-1) DO BEGIN
   FOR j=0, (n_elements(matches)-1) DO BEGIN
   
-    IF (disk_name[i] eq matches[j]) THEN BEGIN
+    IF (name[i] eq matches[j]) THEN BEGIN
   
       ; *************************************************** ;
       ; Load correct data
       
       ; Load MIPS70 data from IDL savefile
-      restore, 'old_savfiles_mcmc/'+disk_name[i]+'.sav'
+      restore, 'old_savfiles_mcmc/'+name[i]+'.sav'
       
       ; Load star system constants
       for k = 0, size(catalog_name,/n_elements)-1 do begin
-        if (catalog_name[k] eq disk_name[i]) then begin
+        if (catalog_name[k] eq name[i]) then begin
           Teff=c_teff[k]
           dist_val=c_dist_val[k]
         endif
@@ -56,7 +79,7 @@ FOR i=0, (n_elements(disk_name)-1) DO BEGIN
 
       ; Load correct r_star
       for k=0, n_elements(r_star_name)-1 do begin
-        if (r_star_name[k] eq disk_name[i]) then begin
+        if (r_star_name[k] eq name[i]) then begin
           r_star = c_r_star[k]
         endif
       endfor
@@ -101,98 +124,99 @@ FOR i=0, (n_elements(disk_name)-1) DO BEGIN
       
       restore, grainfiles[ki]
       
-      ; *************************************************** ;
-      ; Calculate and interpolate modeled spectrum from csv
+      
+      if keyword_set(multi) then begin
+        ; *************************************************** ;
+        ; Calculate multi spectrum from csv
+  
+        ; multi_mips
+        ;link[2]=10^(link[2])
+        ;link[8]=10^(link[8])
 
-      ; multi_mips
-      ;link[2]=10^(link[2])
-      ;link[8]=10^(link[8])
-      ;out_model = modeltwograin(model_x, link)
+        ; Sample model on same wavelengths as response curve
+        ; Outputs flux in Jansky's
+        out_model = modeltwograin(resp_wave, link)
       
+      endif
       
-      ; disk_mips
-      ; Convert db data to model data    
-      ;link[0]=10^(link[0])
-      ;link[6]=10^(link[6])
-      
-      m_moon = 7.34767309e22 ; in kg, from google
-      r_sun = 0.00464913034 ;AU
-      r_star_in_au = r_star*r_sun ; r_star in AU
-      fit_rin = rin[i]*r_star ;for HD3003 ;rin[i]
-      fit_rout = alog(rout[i]/rin[i])
-      fit_amax = alog(amax[i])/amin[i]
-      fit_diskmass = alog10(diskmass[i]*m_moon) ; convert m/m_moon to log(mass_in_kg)
-      stop
-      ; ...
-      
-      ; Define fit parameters
-      params = [10^fit_rin,fit_rout,rlaw[i],amin[i],fit_amax,alaw[i],10^fit_diskmass,foliv[i],fcryst[i],ffost[i]]
-      
-      ; For reference
-      ;rin  = params[0]
-      ;rout = exp(params[1])*rin
-      ;rlaw = params[2]
-      ;amin = params[3]
-      ;amax = exp(params[4])*amin
-      ;alaw = params[5]
-      ;diskmass = params[6]
-      ;foliv = params[7]
-      ;fcrys = params[8]
-      ;fforst = params[9]
- 
-      ; Define constants
-      c = 3.0e10 ; cm/s
-      to_cm = 1.0e-4     
-     
-     
-     
-      ; Sample model on same wavelengths as response curve
-      out_model = modelsinglespectrum(transpose(resp_wave), params)
-            
+      if keyword_set(disk) then begin
+
+        ; *************************************************** ;
+        ; Calculate disk spectrum from csv
+        
+        ; For reference
+        ;rin  = params[0]
+        ;rout = exp(params[1])*rin
+        ;rlaw = params[2]
+        ;amin = params[3]
+        ;amax = exp(params[4])*amin
+        ;alaw = params[5]
+        ;diskmass = params[6]
+        ;foliv = params[7]
+        ;fcrys = params[8]
+        ;fforst = params[9]
+        
+        ; Convert db values to fit parameters
+        r_star_in_au = r_star*r_sun ; r_star in AU
+        fit_rin = alog10(rin[i]/(r_sun*r_star)) ;for HD3003 ;rin[i]
+        fit_rout = alog(rout[i]/rin[i])
+        fit_amax = alog(amax[i])/amin[i]
+        
+        ;part1 = (206265*au_in_cm)^2
+        part1 = 2.0*alog10(206265*au_in_cm)
+        ;part2 = (dist_val*pc_in_cm)^2
+        ;part2 = 2.0*alog10(dist_val*pc_in_cm)
+        part2 = 2.0*alog10(dist_val*pc_in_cm)
+        ;factor = (10^(part2-part1))/10000
+        factor = 1
+        
+        ;factor = 1000*((206265*au_in_cm)^2/(dist_val*pc_in_cm)^2)
+        ;factor = 0.46311132191
+        diskmass[i] = diskmass[i];*factor
+        fit_diskmass = alog10((diskmass[i])*m_moon) ; convert m/m_moon to log(mass_in_kg)
+        ; need to apply correction Tushar mentioned
+        
+        ; Combine fit parameters
+        params = [10^fit_rin,fit_rout,rlaw[i],amin[i],fit_amax,alaw[i],10^fit_diskmass,foliv[i],fcryst[i],ffost[i]]
+        
+        ; Sample model on same wavelengths as response curve
+        ; Outputs flux in Jansky's
+        out_model = modelsinglespectrum(transpose(resp_wave), params)
+
+        wave_model = modelsinglespectrum(transpose([final_wave,71.42]), params)
+        plot, [final_wave,71.42],wave_model
+        oplot,final_wave,final_spec,psym=4
+        oplot,[71.42],[MIPS70_val],psym=4
+        stop
+
+      endif
+
       ; *************************************************** ;
       ; Normalize MIPS SED data by comparing with MIPS70
-      ; -> needs some clean-up after it has been tested and works correctly
-      
-      ; Redefine input names to match names in below
-      mips_sed_spec = out_model
-      mips_sed_wave = resp_wave
-      
-
 
       ;Define integrand
-      int1 = (mips_sed_spec*(mips_sed_wave*to_cm)^2)/(c) ; convert units
-      ;int1 = (c*mips_sed_spec)/(mips_sed_wave*to_cm)^2 ; convert units
-      ;int2 = interpol(int1,mips_sed_wave*to_cm,resp_wave*to_cm) ; get flux at right spots
-      ;int2=int1
-      ;int3 = int1*response;int2*response ; multiply flux and response
-      int3=int1*response
+      int=out_model*response
       
       ; Find integral of filter
       int_filter = int_tabulated(resp_wave*to_cm,response)
       
       ; Integrate the MIPS SED over the bandpass
-      synth_f70 = int_tabulated(resp_wave*to_cm,int3)/int_filter
+      ;synth_f70 = int_tabulated(resp_wave*to_cm,int)/int_filter
+      synth_f70 = interpol(out_model,resp_wave*to_cm,71.42*to_cm)
       
-      synth_f70_jy = (synth_f70*(71.42*to_cm)^2)/(c*1.0e-23)
-      
-      ; Convert MIPS 70 to proper units
-      MIPS_as_flambda = (MIPS70_VAL*c*1.0e-23)/(71.42*to_cm)^2
-      
-      ; Find the normalization constant
-      norm = MIPS_as_flambda/synth_f70
-stop      
-      ; Normalize
-      mips_sed_spec = norm*mips_sed_spec
-
+      ;plot, resp_wave*to_cm,out_model
+      ;oplot,[71.42*to_cm],[synth_f70],psym=4
+      ;stop
       ; *************************************************** ;
       ; Print output as latex style table
 
       ; header: name, actual mips 70, actual error, mips 70 according to model
-  
-      printf,1,format='(%"%s & %f & %f & %f \\")', $
-      disk_name[i], MIPS70_VAL, MIPS70_ERROR, mips_sed_spec
+      ;out_format='(%"%s & %s & %s & %s \\\\")'
+      out_format='(%"%s, %s, %s, %s")'
+      printf,1,format=out_format, $
+      name[i], MIPS70_VAL, MIPS70_ERROR, synth_f70
       
-      print, string(i)+': '+string(disk_name[i])+' done'
+      print, string((i+1))+': '+string(name[i])+' done'
       ; *************************************************** ;
       
     ENDIF

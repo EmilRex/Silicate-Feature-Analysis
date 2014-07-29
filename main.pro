@@ -56,10 +56,11 @@ fit_names = ['single','disk_mips'];,'multi_mips', 'disk_mips']
 FOREACH name, names DO BEGIN
   FOREACH fit_name, fit_names DO BEGIN
     object_name = name
-    fits_v1, name=name, fittype=fit_name
-    ;plot_result, name
-    ;null = display_historic(name)
-    ;null = display_results(name)
+    define_stellar_params
+    ;fits_v1, name=name, fittype=fit_name
+    plot_result
+    null = display_historic(name)
+    null = display_results(name)
   ENDFOREACH
 ENDFOREACH
 
