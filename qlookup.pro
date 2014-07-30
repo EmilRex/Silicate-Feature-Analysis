@@ -148,8 +148,24 @@ IF NOT KEYWORD_SET(separate) THEN BEGIN
 qabs = qext-qscat
 
 ENDIF ELSE BEGIN
+  
   qabs = dblarr(n_elements(grainrad),n_elements(wavelength),4)
-  FOR i=0,3 DO qabs[*,*,i] = qextall[*,*,i] - qscatall[*,*,i]
+  qext = dblarr(n_elements(grainrad),n_elements(wavelength),4)
+  qscat = dblarr(n_elements(grainrad),n_elements(wavelength),4)
+  
+  qext[*,*,0] = qextall[*,*,0]*olivratio*(1.0-crysfrac)
+  qext[*,*,1] = qextall[*,*,1]*(1.0-olivratio)*(1.0-crysfrac)
+  qext[*,*,2] = qextall[*,*,2]*forstfrac*crysfrac
+  qext[*,*,3] = qextall[*,*,3]*(1.0-forstfrac)*crysfrac 
+  
+  qscat[*,*,0] = qscatall[*,*,0]*olivratio*(1.0-crysfrac)
+  qscat[*,*,1] = qscatall[*,*,1]*(1.0-olivratio)*(1.0-crysfrac)
+  qscat[*,*,2] = qscatall[*,*,2]*forstfrac*crysfrac
+  qscat[*,*,3] = qscatall[*,*,3]*(1.0-forstfrac)*crysfrac
+  
+  
+  FOR i=0,3 DO qabs[*,*,i] = qext[*,*,i] - qscat[*,*,i]
+  
 ENDELSE
 
 
