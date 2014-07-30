@@ -63,7 +63,7 @@ out_dir = '../Silicate_Feature_Analysis_output'
 names = ['HD106906','HD146897'];['HD146897','HD117214']
 fit_names = ['single'];'disk_mips';['single','multi_mips','disk_mips'];,'multi_mips', 'disk_mips']
 
-;FOREACH name, names DO BEGIN
+FOREACH name, names DO BEGIN
   FOREACH fit_name, fit_names DO BEGIN
     object_name = name
     ;define_stellar_params
