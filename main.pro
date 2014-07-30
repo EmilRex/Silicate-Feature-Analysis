@@ -72,7 +72,7 @@ FOREACH name, names DO BEGIN
     ;null = display_historic(name)
     null = display_results(name)
   ENDFOREACH
-;ENDFOREACH
+ENDFOREACH
 
 
 end
