@@ -70,7 +70,7 @@ FOREACH name, names DO BEGIN
     fits_v1, name=name, fittype=fit_name
     ;plot_result
     ;null = display_historic(name)
-    null = display_results(name)
+    ;null = display_results(name)
   ENDFOREACH
 ENDFOREACH
 
