@@ -193,7 +193,7 @@ endif else begin
     
 	  param_bnd = dblarr(3,6)
  		;param_bnd[*,0]= [10.0, 1000.0,0] ; Temperatures limited to reasonable values
-		param_bnd[*,0]= [0.1, 500.0,0] ; New distance bounds
+		param_bnd[*,0]= [1.0, 5.0,0] ; New distance bounds
 		param_bnd[*,1]= [amin, 30.0,0] ; .1 as lower bound
 		param_bnd[*,2]= [16.5, 23.5,0] ; positive scale factors
 		param_bnd[*,3]= [0, 1.0,0] ; olivine/pyroxene composition 
