@@ -60,16 +60,17 @@ out_dir = '../Silicate_Feature_Analysis_output'
 ;RUN MULTIPLE
 ; *************************************************** ;
 
-names = 'HD114082';['HD95086','HD146897'];['HD146897','HD117214']'HD108257';'HD106906';
-fit_names = 'single';['single','multi_mips','disk_mips']
+names = ['HD95086','HD106906','HD108257','HD110058','HD111520','HD113556','HD113766','HD114082','HD115600','HD117214','HD145560','HD146181','HD146897']
+fit_names = ['single','disk_mips'];['single','multi_mips','disk_mips']
 
-FOREACH name, names DO BEGIN
-  FOREACH fit_name, fit_names DO BEGIN
+
+FOREACH fit_name, fit_names DO BEGIN
+  FOREACH name, names DO BEGIN
     object_name = name
     ;define_stellar_params
-    ;fits_v1, name=name, fittype=fit_name
-    plot_result
-    null = display_historic(name)
+    fits_v1, name=name, fittype=fit_name
+    ;plot_result
+    ;null = display_historic(name)
     null = display_results(name)
   ENDFOREACH
 ENDFOREACH
