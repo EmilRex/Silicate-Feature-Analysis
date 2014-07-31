@@ -57,7 +57,7 @@ IF (fit_name eq 'single') THEN BEGIN
   
   link=[p[0],p[1],10^(p[2]),p[3],p[4],p[5]]
   
-  spectra = modelsinglespectrum(transpose(extra.wave),link )
+  spectra = modelsinglespectrum(transpose(extra.wave),link, /single )
   
   chisq = TOTAL ( ((extra.spec-spectra)^2.0)/((.05*extra.error)^2.0+(extra.error)^2.0))
   
