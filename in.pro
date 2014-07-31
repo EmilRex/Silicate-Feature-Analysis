@@ -1,5 +1,5 @@
 print, 'Job started'
 
-main,'HD106906'
+main
 
 print, 'Job complete'
