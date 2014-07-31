@@ -67,8 +67,8 @@ FOREACH name, names DO BEGIN
   FOREACH fit_name, fit_names DO BEGIN
     object_name = name
     ;define_stellar_params
-    ;fits_v1, name=name, fittype=fit_name
-    plot_result
+    fits_v1, name=name, fittype=fit_name
+    ;plot_result
     ;null = display_historic(name)
     null = display_results(name)
   ENDFOREACH
