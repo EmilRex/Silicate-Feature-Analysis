@@ -35,3 +35,33 @@ Result:       447.833     0.612513      21.4776     0.383711     0.637969
      0.477659
 Value:       24.8603
 # function calls:         8000
+
+Wed Jul 30 14:36:34 2014
+Result:        404.97464      0.80823525       21.497199      0.86169359
+      0.62594433      0.61566641
+Value:       25.3567
+# function calls:         8000
+       3
+T_star=      6750.00
+Fitting single grain model...
+ 
+Thu Jul 31 08:48:25 2014
+Old parameter results for: 
+HD146897 single
+Temp  a_grain  dustmass  folive  fcrys  ffors 
+       102.71145       6.3111419       20.003439      0.38716031     0.018616916
+      0.77053856
+ 
+Chisq:        5.7192127
+ 
+ 
+Thu Jul 31 08:48:25 2014
+New parameter results for: 
+HD146897 single
+Temp a_grain dustmass folive fcrys ffors 
+Temp
+       490.97624      0.51230213       21.497191      0.27810242      0.46586693
+      0.72370914
+ 
+Chisq:        24.566168
+ 

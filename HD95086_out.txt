@@ -35,3 +35,13 @@ Result:        78.862692       16.867736       20.886294      0.72814159
       0.83911963      0.57679951
 Value:       9.96378
 # function calls:         8000
+
+Wed Jul 30 14:40:26 2014
+Result:        78.886734       16.865821       20.886555      0.47738396
+      0.38844956      0.63228855
+Value:       9.96378
+# function calls:         8000
+       3
+T_star=      8250.00
+Fitting single grain model...
+Job complete'

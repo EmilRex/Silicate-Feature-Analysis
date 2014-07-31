@@ -128,6 +128,9 @@ FOR i = 0, 3 DO BEGIN
   temp[i] = 10^interpol(alog10(t),alog10(rhs),alog10(lhs))
 
   ; Compute spectrum
+  ; Try multiplying "scale" by the "grain fraction" - will make sure each graintype only contributes
+  ; its fraction of the flux. Although, the fractions are already implemented in qabs...
+  ; qabs is really qabs*grain_mass_fraction.
   flux[*,i] = !pi*blackbody(lambda,temp[i])*(reform(qabs[*,*,i],n_elements(lambda))*scale)
   
 ENDFOR

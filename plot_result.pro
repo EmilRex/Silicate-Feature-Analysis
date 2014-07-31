@@ -137,11 +137,11 @@ IF (fit_name eq 'single') THEN BEGIN
   out_model = modelonegrain(model_x, link)
   
   ; Load Tushar's data from input_files
-  data_dir = '/Users/echristensen/Summer2014/dust_fit/hannah_model/pro/output_fin_new2/output_fin_new'
-  data1 = readfits(data_dir+'/'+object_name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=61,/silent)
-  data2=data1[0:(n_elements(data1)-2)]
-  data2[2]=10^(data2[2])
-  tushar_model = modelonegrain(model_x, data2)
+  ;data_dir = '/Users/echristensen/Summer2014/dust_fit/hannah_model/pro/output_fin_new2/output_fin_new'
+  ;data1 = readfits(data_dir+'/'+object_name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=61,/silent)
+  ;data2=data1[0:(n_elements(data1)-2)]
+  ;data2[2]=10^(data2[2])
+  ;tushar_model = modelonegrain(model_x, data2)
 
 ENDIF
 
@@ -212,7 +212,7 @@ oploterr,wave_irs,fl_diff,uncer_irs,0;,psym=1;,color=0
 
 ; Plot the models
 oplot,model_x,out_model,color=3, thick=5,linestyle=lines[1]
-oplot,model_x,tushar_model,color=2, thick=5,linestyle=lines[2]
+;oplot,model_x,tushar_model,color=2, thick=5,linestyle=lines[2]
 
 ; Create legend
 legend,['IRS','MIPS SED','New Model','Old Model'],psym=[2,6,0,0],$
