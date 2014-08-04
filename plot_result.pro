@@ -137,11 +137,11 @@ IF (fit_name eq 'single') THEN BEGIN
   out_model = modelsinglespectrum(transpose(model_x), link, /single)
   
   ; Load Tushar's data from input_files
-  data_dir = '/Users/echristensen/Summer2014/dust_fit/hannah_model/pro/output_fin_new2/output_fin_new'
-  data1 = readfits(data_dir+'/'+object_name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=61,/silent)
-  data2=data1[0:(n_elements(data1)-2)]
-  data2[2]=10^(data2[2])
-  tushar_model = modelonegrain_old(model_x, data2)
+  ;data_dir = '/Users/echristensen/Summer2014/dust_fit/hannah_model/pro/output_fin_new2/output_fin_new'
+  ;data1 = readfits(data_dir+'/'+object_name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=61,/silent)
+  ;data2=data1[0:(n_elements(data1)-2)]
+  ;data2[2]=10^(data2[2])
+  ;tushar_model = modelonegrain_old(model_x, data2)
 
 ENDIF
 
@@ -197,7 +197,7 @@ plot,wave_irs,fl_diff,title=object_name+' ('+fit_name+' Model)', $
      ystyle=1,psym=0,xstyle=1,xtitle='Wavelength ('+cggreek('mu')+'m)', $
      ytitle='F'+cggreek('nu')+' (Jy)',charthick=1, thick=1, $
      xthick=2, ythick=2, charsize=1,color=0, $
-     yrange=[min([out_model,fl_diff]),max([out_model,fl_diff])]
+     yrange=[1.0e-6,1.0],/ylog
 
 ; Connect the points
 ;oplot,wave_irs,fl_diff,color=0
