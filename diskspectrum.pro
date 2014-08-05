@@ -150,14 +150,14 @@ endelse
 
 
 ; Get temperatures - don't include crystalline silicates
-equiltemplookup, Teff, aall, rall, tempr, folivine, 0.0, 0.0
+equiltemplookup, Teff, aall, rall, tempr, folivine, fcrystalline, fforst
 
 ; Get Qabs, from Mie calculation
-qlookup, aall, lambda, folivine, fcrystalline, fforst, qabsall 
+qlookup, aall, lambda, folivine, fcrystalline, fforst, qabsall, /separate
 
 ; *************************************************** ;
 ; Calculate spectrum
-flux = dblarr(n_elements(lambda))
+flux = dblarr(n_elements(lambda),4)
 NL = n_elements(lambda)
 if nl le 1 then print, 'OH WOE!'
 
@@ -171,36 +171,41 @@ amorphnorm = diskmass/totmass
 crysnorm = diskmass/totsigma/total(crosssection)
 
 ; *************************************************** ;
-; Calculate Blackbody
-temp_t1 =reform(transpose(tempr),NA*NR) 
-wave_new1= (REBIN(lambda,NA*NR,NL))*1.d-4
-temp_t2= (REBIN(temp_t1,NA*NR,NL))
+; Calculate flux for each grain type
+for g=0,3 do begin
+  ; Calculate Blackbody
+  temp_t1 =reform(transpose(tempr[*,*,g]),NA*NR) 
+  wave_new1= (REBIN(lambda,NA*NR,NL))*1.d-4
+  temp_t2= (REBIN(temp_t1,NA*NR,NL))
+  
+  
+  hnukT = ((h*c/k)/wave_new1)/temp_t2
+  tmp_p1 = (2.0*h*c)/(wave_new1)^3
+  brightness = (tmp_p1*(1.d23/206265.0^2))/(exp(hnukT)-1.0)
+  subl = where(temp_t2 gt 1000.0) ; include dust sublimation
+  
+  if subl[0] ne -1 then brightness[subl] = 0.0
+  ;  tmp_p1 = REBIN(rintegrand,1,n_elements(rintegrand)*n_elements(tempr[*,0]))
+  ;  rintegrand2 = REBIN(tmp_p1,n_elements(tmp_p1),n_elements(lambda))
+  ;  brightness2 = reform(brightness,NR,NA,NL)
+  
+  brightness = transpose(brightness)
+  ;brightness2 = (brightness)*abscoeff
+  tmp_p1 = FLTARR(NA,NL) 
+  
+  
+  for i=0,NA-1 do begin
+      intFdr = (matrix_multiply(brightness[*,0+NR*(i):NR-1+NR*(i)], rintegrand)*qabsall[i,*,g])*(crosssection[i]*amorphnorm)
+      ;intFdr2 = matrix_multiply(brightness2[*,0+NR*(i):NR-1+NR*(i)], rintegrand)*(crosssection[i]*crysnorm)
+      tmp_p1[i,*] = intFdr;*(1.0-fcrystalline)+intFdr2*fcrystalline
+  endfor
 
+  ; Return the flux and end
+  flux[*,g] = total(tmp_p1,1)
+  flux[*,g] = flux[*,g]/AU_in_cm^2
 
-hnukT = ((h*c/k)/wave_new1)/temp_t2
-tmp_p1 = (2.0*h*c)/(wave_new1)^3
-brightness = (tmp_p1*(1.d23/206265.0^2))/(exp(hnukT)-1.0)
-subl = where(temp_t2 gt 1000.0) ; include dust sublimation
-
-if subl[0] ne -1 then brightness[subl] = 0.0
-;  tmp_p1 = REBIN(rintegrand,1,n_elements(rintegrand)*n_elements(tempr[*,0]))
-;  rintegrand2 = REBIN(tmp_p1,n_elements(tmp_p1),n_elements(lambda))
-;  brightness2 = reform(brightness,NR,NA,NL)
-
-brightness = transpose(brightness)
-;brightness2 = (brightness)*abscoeff
-tmp_p1 = FLTARR(NA,NL) 
-
-
-for i=0,NA-1 do begin
-    intFdr = (matrix_multiply(brightness[*,0+NR*(i):NR-1+NR*(i)], rintegrand)*qabsall[i,*])*(crosssection[i]*amorphnorm)
-    ;intFdr2 = matrix_multiply(brightness2[*,0+NR*(i):NR-1+NR*(i)], rintegrand)*(crosssection[i]*crysnorm)
-    tmp_p1[i,*] = intFdr;*(1.0-fcrystalline)+intFdr2*fcrystalline
 endfor
 
-; Return the flux and end
-flux = total(tmp_p1,1)
-flux = flux/AU_in_cm^2
 return
 end
 

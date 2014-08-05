@@ -1,6 +1,6 @@
 ; Modified by EC on 7/31/14
 
-function modelsinglespectrum, lambda, params, single=single
+function modelsinglespectrum, lambda, params, single=single, separate=separate
 
 
 COMMON stellarprops, temptable, folivine, effectiveTemp, lambdastar, fluxstar
@@ -41,6 +41,11 @@ endif else begin
     foliv, fcrys, fforst, rlaw=rlaw, alaw=alaw, lambda, flux
   
 endelse                                                                                               
+
+
+if not keyword_set(separate) then begin
+  flux = total(flux,2)
+endif
 
 return, flux
 end
