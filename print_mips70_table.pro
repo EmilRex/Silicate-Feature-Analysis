@@ -50,7 +50,7 @@ printf,1,format=out_format, $
 ; Define constants
 c = 3.0e10 ; cm/s
 to_cm = 1.0e-4
-m_moon = 7.34767309e22 ; in kg, from google
+m_moon = 7.34767309e25 ; in g, from google
 r_sun = 0.00464913034 ;AU
 au_in_cm = 1.49597871e13
 pc_in_cm = 3.08567758e18
@@ -167,12 +167,12 @@ FOR i=0, (n_elements(name)-1) DO BEGIN
         ;part2 = (dist_val*pc_in_cm)^2
         ;part2 = 2.0*alog10(dist_val*pc_in_cm)
         part2 = 2.0*alog10(dist_val*pc_in_cm)
-        ;factor = (10^(part2-part1))/10000
-        factor = 1
+        factor = (10^(part1-part2))
+        ;factor = 1.0
         
         ;factor = 1000*((206265*au_in_cm)^2/(dist_val*pc_in_cm)^2)
         ;factor = 0.46311132191
-        diskmass[i] = diskmass[i];*factor
+        ;diskmass[i] = diskmass[i]*factor
         fit_diskmass = alog10((diskmass[i])*m_moon) ; convert m/m_moon to log(mass_in_kg)
         ; need to apply correction Tushar mentioned
         
@@ -181,13 +181,15 @@ FOR i=0, (n_elements(name)-1) DO BEGIN
         
         ; Sample model on same wavelengths as response curve
         ; Outputs flux in Jansky's
-        out_model = modelsinglespectrum(transpose(resp_wave), params)
+        out_model = factor*modelsinglespectrum(transpose(resp_wave), params)
 
-        wave_model = modelsinglespectrum(transpose([final_wave,71.42]), params)
-        plot, [final_wave,71.42],wave_model
+        wave_model = factor*modelsinglespectrum(transpose(final_wave), params)
+        plot, final_wave,wave_model;,/ylog
         oplot,final_wave,final_spec,psym=4
         oplot,[71.42],[MIPS70_val],psym=4
+
         stop
+
 
       endif
 

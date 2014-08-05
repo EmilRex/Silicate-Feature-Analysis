@@ -1,7 +1,8 @@
 pro equiltemplookup, teff, grainrad, distance, $
                      tdust, $
                      folivine, fcrystalline, fforst
-                   
+  
+;print, "Distance: ", distance                 
 ; 
 ; calculates equilibrium temperature of grains at the given grain size
 ; from table lookup
@@ -69,6 +70,8 @@ for i=0,n_elements(grainrad)-1 do begin
     tdust[i,*] = exp(interpol(alog(tgrain), reform(alog(fluxtable[i,*])) $
                             , alog(totabs[i,*])))
 endfor
+
+;print, "tdust: ", tdust
 
 return
 end

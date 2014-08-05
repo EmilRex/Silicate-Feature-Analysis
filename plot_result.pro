@@ -31,7 +31,7 @@
 ;  Generalized and renamed by EC (7/14/14)
 ; -
 ; *************************************************** ;
-pro plot_result
+pro plot_result, plot_old=plot_old
 
 COMMON file_path, in_dir, out_dir, fit_name, object_name
 
@@ -136,12 +136,14 @@ IF (fit_name eq 'single') THEN BEGIN
   link[2]=10^(link[2])
   out_model = modelsinglespectrum(transpose(model_x), link, /single)
   
-  ; Load Tushar's data from input_files
-  ;data_dir = '/Users/echristensen/Summer2014/dust_fit/hannah_model/pro/output_fin_new2/output_fin_new'
-  ;data1 = readfits(data_dir+'/'+object_name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=61,/silent)
-  ;data2=data1[0:(n_elements(data1)-2)]
-  ;data2[2]=10^(data2[2])
-  ;tushar_model = modelonegrain_old(model_x, data2)
+  if keyword_set(plot_old) then begin
+    ; Load Tushar's data from input_files
+    data_dir = '/Users/echristensen/Summer2014/dust_fit/hannah_model/pro/output_fin_new2/output_fin_new'
+    data1 = readfits(data_dir+'/'+object_name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=61,/silent)
+    data2=data1[0:(n_elements(data1)-2)]
+    data2[2]=10^(data2[2])
+    tushar_model = modelonegrain_old(model_x, data2)
+  endif
 
 ENDIF
 
@@ -149,14 +151,16 @@ IF (fit_name eq 'multi_mips') THEN BEGIN
   link[2]=10^(link[2])
   link[8]=10^(link[8])
   out_model = modeltwograin(model_x, link)
-  
-  ; Load Tushar's data from input_files
-  data_dir = '/Users/echristensen/Summer2014/dust_fit/hannah_model/pro/output_fin_new2/output_fin_new'
-  data1 = readfits(data_dir+'/'+object_name+'_chn_mcmc_'+'multi'+'_part.fits',EXTEN_NO=51,/silent)
-  data2=data1[0:(n_elements(data1)-2)]
-  data2[2]=10^(data2[2])
-  data2[8]=10^(data2[8])
-  tushar_model = modeltwograin(model_x, data2)
+
+  if keyword_set(plot_old) then begin  
+    ; Load Tushar's data from input_files
+    data_dir = '/Users/echristensen/Summer2014/dust_fit/hannah_model/pro/output_fin_new2/output_fin_new'
+    data1 = readfits(data_dir+'/'+object_name+'_chn_mcmc_'+'multi'+'_part.fits',EXTEN_NO=51,/silent)
+    data2=data1[0:(n_elements(data1)-2)]
+    data2[2]=10^(data2[2])
+    data2[8]=10^(data2[8])
+    tushar_model = modeltwograin(model_x, data2)
+  endif
   
 ENDIF 
 
@@ -165,16 +169,16 @@ IF (fit_name eq 'disk_mips') THEN BEGIN
   link[0]=10^(link[0])
   link[6]=10^(link[6])
   out_model = modelsinglespectrum(transpose(model_x), link)
-  
-  ; Load Tushar's data from input_files
-  data_dir = '/Users/echristensen/Summer2014/dust_fit/hannah_model/pro/output_fin_new2/output_fin_new'
-  data1 = readfits(data_dir+'/'+object_name+'_chn_mcmc_'+'disk'+'_part.fits',EXTEN_NO=51,/silent)
-  data2=data1[0:(n_elements(data1)-2)]
-  
-  data2[0]=10^(data2[0])
-  data2[6]=10^(data2[6])
-  
-  tushar_model = modelsinglespectrum(transpose(model_x), data2)
+
+  if keyword_set(plot_old) then begin  
+    ; Load Tushar's data from input_files
+    data_dir = '/Users/echristensen/Summer2014/dust_fit/hannah_model/pro/output_fin_new2/output_fin_new'
+    data1 = readfits(data_dir+'/'+object_name+'_chn_mcmc_'+'disk'+'_part.fits',EXTEN_NO=51,/silent)
+    data2=data1[0:(n_elements(data1)-2)]
+    data2[0]=10^(data2[0])
+    data2[6]=10^(data2[6])
+    tushar_model = modelsinglespectrum(transpose(model_x), data2)
+  endif
   
 ENDIF
 
@@ -212,7 +216,10 @@ oploterr,wave_irs,fl_diff,uncer_irs,0;,psym=1;,color=0
 
 ; Plot the models
 oplot,model_x,out_model,color=3, thick=5,linestyle=lines[1]
-;oplot,model_x,tushar_model,color=2, thick=5,linestyle=lines[2]
+
+if keyword_set(plot_old) then begin  
+oplot,model_x,tushar_model,color=2, thick=5,linestyle=lines[2]
+endif
 
 ; Create legend
 legend,['IRS','MIPS SED','New Model','Old Model'],psym=[2,6,0,0],$
