@@ -197,8 +197,8 @@ TVLCT,[0,255,0,0],[0,0,255,0],[0,0,0,255]
 plot,wave_irs,fl_diff,title=object_name+' ('+fit_name+' Model)', $
      ystyle=1,psym=0,xstyle=1,xtitle='Wavelength ('+cggreek('mu')+'m)', $
      ytitle='F'+cggreek('nu')+' (Jy)',charthick=1, thick=1, $
-     xthick=2, ythick=2, charsize=1,color=0, $
-     yrange=[1.0e-6,1.0],/ylog
+     xthick=2, ythick=2, charsize=1,color=0;, $
+     ;yrange=[1.0e-6,1.0],/ylog
 
 ; Connect the points
 ;oplot,wave_irs,fl_diff,color=0

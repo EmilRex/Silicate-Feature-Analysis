@@ -61,7 +61,6 @@ if keyword_set(multi) then begin
   flux = dblarr(n_elements(lambda),8)
   flux[*,0:3] = flux1
   flux[*,4:7] = flux2
-  stop
 
 endif
 
