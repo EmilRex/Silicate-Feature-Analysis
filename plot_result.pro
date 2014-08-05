@@ -133,7 +133,7 @@ lines = [1,2,3,4]
 ; Fittype specifics
 ; Calculate model spectrum
 IF (fit_name eq 'single') THEN BEGIN
-  link[2]=10^(link[2])
+
   out_model = modelsinglespectrum(transpose(model_x), link, /single)
   
   if keyword_set(plot_old) then begin
@@ -148,9 +148,8 @@ IF (fit_name eq 'single') THEN BEGIN
 ENDIF
 
 IF (fit_name eq 'multi_mips') THEN BEGIN
-  link[2]=10^(link[2])
-  link[8]=10^(link[8])
-  out_model = modeltwograin(model_x, link)
+
+  out_model = modelsinglespectrum(transpose(model_x), link, /multi)
 
   if keyword_set(plot_old) then begin  
     ; Load Tushar's data from input_files
@@ -159,16 +158,14 @@ IF (fit_name eq 'multi_mips') THEN BEGIN
     data2=data1[0:(n_elements(data1)-2)]
     data2[2]=10^(data2[2])
     data2[8]=10^(data2[8])
-    tushar_model = modeltwograin(model_x, data2)
+    tushar_model = modeltwograin_old(model_x, data2)
   endif
   
 ENDIF 
 
 IF (fit_name eq 'disk_mips') THEN BEGIN
   
-  link[0]=10^(link[0])
-  link[6]=10^(link[6])
-  out_model = modelsinglespectrum(transpose(model_x), link)
+  out_model = modelsinglespectrum(transpose(model_x), link, /disk)
 
   if keyword_set(plot_old) then begin  
     ; Load Tushar's data from input_files
@@ -177,7 +174,7 @@ IF (fit_name eq 'disk_mips') THEN BEGIN
     data2=data1[0:(n_elements(data1)-2)]
     data2[0]=10^(data2[0])
     data2[6]=10^(data2[6])
-    tushar_model = modelsinglespectrum(transpose(model_x), data2)
+    tushar_model = modelsinglespectrum_old(transpose(model_x), data2 )
   endif
   
 ENDIF
