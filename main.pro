@@ -13,8 +13,8 @@ CD, home_dir
 ; Functional directories
 COMMON file_path, in_dir, out_dir, fit_name, object_name
 in_dir = 'savfiles_MIPS_SED_corrected'
-;out_dir = '../Silicate_Feature_Analysis_output'
-out_dir = '../Science3_output'
+out_dir = '../Silicate_Feature_Analysis_output'
+;out_dir = '../Science3_output'
 ; *************************************************** ;
 ;For testing diskspectrum
 ;COMMON disk_benchmarking, run, times, lines
@@ -72,6 +72,7 @@ FOREACH fit_name, fit_names DO BEGIN
     fits_v1, name=name, fittype=fit_name
     ;print, object_name
     ;plot_result, /plot_old
+    ;plot_result_separate
     null = display_historic(name)
     null = display_results(name)
     ;stop

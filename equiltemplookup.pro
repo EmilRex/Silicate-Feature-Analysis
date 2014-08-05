@@ -28,7 +28,7 @@ nl = n_elements(alllambda)
 
 
 ; read in optical data
-qlookup, grainrad, alllambda, folivine, fcrystalline, fforst, qabsall
+qlookup, grainrad, alllambda, folivine, fcrystalline, fforst, qabsall, /separate
 
 ; look up stellar fluxes
 starfluxarr = dblarr(size(stellar_emit,/dimensions))
