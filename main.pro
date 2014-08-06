@@ -69,11 +69,11 @@ fit_names = ['multi_mips','single'];,'disk_mips']
 FOREACH fit_name, fit_names DO BEGIN
   FOREACH name, names DO BEGIN
     object_name = name
-    fits_v1, name=name, fittype=fit_name
+    ;fits_v1, name=name, fittype=fit_name
     ;print, object_name
     ;plot_result, /plot_old
-    ;plot_result_separate
-    null = display_historic(name)
+    ;plot_result_separate, /plot_old
+    ;null = display_historic(name)
     null = display_results(name)
     ;stop
   ENDFOREACH

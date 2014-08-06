@@ -49,7 +49,7 @@ chisq_best = mcmc_result[(n_elements(mcmc_result)-1)]
 
 ; Get Teff, amin and dist_val for the object
 fmt='a,f,f,f'
-readcol,'input_files/input_param_file.txt',F=fmt,catalog_nameA,c_teff,c_amin,c_dist_val
+readcol,'input_files/input_param_file.txt',F=fmt,catalog_nameA,c_teff,c_amin,c_dist_val,/silent
   
  
 for i = 0, size(catalog_nameA,/n_elements)-1 do begin
@@ -197,8 +197,8 @@ TVLCT,[0,255,0,0],[0,0,255,0],[0,0,0,255]
 plot,wave_irs,fl_diff,title=object_name+' ('+fit_name+' Model)', $
      ystyle=1,psym=0,xstyle=1,xtitle='Wavelength ('+cggreek('mu')+'m)', $
      ytitle='F'+cggreek('nu')+' (Jy)',charthick=1, thick=1, $
-     xthick=2, ythick=2, charsize=1,color=0;, $
-     ;yrange=[1.0e-6,1.0],/ylog
+     xthick=2, ythick=2, charsize=1,color=0, $
+     yrange=[1.0e-6,1.0],/ylog
 
 ; Connect the points
 ;oplot,wave_irs,fl_diff,color=0

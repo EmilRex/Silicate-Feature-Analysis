@@ -49,7 +49,7 @@ chisq_best = mcmc_result[(n_elements(mcmc_result)-1)]
 
 ; Get Teff, amin and dist_val for the object
 fmt='a,f,f,f'
-readcol,'input_files/input_param_file.txt',F=fmt,catalog_nameA,c_teff,c_amin,c_dist_val
+readcol,'input_files/input_param_file.txt',F=fmt,catalog_nameA,c_teff,c_amin,c_dist_val, /silent
   
  
 for i = 0, size(catalog_nameA,/n_elements)-1 do begin
@@ -134,7 +134,8 @@ lines = [1,2,3,4]
 ; Calculate model spectrum
 IF (fit_name eq 'single') THEN BEGIN
 
-  out_model = modelsinglespectrum(transpose(model_x), link, /single, /separate)
+  out_model_separate = modelsinglespectrum(transpose(model_x), link, /single, /separate)
+  out_model = modelsinglespectrum(transpose(model_x), link, /single)
   
   if keyword_set(plot_old) then begin
     ; Load Tushar's data from input_files
@@ -149,7 +150,8 @@ ENDIF
 
 IF (fit_name eq 'multi_mips') THEN BEGIN
 
-  out_model = modelsinglespectrum(transpose(model_x), link, /multi, /separate)
+  out_model_separate = modelsinglespectrum(transpose(model_x), link, /multi, /separate)
+  out_model = modelsinglespectrum(transpose(model_x), link, /multi)
 
   if keyword_set(plot_old) then begin  
     ; Load Tushar's data from input_files
@@ -165,7 +167,8 @@ ENDIF
 
 IF (fit_name eq 'disk_mips') THEN BEGIN
   
-  out_model = modelsinglespectrum(transpose(model_x), link, /disk, /separate)
+  out_model_separate = modelsinglespectrum(transpose(model_x), link, /disk, /separate)
+  out_model = modelsinglespectrum(transpose(model_x), link, /disk)
 
   if keyword_set(plot_old) then begin  
     ; Load Tushar's data from input_files
@@ -186,7 +189,7 @@ tmp1 = round(chisq_best*100.)/100.
 
 ; Set up device
 set_plot,'PS'
-device, filename ='plots/MIPS_SED_'+object_name+'_'+fit_name+'.ps',/COLOR,/HELVETICA,XSIZE=15,YSIZE=12.5 & !p.font =0
+device, filename ='plots/MIPS_SED_'+object_name+'_'+fit_name+'_separate.ps',/COLOR,/HELVETICA,XSIZE=15,YSIZE=12.5 & !p.font =0
 loadct,39
 !p.background=16777215
 
@@ -197,8 +200,8 @@ TVLCT,[0,255,0,0],[0,0,255,0],[0,0,0,255]
 plot,wave_irs,fl_diff,title=object_name+' ('+fit_name+' Model)', $
      ystyle=1,psym=0,xstyle=1,xtitle='Wavelength ('+cggreek('mu')+'m)', $
      ytitle='F'+cggreek('nu')+' (Jy)',charthick=1, thick=1, $
-     xthick=2, ythick=2, charsize=1,color=0;, $
-     ;yrange=[1.0e-6,1.0],/ylog
+     xthick=2, ythick=2, charsize=1,color=0, $
+     yrange=[1.0e-6,1.0],/ylog
 
 ; Connect the points
 ;oplot,wave_irs,fl_diff,color=0
@@ -211,10 +214,11 @@ oplot,MIPS_SED_wave,MIPS_SED_spec,color=MIPS_SED_color,psym=MIPS_SED_psym
 ; Add error bars
 oploterr,wave_irs,fl_diff,uncer_irs,0;,psym=1;,color=0
 
-n_grains = size(out_model,/dimensions)
 ; Plot the models
-for i=0,(n_elements(n_grains[1])-1) do begin
-  oplot,model_x,out_model,color=(i+4), thick=5,linestyle=(i+4)
+oplot,model_x,out_model,color=3, thick=5,linestyle=lines[1]
+
+for i=0,3 do begin
+  oplot,model_x,out_model_separate[*,i],color=3, thick=5,linestyle=3
 endfor
 
 if keyword_set(plot_old) then begin  
