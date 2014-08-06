@@ -29,10 +29,10 @@ function display_historic,name
     END
   ENDCASE
   
-  print, ' '
+  print, ' -------------------------------------------------------------------------------------------- '
   print, systime()
-  print, 'Old parameter results for: '
-  print, [name,fit_name]
+  print, name,' --- ',fit_name,' --- OLD'
+  print, ' '
   print, head
   print, old_result[0:(n_elements(old_result)-2)]
   print, ' '
