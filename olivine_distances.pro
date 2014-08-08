@@ -16,15 +16,18 @@ k = 1.381d-16 ; erg/K
 ; 3 - Enstatite
 
 ; Load names and distances from db produced csv
-fmt = 'a,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f'
-readcol, 'multi_new.csv',F=fmt,db_name,chisq,temp1,temp2,Loc1,Loc2,amin1,amin2,mass1,mass2,fcryst1,fcryst2,oliv1,oliv2,ffost1,ffost2
+;fmt = 'a,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f'
+;readcol, 'multi_new.csv',F=fmt,db_name,chisq,temp1,temp2,Loc1,Loc2,amin1,amin2,mass1,mass2,fcryst1,fcryst2,oliv1,oliv2,ffost1,ffost2
+
+fmt = 'a,a,f,f,f,f,f,f,f,f,f,f,f,f,f'
+readcol, 'multi.csv',F=fmt,db_name,type,chisq,temp1,amin1,mass1,oliv1,fcryst1,ffost1,temp2,amin2,mass2,oliv2,fcryst2,ffost2
 
 agr = transpose([[amin1],[amin2]])
 temp = transpose([[temp1],[temp2]])
 foliv = transpose([[oliv1],[oliv2]])
 fcrys = transpose([[fcryst1],[fcryst2]])
 ffors = transpose([[ffost1],[ffost2]])
-loc = transpose([[Loc1],[Loc2]])
+;loc = transpose([[Loc1],[Loc2]])
 
 ; Load star system parameters: Teff and dist
 fmt='a,f,f,f'
@@ -32,7 +35,7 @@ readcol,'input_files/input_param_file.txt',F=fmt,catalog_name,c_teff,c_amin,c_di
 
 ; Create save file and header
 close,1
-openw,1,'olivine_distances_v2.csv'
+openw,1,'olivine_distances_no_loc.csv'
 printf,1, 'Name,Temp1,Tushar_Dist1,Oliv_Dist1,Pyro_Dist1,Fors_Dist1,Enst_Dist1,Temp2,Tushar_Dist2,Oliv_Dist2,Pyro_Dist2,Fors_Dist2,Enst_Dist2'
 
 FOR i=0, n_elements(db_name)-1 DO BEGIN
@@ -78,8 +81,8 @@ FOR i=0, n_elements(db_name)-1 DO BEGIN
     
     ENDFOR ; cold,hot disk
     
-    printf,1,string(db_name[i])+','+string(temp[0,i])+','+string(loc[0,i])+','+string(dist[0,0])+','+string(dist[0,1])+','+string(dist[0,2])+$
-      ','+string(dist[0,3])+','+string(temp[1,i])+','+string(loc[1,i])+','+string(dist[1,0])+','+$
+    printf,1,string(db_name[i])+','+string(temp[0,i])+','+'location1'+','+string(dist[0,0])+','+string(dist[0,1])+','+string(dist[0,2])+$
+      ','+string(dist[0,3])+','+string(temp[1,i])+','+'location2'+','+string(dist[1,0])+','+$
       string(dist[1,1])+','+string(dist[1,2])+','+string(dist[1,3])
       
     ;printf,1,string(db_name[i])+','+string(temp[0,i])+','+string(dist)+','+string(loc[part,i])+','+string(dist-loc)
