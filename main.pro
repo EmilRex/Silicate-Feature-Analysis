@@ -71,11 +71,11 @@ FOREACH fit_name, fit_names DO BEGIN
     object_name = name
     ;fits_v1, name=name, fittype=fit_name
     
-    print, object_name
-    plot_result;, /plot_old
+    ;print, object_name
+    ;plot_result;, /plot_old
     ;null = display_historic(name)
     ;null = display_results(name)
-    stop
+    ;stop
   ENDFOREACH
 ENDFOREACH
 

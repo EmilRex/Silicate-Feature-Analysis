@@ -39,18 +39,18 @@ readcol,'input_files/input_param_file.txt',F=fmt,catalog_name,c_teff,c_amin,c_di
 
 ; Open output file
 close,1
-openw,1,'print_mips70_table_'+out_type+'.txt'
+openw,1,'print_mips70_table_'+out_type+'.csv'
 
 ; Print header
 ;out_format='(%"%s & %s & %s & %s \\\\")'
-out_format='(%"%s, %s, %s, %s")'
+out_format='(%"%s, %s, %s, %s, %s, %s")'
 printf,1,format=out_format, $
-  'Name', 'Observed MIPS70', 'Observed MIPS70 Error', 'Model MIPS70'
+  'Name', 'Chisq', 'Observed MIPS70', 'Observed MIPS70 Error', 'Modeled MIPS70', 'Interpolated MIPS70'
 
 ; Define constants
 c = 3.0e10 ; cm/s
 to_cm = 1.0e-4
-m_moon = 7.34767309e25 ; in g, from google
+m_moon = 7.34767309e22 ; in kg, from google
 r_sun = 0.00464913034 ;AU
 au_in_cm = 1.49597871e13
 pc_in_cm = 3.08567758e18
@@ -135,7 +135,14 @@ FOR i=0, (n_elements(name)-1) DO BEGIN
 
         ; Sample model on same wavelengths as response curve
         ; Outputs flux in Jansky's
-        out_model = modeltwograin(resp_wave, link)
+        
+        fit_mass1 = alog10((mass1[i])*m_moon)
+        fit_mass2 = alog10((mass2[i])*m_moon)
+        
+        link = [temp1[i],amin1[i],10^fit_mass1,fcryst1[i],oliv1[i],ffost1[i],$
+               temp2[i],amin2[i],10^fit_mass2,fcryst2[i],oliv2[i],ffost2[i]]
+        
+        out_model = modeltwograin_old(resp_wave, link)
       
       endif
       
@@ -160,19 +167,8 @@ FOR i=0, (n_elements(name)-1) DO BEGIN
         r_star_in_au = r_star*r_sun ; r_star in AU
         fit_rin = alog10(rin[i]/(r_sun*r_star)) ;for HD3003 ;rin[i]
         fit_rout = alog(rout[i]/rin[i])
-        fit_amax = alog(amax[i])/amin[i]
+        fit_amax = alog(amax[i]/amin[i])
         
-        ;part1 = (206265*au_in_cm)^2
-        part1 = 2.0*alog10(206265*au_in_cm)
-        ;part2 = (dist_val*pc_in_cm)^2
-        ;part2 = 2.0*alog10(dist_val*pc_in_cm)
-        part2 = 2.0*alog10(dist_val*pc_in_cm)
-        factor = (10^(part1-part2))
-        ;factor = 1.0
-        
-        ;factor = 1000*((206265*au_in_cm)^2/(dist_val*pc_in_cm)^2)
-        ;factor = 0.46311132191
-        ;diskmass[i] = diskmass[i]*factor
         fit_diskmass = alog10((diskmass[i])*m_moon) ; convert m/m_moon to log(mass_in_kg)
         ; need to apply correction Tushar mentioned
         
@@ -181,15 +177,7 @@ FOR i=0, (n_elements(name)-1) DO BEGIN
         
         ; Sample model on same wavelengths as response curve
         ; Outputs flux in Jansky's
-        out_model = factor*modelsinglespectrum(transpose(resp_wave), params)
-
-        wave_model = factor*modelsinglespectrum(transpose(final_wave), params)
-        plot, final_wave,wave_model;,/ylog
-        oplot,final_wave,final_spec,psym=4
-        oplot,[71.42],[MIPS70_val],psym=4
-
-        stop
-
+        out_model = modelsinglespectrum(transpose(resp_wave), params)
 
       endif
 
@@ -203,20 +191,19 @@ FOR i=0, (n_elements(name)-1) DO BEGIN
       int_filter = int_tabulated(resp_wave*to_cm,response)
       
       ; Integrate the MIPS SED over the bandpass
-      ;synth_f70 = int_tabulated(resp_wave*to_cm,int)/int_filter
-      synth_f70 = interpol(out_model,resp_wave*to_cm,71.42*to_cm)
+      synth_f70 = int_tabulated(resp_wave*to_cm,int)/int_filter
+      ;synth_f70 = interpol(out_model,resp_wave*to_cm,71.42*to_cm)
       
-      ;plot, resp_wave*to_cm,out_model
-      ;oplot,[71.42*to_cm],[synth_f70],psym=4
-      ;stop
+      interpol_f70 = interpol(out_model,resp_wave*to_cm,71.42*to_cm)
+      
       ; *************************************************** ;
       ; Print output as latex style table
 
       ; header: name, actual mips 70, actual error, mips 70 according to model
       ;out_format='(%"%s & %s & %s & %s \\\\")'
-      out_format='(%"%s, %s, %s, %s")'
+      out_format='(%"%s, %f, %f, %f, %f, %f")'
       printf,1,format=out_format, $
-      name[i], MIPS70_VAL, MIPS70_ERROR, synth_f70
+      name[i], chisq[i], MIPS70_VAL, MIPS70_ERROR, synth_f70, interpol_f70
       
       print, string((i+1))+': '+string(name[i])+' done'
       ; *************************************************** ;

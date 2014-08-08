@@ -42,8 +42,8 @@ COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crys
 COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, effectiveTempArray, stellar_emit
 
 ; Call modelone grain for each set of parameters
-spect1 = modelonegrain(lambda, params[0:5], mie=mie)
-spect2 = modelonegrain(lambda, params[6:11], mie=mie)
+spect1 = modelonegrain_old(lambda, params[0:5], mie=mie)
+spect2 = modelonegrain_old(lambda, params[6:11], mie=mie)
 
 ; Combine the two spectra 
 flux = spect1+spect2
