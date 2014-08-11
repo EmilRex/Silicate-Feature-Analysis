@@ -1,5 +1,5 @@
 ; ****************************************************************************************************** ;
-pro main;,name
+pro main
 ; ****************************************************************************************************** ;
 ; Perform setup operations
 
@@ -13,8 +13,8 @@ CD, home_dir
 ; Functional directories
 COMMON file_path, in_dir, out_dir, fit_name, object_name
 in_dir = 'savfiles_MIPS_SED_corrected'
-out_dir = '../Silicate_Feature_Analysis_output'
-
+;out_dir = '../Silicate_Feature_Analysis_output'
+out_dir = '../Science3_output'
 ; *************************************************** ;
 ;For testing diskspectrum
 ;COMMON disk_benchmarking, run, times, lines
@@ -60,17 +60,23 @@ out_dir = '../Silicate_Feature_Analysis_output'
 ;RUN MULTIPLE
 ; *************************************************** ;
 
-names = ['HD95086','HD146897'];['HD146897','HD117214']'HD108257';'HD106906';
-fit_names = 'single';'disk_mips';['single','multi_mips','disk_mips'];,'multi_mips', 'disk_mips']
+;names = ['HD95086','HD106906','HD108257','HD110058','HD111520','HD113556','HD113766','HD114082','HD115600','HD117214','HD145560','HD146181','HD146897']
+names = ['HD95086','HD110058','HD113556','HD114082','HD115600','HD117214','HD145560','HD146181','HD146897']
+;names = ['HD117214','HD146897']
+;fit_names = ['single'];['single','multi_mips','disk_mips']
+fit_names = ['single'];,'disk_mips']
 
-FOREACH name, names DO BEGIN
-  FOREACH fit_name, fit_names DO BEGIN
+FOREACH fit_name, fit_names DO BEGIN
+  FOREACH name, names DO BEGIN
     object_name = name
     ;define_stellar_params
     fits_v1, name=name, fittype=fit_name
-    ;plot_result
+    
+    ;print, object_name
+    ;plot_result;, /plot_old
     ;null = display_historic(name)
-    null = display_results(name)
+    ;null = display_results(name)
+    ;stop
   ENDFOREACH
 ENDFOREACH
 

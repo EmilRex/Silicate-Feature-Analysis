@@ -48,12 +48,13 @@
 ;  Added comprehensive computation time diagnostics
 ;   see test_disk_benchmarks.pro for analysis
 ;  Removed benchmarking scheme and commented (7/30/14)
+;  Modified to also include single model by EC on (7/31/14)
 ; -
 ; *************************************************** ;
 pro diskspectrum, rin, rout, amin, amax, Teff, diskmass, $ 
                   folivine, fcrystalline, fforst, $
                   rlaw=rlaw, alaw=alaw, verbose=verbose, $
-                  lambda, flux, ring=ring, mie=mie
+                  lambda, flux, ring=ring, mie=mie, single=single
 
 ;COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
 
@@ -94,41 +95,59 @@ if not keyword_set(alaw) then alaw=3.5
 ; luminosity = 4!pi R^2 sigma T^4
 ; *************************************************** ;
 
-
-dloga = 0.02d
-NA = ceil(alog10(amax/amin)/dloga)+1
-dloga = alog10(amax/amin)/(NA-1.0d)
-aall = amin*10.0D^(dindgen(NA)*dloga)
-dla = replicate(dloga*alog(10.0D), NA)
-dla[0] = 0.5*dla[0]
-dla[NA-1] = dla[0]
-
-if keyword_set(ring) then begin
-   radius = rin
-   width = rout
-   rin = (radius - 4.0*width) > 5.0
-   rout = radius + 4.0*width
-endif 
-
-
-if (abs(rout/rin-1.0) le 1e-3) then begin ; single radius ring, no width
-   NR = 1
-   dlr = 1.0
-   rall = [rin]
-   sigma = 1.0/(2.0*!dpi*rall^2)
+if keyword_set(single) then begin
+  
+  ; Set up a grain parameters
+  NA = 1
+  dla = 1.0
+  aall = [amin]
+  
+  ; Set up radius parameters
+  NR = 1
+  dlr = 1.0
+  rall = [rin]
+  sigma = 1.0/(2.0*!dpi*rall^2)
+  
 endif else begin
-   dlogr = 0.02d
-   NR = ceil(alog10(rout/rin)/dlogr) + 1
-   dlogr = alog10(rout/rin)/(NR-1.0d)
-   rall = rin*10.0D^(dindgen(NR)*dlogr)
-   dlr = replicate(dlogr*alog(10.0D), NR)
-   dlr[0] = 0.5*dlr[0]
-   dlr[NR-1] = dlr[0]
-   if keyword_set(ring) then $
+  
+  ; Set up a grain parameters
+  dloga = 0.02d
+  NA = ceil(alog10(amax/amin)/dloga)+1
+  dloga = alog10(amax/amin)/(NA-1.0d)
+  aall = amin*10.0D^(dindgen(NA)*dloga)
+  dla = replicate(dloga*alog(10.0D), NA)
+  dla[0] = 0.5*dla[0]
+  dla[NA-1] = dla[0]
+  
+  if keyword_set(ring) then begin
+    radius = rin
+    width = rout
+    rin = (radius - 4.0*width) > 5.0
+    rout = radius + 4.0*width
+  endif
+  
+  ; Set up radius parameters
+  if (abs(rout/rin-1.0) le 1e-3) then begin ; single radius ring, no width
+    NR = 1
+    dlr = 1.0
+    rall = [rin]
+    sigma = 1.0/(2.0*!dpi*rall^2)
+  endif else begin
+    dlogr = 0.02d
+    NR = ceil(alog10(rout/rin)/dlogr) + 1
+    dlogr = alog10(rout/rin)/(NR-1.0d)
+    rall = rin*10.0D^(dindgen(NR)*dlogr)
+    dlr = replicate(dlogr*alog(10.0D), NR)
+    dlr[0] = 0.5*dlr[0]
+    dlr[NR-1] = dlr[0]
+    if keyword_set(ring) then $
       sigma = exp(-0.5*(rall-radius)^2/width^2) $
-   else $
+    else $
       sigma = rall^(-rlaw)
+  endelse
+  
 endelse
+
 
 ; Get temperatures - don't include crystalline silicates
 equiltemplookup, Teff, aall, rall, tempr, folivine, 0.0, 0.0

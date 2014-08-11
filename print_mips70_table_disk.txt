@@ -1,1 +1,0 @@
-Name, Observed MIPS70, Observed MIPS70 Error, Model MIPS70

@@ -369,7 +369,7 @@ IF (fit_name eq 'single') THEN BEGIN
 
   link[2]=10^(link[2])
   
-  spectra = modelonegrain(result[0,*], link)
+  spectra = modelsinglespectrum(result[0,*], link, /single)
   chisq = TOTAL ( ((result[1,*]-spectra)^2.0)/((.05*result[2,*])^2.0+(result[2,*])^2.0))
   like_func = -(chisq)/(2.0*dof1)
   

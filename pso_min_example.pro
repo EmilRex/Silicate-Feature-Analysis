@@ -57,7 +57,7 @@ IF (fit_name eq 'single') THEN BEGIN
   
   link=[p[0],p[1],10^(p[2]),p[3],p[4],p[5]]
   
-  spectra = modelonegrain(transpose(extra.wave),link )
+  spectra = modelsinglespectrum(transpose(extra.wave),link, /single )
   
   chisq = TOTAL ( ((extra.spec-spectra)^2.0)/((.05*extra.error)^2.0+(extra.error)^2.0))
   
@@ -148,7 +148,8 @@ pro pso_min_example,amin=amin,Teff=teff_val,name=name1,output=output1,out_par=fu
 COMMON file_path, in_dir, out_dir, fit_name, object_name
 
 IF (fit_name eq 'single') THEN BEGIN
-  prange = [[0.1, 500.0],[amin, 30.0],[16.5, 23.5],[0, 1.0],[0, 1.0],[0, 1.0]]
+  ;prange = [[30.0, 800.0],[amin, 30.0],[16.5, 23.5],[0, 1.0],[0, 1.0],[0, 1.0]]
+  prange = [[1.0, 5.0],[amin, 30.0],[16.5, 23.5],[0, 1.0],[0, 1.0],[0, 1.0]]
 ENDIF
 
 IF (fit_name eq 'multi_mips') THEN BEGIN

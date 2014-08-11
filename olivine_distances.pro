@@ -32,7 +32,7 @@ readcol,'input_files/input_param_file.txt',F=fmt,catalog_name,c_teff,c_amin,c_di
 
 ; Create save file and header
 close,1
-openw,1,'olivine_distances_v2.csv'
+openw,1,'olivine_distances.csv'
 printf,1, 'Name,Temp1,Tushar_Dist1,Oliv_Dist1,Pyro_Dist1,Fors_Dist1,Enst_Dist1,Temp2,Tushar_Dist2,Oliv_Dist2,Pyro_Dist2,Fors_Dist2,Enst_Dist2'
 
 FOR i=0, n_elements(db_name)-1 DO BEGIN
