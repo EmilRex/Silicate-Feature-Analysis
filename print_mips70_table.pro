@@ -14,8 +14,8 @@ endif
 
 if keyword_set(multi) then begin
   out_type = 'multi'
-  fmt = 'a,a,f,f,f,f,f,f,f,f,f,f,f,f,f'
-  readcol, 'multi.csv',F=fmt,name,type,chisq,temp1,amin1,mass1,oliv1,fcryst1,ffost1,temp2,amin2,mass2,oliv2,fcryst2,ffost2
+  fmt = 'a,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f'
+  readcol, 'multi_new.csv',F=fmt,name,chisq,temp1,temp2,Loc1,Loc2,amin1,amin2,mass1,mass2,fcryst1,fcryst2,oliv1,oliv2,ffost1,ffost2
 endif
 
 
@@ -129,12 +129,20 @@ FOR i=0, (n_elements(name)-1) DO BEGIN
         ; *************************************************** ;
         ; Calculate multi spectrum from csv
   
-        link = [temp1[i],amin1[i],mass1[i],fcryst1[i],oliv1[i],ffost1[i],$
-               temp2[i],amin2[i],mass2[i],fcryst2[i],oliv2[i],ffost2[i]]
+        fit_mass1 = alog10((mass1[i])*m_moon)
+        fit_mass2 = alog10((mass2[i])*m_moon)
+  
+        link = [temp1[i],amin1[i],10^fit_mass1,fcryst1[i],oliv1[i],ffost1[i],$
+               temp2[i],amin2[i],10^fit_mass2,fcryst2[i],oliv2[i],ffost2[i]]
         
         ; Sample model on same wavelengths as response curve
         ; Outputs flux in Jansky's        
         out_model = modeltwograin_old(resp_wave, link)
+      
+        ;wave_model = modeltwograin_old(final_wave, link)
+        ;plot, final_wave,wave_model;,/ylog
+        ;oplot,final_wave,final_spec,psym=4
+        ;stop
       
       endif
       
