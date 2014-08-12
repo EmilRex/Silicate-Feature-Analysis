@@ -55,14 +55,9 @@ COMMON file_path, in_dir, out_dir, fit_name, object_name
 
 IF (fit_name eq 'single') THEN BEGIN
   
-  link=[p[0],p[1],10^(p[2]),p[3],p[4],p[5]]
-  
+  link=[p[0],p[1],p[2],p[3],p[4],p[5]]
   spectra = modelsinglespectrum(transpose(extra.wave),link, /single )
   
-  chisq = TOTAL ( ((extra.spec-spectra)^2.0)/((.05*extra.error)^2.0+(extra.error)^2.0))
-  
-  z = (chisq)/(extra.dof - 1.)   ; Log of likelihood func - where likelihood funct is exp(-chisq/2 )
-
 ENDIF
 
 ; *************************************************** ;
@@ -70,19 +65,8 @@ ENDIF
 
 IF (fit_name eq 'multi_mips') THEN BEGIN 
 
-  ; Rename parameters
-  link=[p[0],p[1],10^(p[2]),p[3],p[4],p[5],p[6],p[7],10^(p[8]),p[9],p[10],p[11]]
-  
-  ; Model spectrum with current parameter values
-  spectra = modeltwograin(transpose(extra.wave),link ) ; changed from spectra1 to spectra
-  
-  
-  ; Compute chisq without MIPS
-  chisq = TOTAL ( ((extra.spec-spectra)^2.0)/((.05*extra.error)^2.0+(extra.error)^2.0))
-  
-    
-  ; Compute likelihood function
-  z = (chisq)/(extra.dof - 1.)   ; Log of likelihood func - where likelihood funct is exp(-chisq/2 )                                
+  link=[p[0],p[1],p[2],p[3],p[4],p[5],p[6],p[7],p[8],p[9],p[10],p[11]]
+  spectra = modelsinglespectrum(transpose(extra.wave),link, /multi )                         
 
 ENDIF
 
@@ -91,21 +75,17 @@ ENDIF
 
 IF (fit_name eq 'disk_mips') THEN BEGIN
 
-  ; Rename parameters
-  link=[10^p[0],p[1],p[2],p[3],p[4],p[5],10^p[6],p[7],p[8],p[9]]
-  
-  ; Model spectrum with current parameter values
-  spectra = modelsinglespectrum(transpose(extra.wave),link ) 
-  
-  ; Compute chisq without MIPS
-  chisq = TOTAL ( ((extra.spec-spectra)^2.0)/((.05*extra.error)^2.0+(extra.error)^2.0))
-  
-  ; Compute likelihood function
-  z = (chisq)/(extra.dof - 1.)   ; Log of likelihood func - where likelihood funct is exp(-chisq/2 )
+  link=[p[0],p[1],p[2],p[3],p[4],p[5],p[6],p[7],p[8],p[9]]
+  spectra = modelsinglespectrum(transpose(extra.wave),link, /disk ) 
   
 ENDIF
 
 ; *************************************************** ;
+; Compute chisq
+
+chisq = TOTAL ( ((extra.spec-spectra)^2.0)/((.05*extra.error)^2.0+(extra.error)^2.0))
+z = (chisq)/(extra.dof - 1.)   ; Log of likelihood func - where likelihood funct is exp(-chisq/2 )
+
 
 ; Print to txt file if desired
 ;openw, 1, 'output_v1/'+extra.name+'_fit_multi_pso.txt',/append
@@ -153,8 +133,11 @@ IF (fit_name eq 'single') THEN BEGIN
 ENDIF
 
 IF (fit_name eq 'multi_mips') THEN BEGIN
-  prange = [[30.0, 300.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0],$
-           [100.0, 1000.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0]]
+  ;prange = [[30.0, 300.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0],$
+  ;         [100.0, 1000.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0]]
+  
+  prange = [[1.0, 5.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0],$
+           [1.0, 6.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0]]
 ENDIF
 
 IF (fit_name eq 'disk_mips') THEN BEGIN

@@ -362,46 +362,18 @@ COMMON file_path, in_dir, out_dir, fit_name, object_name
 
 ; *************************************************** ;
 ; ONE GRAIN MODEL
-;
 ;temp1, grain1, scale1, olivine/pyroxene, crystalline, enstatite/fosterite,
-
-IF (fit_name eq 'single') THEN BEGIN
-
-  link[2]=10^(link[2])
-  
-  spectra = modelsinglespectrum(result[0,*], link, /single)
-  chisq = TOTAL ( ((result[1,*]-spectra)^2.0)/((.05*result[2,*])^2.0+(result[2,*])^2.0))
-  like_func = -(chisq)/(2.0*dof1)
-  
-  link[2]=alog10(link[2])
-  
-ENDIF
+IF (fit_name eq 'single') THEN spectra = modelsinglespectrum(result[0,*], link, /single)
 
 ; *************************************************** ;
 ; TWO GRAIN MODEL
-;
 ;temp1, grain1, scale1, olivine/pyroxene, crystalline, enstatite/fosterite,  
 ;temp2, grain2, scale2, olivine/pyroxene2, crystalline2, enstatite/fosterite2 
 
-IF (fit_name eq 'multi_mips') THEN BEGIN
-
-; un'log' value
-  link[2]=10^(link[2])
-  link[8]=10^(link[8])
-
-  spectra = modeltwograin(result[0,*], link)
-  chisq = TOTAL ( ((result[1,*]-spectra)^2.0)/((.05*result[2,*])^2.0+(result[2,*])^2.0))
-  like_func = -(chisq)/(2.0*dof1)
-
-; re'log' value
-  link[2]=alog10(link[2])
-  link[8]=alog10(link[8])
-
-ENDIF
+IF (fit_name eq 'multi_mips') THEN spectra = modelsinglespectrum(result[0,*], link, /multi)
 
 ; *************************************************** ;
 ; CONTINUOUS DISK MODEL
-;
 ;   rin  = 10^fitparam[0]
 ;   rout = exp(fitparam[1])*rin
 ;   sigmalaw = fitparam[2]
@@ -413,19 +385,11 @@ ENDIF
 ;   fc = fitparam[8]
 ;   ff = fitparam[9]
 
-IF (fit_name eq 'disk_mips') THEN BEGIN
-  
-  link[0]=10^(link[0])
-  link[6]=10^(link[6])
+IF (fit_name eq 'disk_mips') THEN spectra =  modelsinglespectrum(result[0,*], link, /disk)
 
-  spectra =  modelsinglespectrum(result[0,*], link)
-  chisq = TOTAL ( ((result[1,*]-spectra)^2.0)/((.05*result[2,*])^2.0+(result[2,*])^2.0))
-  like_func = -(chisq)/(2.0*dof1)
-  
-  link[6]=alog10(link[6])
-  link[0]=alog10(link[0])
-  
-ENDIF
+
+chisq = TOTAL ( ((result[1,*]-spectra)^2.0)/((.05*result[2,*])^2.0+(result[2,*])^2.0))
+like_func = -(chisq)/(2.0*dof1)
 
 ; return the likelyhood value (i.e. fitness of link)
 return, like_func
