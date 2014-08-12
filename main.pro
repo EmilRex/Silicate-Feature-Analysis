@@ -72,10 +72,10 @@ FOREACH name, names DO BEGIN
     ;fits_v1, name=name, fittype=fit_name
     ;print, object_name
     
-    ;plot_result;, /plot_old
+    plot_result
     ;plot_result_separate, /plot_old
     ;null = display_historic(name)
-    null = display_results(name)
+    ;null = display_results(name)
     ;stop
   ENDFOREACH
 ENDFOREACH

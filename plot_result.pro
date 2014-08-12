@@ -31,27 +31,26 @@
 ;  Generalized and renamed by EC (7/14/14)
 ; -
 ; *************************************************** ;
-pro plot_result, plot_old=plot_old
+pro plot_result
 
 COMMON file_path, in_dir, out_dir, fit_name, object_name
 
-; -------------------------------------------------- ;
-; Replace with new structure for reading in data. 
-; Take from _chn_mcmc_multi_part.fits, extension = final output
-; generated through mcmc_m_mips_v1
+; Check if data file exists. If not exit program.
+if (file_test(out_dir+'/'+object_name+'_chn_mcmc_'+fit_name+'_part.fits') eq 0) then begin
+  print, "Data not found for object: "+object_name
+  print, "Continuing to next object..."
+  return
+endif
 
 ; Get result of simulation to plot model
 mcmc_result = readfits(out_dir+'/'+object_name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=51,/silent)
 link=mcmc_result[0:(n_elements(mcmc_result)-2)]
 chisq_best = mcmc_result[(n_elements(mcmc_result)-1)]
 
-;print, mcmc_result
-
 ; Get Teff, amin and dist_val for the object
 fmt='a,f,f,f'
 readcol,'input_files/input_param_file.txt',F=fmt,catalog_nameA,c_teff,c_amin,c_dist_val,/silent
   
- 
 for i = 0, size(catalog_nameA,/n_elements)-1 do begin
   if (catalog_nameA[i] eq object_name) then begin
     Teff=c_teff[i]
@@ -132,52 +131,70 @@ lines = [1,2,3,4]
 ; *************************************************** ;
 ; Fittype specifics
 ; Calculate model spectrum
+
+; Define constants
+m_moon = 7.34767309e25 ; in g, from google
+r_sun = 0.00464913034 ;AU
+
+plot_old = 0
+
 IF (fit_name eq 'single') THEN BEGIN
 
   out_model = modelsinglespectrum(transpose(model_x), link, /single)
   
-  if keyword_set(plot_old) then begin
-    ; Load Tushar's data from input_files
-    data_dir = '/Users/echristensen/Summer2014/dust_fit/hannah_model/pro/output_fin_new2/output_fin_new'
-    data1 = readfits(data_dir+'/'+object_name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=61,/silent)
-    data2=data1[0:(n_elements(data1)-2)]
-    data2[2]=10^(data2[2])
-    tushar_model = modelonegrain_old(model_x, data2)
-  endif
->>>>>>> diskspectrum
-
 ENDIF
+
+
 
 IF (fit_name eq 'multi_mips') THEN BEGIN
 
   out_model = modelsinglespectrum(transpose(model_x), link, /multi)
 
-  if keyword_set(plot_old) then begin  
-    ; Load Tushar's data from input_files
-    data_dir = '/Users/echristensen/Summer2014/dust_fit/hannah_model/pro/output_fin_new2/output_fin_new'
-    data1 = readfits(data_dir+'/'+object_name+'_chn_mcmc_'+'multi'+'_part.fits',EXTEN_NO=51,/silent)
-    data2=data1[0:(n_elements(data1)-2)]
-    data2[2]=10^(data2[2])
-    data2[8]=10^(data2[8])
-    tushar_model = modeltwograin_old(model_x, data2)
-  endif
-  
+  fmt = 'a,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f'
+  readcol, 'multi_new.csv',F=fmt,db_name,chisq,temp1,temp2,Loc,Loc2,amin1,amin2,mass1,mass2,fcryst1,fcryst2,oliv1,oliv2,ffost1,ffost2,/silent
+
+  FOR i=0,(n_elements(db_name)-1) DO BEGIN
+    IF (object_name eq db_name[i]) THEN BEGIN
+
+      plot_old = 1
+      data2 = [temp1[i],amin1[i],alog10(mass1[i]*m_moon),oliv1[i],fcryst1[i],ffost1[i],temp2[i],amin2[i],alog10(mass2[i]*m_moon),oliv2[i],fcryst2[i],ffost2[i]]
+      tushar_model = modeltwograin_old(model_x, data2)
+
+      break
+    ENDIF
+  ENDFOR
 ENDIF 
+
+
 
 IF (fit_name eq 'disk_mips') THEN BEGIN
   
   out_model = modelsinglespectrum(transpose(model_x), link, /disk)
 
-  if keyword_set(plot_old) then begin  
-    ; Load Tushar's data from input_files
-    data_dir = '/Users/echristensen/Summer2014/dust_fit/hannah_model/pro/output_fin_new2/output_fin_new'
-    data1 = readfits(data_dir+'/'+object_name+'_chn_mcmc_'+'disk'+'_part.fits',EXTEN_NO=51,/silent)
-    data2=data1[0:(n_elements(data1)-2)]
-    data2[0]=10^(data2[0])
-    data2[6]=10^(data2[6])
-    tushar_model = modelsinglespectrum_old(transpose(model_x), data2 )
-  endif
+  fmt = 'a,f,f,f,f,f,f,f,f,f,f,f'
+  readcol, 'disk_new.csv',F=fmt,db_name,chisq,rin,rout,rlaw,amin,amax,alaw,diskmass,fcryst,foliv,ffost,/silent
   
+  fmt = 'a,f'
+  readcol, 'r_star.csv',F=fmt,r_star_name,c_r_star,/silent
+  
+  ; Load correct r_star
+  for k=0, n_elements(r_star_name)-1 do begin
+    if (r_star_name[k] eq object_name) then begin
+      r_star = c_r_star[k]
+      break
+    endif
+  endfor
+  
+  FOR i=0,(n_elements(db_name)-1) DO BEGIN
+    IF (object_name eq db_name[i]) THEN BEGIN
+      
+      plot_old = 1
+      data2 = [alog10(rin[i]/(r_sun*r_star)),alog(rout[i]/rin[i]),rlaw[i],amin[i],alog(amax[i])/amin[i],alaw[i],alog10((diskmass[i])*m_moon),foliv[i],fcryst[i],ffost[i]]
+      tushar_model = modelsinglespectrum_old(transpose(model_x), data2 )
+      
+      break
+    ENDIF
+  ENDFOR
 ENDIF
 
 tmp1 = round(chisq_best*100.)/100.
@@ -188,7 +205,7 @@ tmp1 = round(chisq_best*100.)/100.
 ; Set up device
 set_plot,'PS'
 device, filename ='plots/MIPS_SED_'+object_name+'_'+fit_name+'.ps',/COLOR,/HELVETICA,XSIZE=15,YSIZE=12.5 & !p.font =0
-loadct,39
+loadct,39,/silent
 !p.background=16777215
 
 ;Make IRS Spectrum Plot w/ Errorbars                                                                                                    
@@ -215,8 +232,9 @@ oploterr,wave_irs,fl_diff,uncer_irs,0;,psym=1;,color=0
 ; Plot the models
 oplot,model_x,out_model,color=3, thick=5,linestyle=lines[1]
 
-if keyword_set(plot_old) then begin  
-oplot,model_x,tushar_model,color=2, thick=5,linestyle=lines[2]
+if (plot_old eq 1) then begin  
+  oplot,model_x,tushar_model,color=2, thick=5,linestyle=lines[2]
+  print, "Old model plotted for: "+object_name
 endif
 
 ; Create legend
