@@ -5,7 +5,20 @@ function display_results,name
   ; Print simulation results to CL
   
   COMMON file_path, in_dir, out_dir, fit_name, object_name
-  mcmc_result = readfits(out_dir+'/'+name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=51,/silent)
+  if (file_test(out_dir+'/'+name+'_chn_mcmc_'+fit_name+'_part.fits') eq 1) then begin
+    mcmc_result = readfits(out_dir+'/'+name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=51,/silent)
+  endif else begin 
+    print, ' -------------------------------------------------------------------------------------------- '
+    print, systime()
+    print, ' '
+    print, ' '
+    print, ' '
+    print, 'No new data exists for '+name+' with fit = '+fit_name
+    print, ' '
+    print, ' '
+    print, ' '
+    return,0
+  endelse  
   
   ; Load R-star values
   fmt = 'a,f'

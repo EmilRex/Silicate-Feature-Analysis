@@ -60,8 +60,8 @@ out_dir = '../Science3_output'
 ;RUN MULTIPLE
 ; *************************************************** ;
 
-;names = ['HD95086','HD106906','HD108257','HD110058','HD111520','HD113556','HD113766','HD114082','HD115600','HD117214','HD145560','HD146181','HD146897']
-names = ['HD95086','HD110058','HD113556','HD114082','HD115600','HD117214','HD145560','HD146181','HD146897']
+names = ['HD95086','HD106906','HD108257','HD110058','HD111520','HD113556','HD113766','HD114082','HD115600','HD117214','HD145560','HD146181','HD146897']
+;names = ['HD95086','HD110058','HD113556','HD114082','HD115600','HD117214','HD145560','HD146181','HD146897']
 ;names = ['HD117214','HD146897']
 ;fit_names = ['single'];['single','multi_mips','disk_mips']
 fit_names = ['multi_mips','single'];,'disk_mips']
@@ -72,10 +72,10 @@ FOREACH name, names DO BEGIN
     ;fits_v1, name=name, fittype=fit_name
     ;print, object_name
     
-    plot_result;, /plot_old
+    ;plot_result;, /plot_old
     ;plot_result_separate, /plot_old
     ;null = display_historic(name)
-    ;null = display_results(name)
+    null = display_results(name)
     ;stop
   ENDFOREACH
 ENDFOREACH
