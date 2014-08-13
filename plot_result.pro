@@ -133,7 +133,7 @@ lines = [1,2,3,4]
 ; Calculate model spectrum
 
 ; Define constants
-m_moon = 7.34767309e25 ; in g, from google
+m_moon = 7.34767309e22 ; in g, from google
 r_sun = 0.00464913034 ;AU
 
 plot_old = 0
@@ -157,9 +157,10 @@ IF (fit_name eq 'multi_mips') THEN BEGIN
     IF (object_name eq db_name[i]) THEN BEGIN
 
       plot_old = 1
-      data2 = [temp1[i],amin1[i],alog10(mass1[i]*m_moon),oliv1[i],fcryst1[i],ffost1[i],temp2[i],amin2[i],alog10(mass2[i]*m_moon),oliv2[i],fcryst2[i],ffost2[i]]
+      data2 = [temp1[i],amin1[i],(mass1[i]*m_moon),oliv1[i],fcryst1[i],ffost1[i],temp2[i],amin2[i],(mass2[i]*m_moon),oliv2[i],fcryst2[i],ffost2[i]]
       tushar_model = modeltwograin_old(model_x, data2)
-
+      ;plot, model_x,tushar_model
+      ;stop
       break
     ENDIF
   ENDFOR
