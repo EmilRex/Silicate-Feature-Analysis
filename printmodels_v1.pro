@@ -9,12 +9,9 @@
 ; INPUTS:
 ;  NAME1:  Name of object to be analyzed. Main identifier.
 ;  FITTYPE: Model to be fitted (in order of appearance below)
-;          3) 'single' - Single grain model
-;          0) 'disk' - Continuous radial distribution of particles 
-;          7) 'disk_mips' -  
-;          4) 'ring' - Gaussian ring 
-;          1) 'multi' - Two discrete grain populations, (T1,a1), (T2,a2)
-;          6) 'multi_mips' - 
+;          1) 'single' - Single grain model
+;          2) 'multi' - Two discrete grain populations, (T1,a1), (T2,a2)
+;          3) 'disk' - Continuous radial distribution of particles 
 ;  PS:
 ;  NSTEP:
 ;  THIN_VAL:
@@ -52,7 +49,10 @@ pro printmodels_v1, name1, fittype=fittype,ps=ps,nstep=nstep,$
 COMMON file_path, in_dir, out_dir
 
 ; Assign default if fit type not set
-if not keyword_set(fittype) then fittype=[0]
+if not keyword_set(fittype) then begin
+  print, 'Error: fit type not set. Exiting from printmodels'
+  return
+endif
 
 ; Load object data from IDL savefile
 restore,in_dir+'/'+name1+'.sav' ; Changed to new directory name for the time being
