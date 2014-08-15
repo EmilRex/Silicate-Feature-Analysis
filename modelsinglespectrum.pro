@@ -22,9 +22,10 @@ if keyword_set(single) then begin
   foliv = params[3]
   fcrys = params[4]
   fforst = params[5]
+  fwaterice = params[6]
   
   diskspectrum, rin, rout, amin, amax, effectiveTemp, diskmass, $
-    foliv, fcrys, fforst, rlaw=rlaw, alaw=alaw, lambda, flux, /single
+    foliv, fcrys, fforst, fwaterice, rlaw=rlaw, alaw=alaw, lambda, flux, /single
   
 endif 
 
@@ -39,13 +40,15 @@ if keyword_set(multi) then begin
   foliv1 = params[3]
   fcrys1 = params[4]
   fforst1 = params[5]
+  fwaterice1 = params[6]
   
-  rin2  = 10^params[6]
-  amin2 = params[7]
-  diskmass2 = 10^params[8]
-  foliv2 = params[9]
-  fcrys2 = params[10]
-  fforst2 = params[11]
+  rin2  = 10^params[7]
+  amin2 = params[8]
+  diskmass2 = 10^params[9]
+  foliv2 = params[10]
+  fcrys2 = params[11]
+  fforst2 = params[12]
+  fwaterice2 = params[13]
   
   rout = 0.0
   rlaw = 1.0
@@ -53,14 +56,14 @@ if keyword_set(multi) then begin
   alaw = 1.0
   
   diskspectrum, rin1, rout, amin1, amax, effectiveTemp, diskmass1, $
-    foliv1, fcrys1, fforst1, rlaw=rlaw, alaw=alaw, lambda, flux1, /single
+    foliv1, fcrys1, fforst1, fwaterice1, rlaw=rlaw, alaw=alaw, lambda, flux1, /single
 
   diskspectrum, rin2, rout, amin2, amax, effectiveTemp, diskmass2, $
-    foliv2, fcrys2, fforst2, rlaw=rlaw, alaw=alaw, lambda, flux2, /single
+    foliv2, fcrys2, fforst2, fwaterice2, rlaw=rlaw, alaw=alaw, lambda, flux2, /single
 
-  flux = dblarr(n_elements(lambda),8)
-  flux[*,0:3] = flux1
-  flux[*,4:7] = flux2
+  flux = dblarr(n_elements(lambda),10)
+  flux[*,0:4] = flux1
+  flux[*,5:9] = flux2
 
 endif
 
@@ -78,9 +81,10 @@ if keyword_set(disk) then begin
   foliv = params[7]
   fcrys = params[8]
   fforst = params[9]
+  fwaterice = params[10]
   
   diskspectrum, rin, rout, amin, amax, effectiveTemp, diskmass, $
-    foliv, fcrys, fforst, rlaw=rlaw, alaw=alaw, lambda, flux
+    foliv, fcrys, fforst, fwaterice, rlaw=rlaw, alaw=alaw, lambda, flux
 endif
 
 ; *************************************************** ;

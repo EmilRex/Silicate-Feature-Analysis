@@ -581,8 +581,8 @@ if n_elements(function_name) eq 0 then return,0
 if n_elements(num_particles) eq 0 then num_particles = 10
 if n_elements(vel_decrement) eq 0 then vel_decrement = 0.95
 
-COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
-COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, effectiveTempArray, stellar_emit
+COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, Qwaterice, crystallineabs
+COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, waterice_emit, effectiveTempArray, stellar_emit
 
 o = obj_new('pso',   prange = prange,                 $
                      ftol = ftol,                     $

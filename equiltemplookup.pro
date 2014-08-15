@@ -1,6 +1,6 @@
 pro equiltemplookup, teff, grainrad, distance, $
                      tdust, $
-                     folivine, fcrystalline, fforst
+                     folivine, fcrystalline, fforst, fwaterice
   
 ;print, "Distance: ", distance                 
 ; 
@@ -19,7 +19,7 @@ pro equiltemplookup, teff, grainrad, distance, $
 ;                 forsterite_emit, enstatite_emit
 ; tables of total emission versus temperature and grain size
 
-COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, effectiveTempArray, stellar_emit
+COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, waterice_emit, effectiveTempArray, stellar_emit
 COMMON GRAINPROPS
 
 alllambda = [qastrosil.lambda[where(qastrosil.lambda lt qolivine.lambda[0])], $
@@ -28,15 +28,16 @@ nl = n_elements(alllambda)
 
 
 ; read in optical data
-qlookup, grainrad, alllambda, folivine, fcrystalline, fforst, qabsall, /separate
+qlookup, grainrad, alllambda, folivine, fcrystalline, fforst, fwaterice, qabsall, /separate
 
 ; look up stellar fluxes
 starfluxarr = dblarr(size(stellar_emit,/dimensions))
 
-starfluxarr[*,*,0] = stellar_emit[*,*,0] * folivine * (1.0-fcrystalline)
-starfluxarr[*,*,1] = stellar_emit[*,*,1] * (1.0-folivine) * (1.0-fcrystalline)
-starfluxarr[*,*,2] = stellar_emit[*,*,2] * fforst * fcrystalline
-starfluxarr[*,*,3] = stellar_emit[*,*,3] * (1.0-fforst) * fcrystalline
+starfluxarr[*,*,0] = stellar_emit[*,*,0] * folivine * (1.0-fcrystalline) * (1.0-fwaterice)
+starfluxarr[*,*,1] = stellar_emit[*,*,1] * (1.0-folivine) * (1.0-fcrystalline) * (1.0-fwaterice)
+starfluxarr[*,*,2] = stellar_emit[*,*,2] * fforst * fcrystalline * (1.0-fwaterice)
+starfluxarr[*,*,3] = stellar_emit[*,*,3] * (1.0-fforst) * fcrystalline * (1.0-fwaterice)
+starfluxarr[*,*,4] = stellar_emit[*,*,4] * fwaterice
 
 
 ii = interpol(dindgen(n_elements(agrain)), $
@@ -44,10 +45,10 @@ ii = interpol(dindgen(n_elements(agrain)), $
 jj = interpol(dindgen(n_elements(effectiveTempArray)), $
               effectiveTempArray, teff)
 
-absflux = dblarr(n_elements(ii),4)
-totabs = dblarr(n_elements(ii),n_elements(distance),4)
+absflux = dblarr(n_elements(ii),5)
+totabs = dblarr(n_elements(ii),n_elements(distance),5)
 
-for g=0,3 do begin
+for g=0,4 do begin
   absflux[*,g] = exp(interpolate(alog(starfluxarr[*,*,g]), ii, jj, /grid)) 
   
   ; divide by distance to get actual flux
@@ -56,20 +57,21 @@ for g=0,3 do begin
 endfor
 
 nte = size(olivine_emit,/dimensions)
-thisemit = dblarr(nte[0],nte[1],4)
-thisemit[*,*,0] = olivine_emit*folivine*(1.0-fcrystalline)
-thisemit[*,*,1] = pyroxene_emit*(1.0-folivine)*(1.0-fcrystalline)
-thisemit[*,*,2] = forsterite_emit*fforst*fcrystalline
-thisemit[*,*,3] = enstatite_emit*(1.0-fforst)*fcrystalline
+thisemit = dblarr(nte[0],nte[1],5)
+thisemit[*,*,0] = olivine_emit*folivine*(1.0-fcrystalline)*(1.0-fwaterice)
+thisemit[*,*,1] = pyroxene_emit*(1.0-folivine)*(1.0-fcrystalline)*(1.0-fwaterice)
+thisemit[*,*,2] = forsterite_emit*fforst*fcrystalline*(1.0-fwaterice)
+thisemit[*,*,3] = enstatite_emit*(1.0-fforst)*fcrystalline*(1.0-fwaterice)
+thisemit[*,*,4] = waterice_emit*fwaterice
 
 ; look up temperature in table
 tindex = dindgen(n_elements(tgrain))
 aindex = interpol(dindgen(n_elements(agrain)), alog(agrain),alog(grainrad))
 
-fluxtable = dblarr(n_elements(aindex),n_elements(tindex),4)
-tdust = dblarr(n_elements(grainrad), n_elements(distance),4)
+fluxtable = dblarr(n_elements(aindex),n_elements(tindex),5)
+tdust = dblarr(n_elements(grainrad), n_elements(distance),5)
 
-for g=0,3 do begin
+for g=0,4 do begin
   
   fluxtable[*,*,g] = interpolate(thisemit[*,*,g], aindex, tindex, /grid)
   for i=0,n_elements(grainrad)-1 do begin

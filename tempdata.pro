@@ -4,6 +4,7 @@ COMMON grainprops, qastrosil, qolivine, qpyroxene, qenstatite, qforsterite, qwat
 RESTORE, 'qtables_withcrys2.sav'
 RESTORE, 'qwaterice.sav'
 
+
 NT = 751
 tgrain = 2.0*10.0d^(3.0*dindgen(NT)/(NT-1.0))
 

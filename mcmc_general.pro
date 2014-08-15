@@ -43,12 +43,13 @@ compile_opt idl2
 COMMON file_path, in_dir, out_dir, fit_name, object_name
 
 ; Create global variables relating to silicate features
-COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
-COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, effectiveTempArray, stellar_emit
+COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, Qwaterice, crystallineabs
+COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, waterice_emit, effectiveTempArray, stellar_emit
 
 ; Load data into some of the global parameters above
 restore, 'graintempdata.sav'
-restore, 'qtables_withcrys2.sav' ; qastrosil, qolivine, qpyroxene                                                                     
+restore, 'qtables_withcrys2.sav' ; qastrosil, qolivine, qpyroxene 
+restore, 'qwaterice.sav'                                                                    
 
 ; Create more global variables
 COMMON mcmc_common, seed1  ;- save the random seed value
@@ -355,8 +356,8 @@ function logTargetDistribution,link,result
 ; Take current 'link' in current 'chain', model the spectrum and compare to actual 'result'
 
 COMMON fnc_name,dof1 
-COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
-COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, effectiveTempArray, stellar_emit
+COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, Qwaterice, crystallineabs
+COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, waterice_emit, effectiveTempArray, stellar_emit
 COMMON file_path, in_dir, out_dir, fit_name, object_name
 
 
@@ -370,7 +371,7 @@ IF (fit_name eq 'single') THEN spectra = modelsinglespectrum(result[0,*], link, 
 ;temp1, grain1, scale1, olivine/pyroxene, crystalline, enstatite/fosterite,  
 ;temp2, grain2, scale2, olivine/pyroxene2, crystalline2, enstatite/fosterite2 
 
-IF (fit_name eq 'multi_mips') THEN spectra = modelsinglespectrum(result[0,*], link, /multi)
+IF (fit_name eq 'multi') THEN spectra = modelsinglespectrum(result[0,*], link, /multi)
 
 ; *************************************************** ;
 ; CONTINUOUS DISK MODEL
@@ -385,7 +386,7 @@ IF (fit_name eq 'multi_mips') THEN spectra = modelsinglespectrum(result[0,*], li
 ;   fc = fitparam[8]
 ;   ff = fitparam[9]
 
-IF (fit_name eq 'disk_mips') THEN spectra =  modelsinglespectrum(result[0,*], link, /disk)
+IF (fit_name eq 'disk') THEN spectra =  modelsinglespectrum(result[0,*], link, /disk)
 
 
 chisq = TOTAL ( ((result[1,*]-spectra)^2.0)/((.05*result[2,*])^2.0+(result[2,*])^2.0))

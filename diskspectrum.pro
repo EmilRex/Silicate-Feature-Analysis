@@ -52,11 +52,11 @@
 ; -
 ; *************************************************** ;
 pro diskspectrum, rin, rout, amin, amax, Teff, diskmass, $ 
-                  folivine, fcrystalline, fforst, $
+                  folivine, fcrystalline, fforst, fwaterice, $
                   rlaw=rlaw, alaw=alaw, verbose=verbose, $
                   lambda, flux, ring=ring, mie=mie, single=single
 
-;COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
+;COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, Qwaterice, crystallineabs
 
 ; Set constants
 rho_s = 3.3 ;bulk density of grains in g/cm^3
@@ -150,14 +150,14 @@ endelse
 
 
 ; Get temperatures - don't include crystalline silicates
-equiltemplookup, Teff, aall, rall, tempr, folivine, fcrystalline, fforst
+equiltemplookup, Teff, aall, rall, tempr, folivine, fcrystalline, fforst, fwaterice
 
 ; Get Qabs, from Mie calculation
-qlookup, aall, lambda, folivine, fcrystalline, fforst, qabsall, /separate
+qlookup, aall, lambda, folivine, fcrystalline, fforst, fwaterice, qabsall, /separate
 
 ; *************************************************** ;
 ; Calculate spectrum
-flux = dblarr(n_elements(lambda),4)
+flux = dblarr(n_elements(lambda),5)
 NL = n_elements(lambda)
 if nl le 1 then print, 'OH WOE!'
 
@@ -172,7 +172,7 @@ crysnorm = diskmass/totsigma/total(crosssection)
 
 ; *************************************************** ;
 ; Calculate flux for each grain type
-for g=0,3 do begin
+for g=0,4 do begin
   ; Calculate Blackbody
   temp_t1 =reform(transpose(tempr[*,*,g]),NA*NR) 
   wave_new1= (REBIN(lambda,NA*NR,NL))*1.d-4

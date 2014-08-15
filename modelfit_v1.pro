@@ -37,9 +37,9 @@
 pro modelfit_v1,param_struc=params,fittype=fittype
 
 ; Create global variables relating to silicate features
-COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, Qwater_ice, crystallineabs
+COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, Qwaterice, crystallineabs
 COMMON stellarprops, temptable, folivine, effectiveTemp, lambdastar, fluxstar
-COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, effectiveTempArray, stellar_emit
+COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, waterice_emit, effectiveTempArray, stellar_emit
 
 ; Load data into some of the global parameters above
 restore, 'graintempdata.sav'
@@ -56,7 +56,6 @@ Teff=params.teff_val
 print, 'T_star=', Teff
 effectiveTemp = Teff
 amin = params.amin_val
-
 
 ; *************************************************** ;
 ; Find the right grain model for calculating temperatures
@@ -107,6 +106,7 @@ restore, grainfiles[ki]
 		param_bnd[*,3]= [0, 1.0,0] ; olivine/pyroxene composition 
 		param_bnd[*,4]= [0, 1.0,0] ; crystalline fraction
 		param_bnd[*,5]= [0, 1.0,0] ; forsterite/enstatite composition 
+		param_bnd[*,6]= [0, 1.0,0] ; water-ice fraction (fraction of total mass)
 
 
     mcmc_general,par_bound=param_bnd,parameter=params
@@ -129,22 +129,25 @@ restore, grainfiles[ki]
 		param_bnd[*,3]= [0, 1.0,0] ; olivine/pyroxene composition 
 		param_bnd[*,4]= [0, 1.0,0] ; crystalline fraction
 		param_bnd[*,5]= [0, 1.0,0] ; forsterite/enstatite composition 
+		param_bnd[*,6]= [0, 1.0,0] ; water-ice fraction (fraction of total mass)
+		
  		;param_bnd[*,6]= [100.0, 1000.0,0] ; Temp limited to reasonable values
-		param_bnd[*,6]= [1.0, 6.0,0] ; New distance bounds
-		param_bnd[*,7]= [amin, 30.0,0] ; blowout radius as lower bound
-		param_bnd[*,8]= [16.5, 23.5,0] ; positive scale factors
-		param_bnd[*,9]= [0, 1.0,0] ; olivine/pyroxene composition 
-		param_bnd[*,10]= [0, 1.0,0] ; crystalline fraction
-		param_bnd[*,11]= [0, 1.0,0] ; forsterite/enstatite composition 
-
-    if keyword_set(nocrys) then begin
-		  param_bnd[*,4]= [0, 1.0,1]
-      param_bnd[*,5]= [0, 1.0,1]
-      param_bnd[*,10]= [0, 1.0,1]
-      param_bnd[*,11]= [0, 1.0,1]
-      initparams[4] = 0.0
-	    initparams[10] = 0.0
-    endif
+		param_bnd[*,7]= [1.0, 6.0,0] ; New distance bounds
+		param_bnd[*,8]= [amin, 30.0,0] ; blowout radius as lower bound
+		param_bnd[*,9]= [16.5, 23.5,0] ; positive scale factors
+		param_bnd[*,10]= [0, 1.0,0] ; olivine/pyroxene composition 
+		param_bnd[*,12]= [0, 1.0,0] ; crystalline fraction
+		param_bnd[*,13]= [0, 1.0,0] ; forsterite/enstatite composition 
+    param_bnd[*,12]= [0, 1.0,0] ; water-ice fraction (fraction of total mass)
+    
+    ;if keyword_set(nocrys) then begin
+		;  param_bnd[*,4]= [0, 1.0,1]
+    ;  param_bnd[*,5]= [0, 1.0,1]
+    ;  param_bnd[*,10]= [0, 1.0,1]
+    ;  param_bnd[*,11]= [0, 1.0,1]
+    ;  initparams[4] = 0.0
+	  ;  initparams[10] = 0.0
+    ;endif
 
     ;scale_val=[1.010,.70, .0220, .0150, .0150, .0150,  1.50, .530,  .0120, .0150, .0150, .0150]
 
@@ -176,14 +179,13 @@ restore, grainfiles[ki]
 		param_bnd[*,6]= [16.5, 23.5,0] ; no limits on mass
 		param_bnd[*,7]= [0.0, 1.0,0] ; amorph composition
 		param_bnd[*,8]= [0.0, 1.0,0] ; crystalline fraction
+    param_bnd[*,9]= [0.0, 1.0,0] ; crystalline composition
+    param_bnd[*,10]= [0.0, 1.0,0] ; water-ice fraction (fraction of total mass)
 
-	  if keyword_set(nocrys) then begin
-			param_bnd[*,8]= [0.0, 1.0,1]
-      initparams[8] = 0.0
-  	endif
-		
-		; crystalline composition
-		param_bnd[*,9]= [0.0, 1.0,0]
+	  ;if keyword_set(nocrys) then begin
+		;	param_bnd[*,8]= [0.0, 1.0,1]
+    ;  initparams[8] = 0.0
+  	;endif
 
     ;scale_val=[[.030,.030,.0220,0.80,.030,.0220, .0220, .0150, .015, .0150],$
     ;[.050,.050,.0350,1.60,.050,.0350, .0420, .0350, .0325, .0150],$

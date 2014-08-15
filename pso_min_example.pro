@@ -46,8 +46,8 @@ function f1_eval,p,_EXTRA = extra
 ; call and evaluate agents positions, one at a time.
 
 ; Create global variables relating to silicate features
-COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
-COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, effectiveTempArray, stellar_emit
+COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, Qwaterice, crystallineabs
+COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, waterice_emit, effectiveTempArray, stellar_emit
 COMMON file_path, in_dir, out_dir, fit_name, object_name
 
 ; *************************************************** ;
@@ -55,7 +55,7 @@ COMMON file_path, in_dir, out_dir, fit_name, object_name
 
 IF (fit_name eq 'single') THEN BEGIN
   
-  link=[p[0],p[1],p[2],p[3],p[4],p[5]]
+  link=[p[0],p[1],p[2],p[3],p[4],p[5],p[6]]
   spectra = modelsinglespectrum(transpose(extra.wave),link, /single )
   
 ENDIF
@@ -63,9 +63,9 @@ ENDIF
 ; *************************************************** ;
 ; MODEL: TWO GRAIN
 
-IF (fit_name eq 'multi_mips') THEN BEGIN 
+IF (fit_name eq 'multi') THEN BEGIN 
 
-  link=[p[0],p[1],p[2],p[3],p[4],p[5],p[6],p[7],p[8],p[9],p[10],p[11]]
+  link=[p[0],p[1],p[2],p[3],p[4],p[5],p[6],p[7],p[8],p[9],p[10],p[11],p[12],p[13]]
   spectra = modelsinglespectrum(transpose(extra.wave),link, /multi )                         
 
 ENDIF
@@ -73,9 +73,9 @@ ENDIF
 ; *************************************************** ;
 ; MODEL: CONTINUOUS DISK
 
-IF (fit_name eq 'disk_mips') THEN BEGIN
+IF (fit_name eq 'disk') THEN BEGIN
 
-  link=[p[0],p[1],p[2],p[3],p[4],p[5],p[6],p[7],p[8],p[9]]
+  link=[p[0],p[1],p[2],p[3],p[4],p[5],p[6],p[7],p[8],p[9],p[10]]
   spectra = modelsinglespectrum(transpose(extra.wave),link, /disk ) 
   
 ENDIF
@@ -129,19 +129,19 @@ COMMON file_path, in_dir, out_dir, fit_name, object_name
 
 IF (fit_name eq 'single') THEN BEGIN
   ;prange = [[30.0, 800.0],[amin, 30.0],[16.5, 23.5],[0, 1.0],[0, 1.0],[0, 1.0]]
-  prange = [[1.0, 5.0],[amin, 30.0],[16.5, 23.5],[0, 1.0],[0, 1.0],[0, 1.0]]
+  prange = [[1.0, 5.0],[amin, 30.0],[16.5, 23.5],[0, 1.0],[0, 1.0],[0, 1.0],[0, 1.0]]
 ENDIF
 
-IF (fit_name eq 'multi_mips') THEN BEGIN
+IF (fit_name eq 'multi') THEN BEGIN
   ;prange = [[30.0, 300.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0],$
   ;         [100.0, 1000.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0]]
   
-  prange = [[1.0, 5.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0],$
-           [1.0, 6.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0]]
+  prange = [[1.0, 5.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0],[0, 1.0],$
+           [1.0, 6.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0],[0, 1.0]]
 ENDIF
 
-IF (fit_name eq 'disk_mips') THEN BEGIN
-  prange = [[1.0, 5.0],[0.0, 10.0],[-5., 5.],[amin, 30.0],[0.0, 7.0],[1.5, 5.5],[16.5, 23.5],[0.0, 1.0],[0.0, 1.0],[0.0, 1.0]]
+IF (fit_name eq 'disk') THEN BEGIN
+  prange = [[1.0, 5.0],[0.0, 10.0],[-5., 5.],[amin, 30.0],[0.0, 7.0],[1.5, 5.5],[16.5, 23.5],[0.0, 1.0],[0.0, 1.0],[0.0, 1.0],[0, 1.0]]
 ENDIF
 
 func = 'f1_eval' ; Function to be minimized
@@ -178,13 +178,14 @@ functargs =  {  wave:final_wave,    $
  ; *************************************************** ;
 
  ; Create global variables relating to silicate features
- COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
+ COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, Qwaterice, crystallineabs
  COMMON stellarprops, temptable, folivine, effectiveTemp, lambdastar, fluxstar
- COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, effectiveTempArray, stellar_emit
+ COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, waterice_emit, effectiveTempArray, stellar_emit
  
  ; Fill the above global variables
  restore, 'graintempdata.sav'
  restore, 'qtables_withcrys2.sav' ; qastrosil, qolivine, qpyroxene
+ restore, 'qwaterice.sav'
 
  rho_s = 3.3
  AU_in_cm = 1.496e13
