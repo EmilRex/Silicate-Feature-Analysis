@@ -1,7 +1,6 @@
 pro tempdata
 ; read in optical data
-COMMON grainprops, qastrosil, qolivine, qpyroxene, qenstatite, qforsterite, $
-   crystallineabs
+COMMON grainprops, qastrosil, qolivine, qpyroxene, qenstatite, qforsterite, qwaterice, crystallineabs
 RESTORE, 'qtables_withcrys.sav'
 
 NT = 751
