@@ -1,4 +1,6 @@
+; ****************************************************************************************************** ;
 pro qtables, Qastrosil, Qolivine, Qpyroxene
+; ****************************************************************************************************** ;
 ; read in files of optical constants
 ; generate Qext, Qabs values, as a function of grain size & wavelength
 ; save in qtables.sav
@@ -15,8 +17,9 @@ NA = n_elements(agrain)
 ; maximum grain size parameter allowed to mie_single is 12000.0
 maxx = 12000.0
 
-
+; *************************************************** ;
 ; DRAINE & LEE astronomical silicates
+; *************************************************** ;
 
 ; read in optical data
 readcol, 'opacities/eps_Sil', lasil, e1, e2, nasil, kasil, $
@@ -52,9 +55,10 @@ for i=0, nl-1 do begin
    print, 'lambda = ', lasil[i]
 endfor
 
-
+; *************************************************** ;
 ; OLIVINE
-
+; *************************************************** ;
+; 
 ; read in optical data
 readcol, 'opacities/olmg50.lnk', loliv, noliv, koliv, format='(F,F,F)'
 
@@ -77,9 +81,10 @@ for i=0, nl-1 do begin
    print, 'lambda = ', loliv[i]
 endfor
 
-
+; *************************************************** ;
 ; PYROXENE
-
+; *************************************************** ;
+; 
 ; read in optical data
 readcol, 'opacities/pyrmg50.lnk', lpyr, npyr, kpyr, format='(F,F,F)'
 
@@ -102,6 +107,7 @@ for i=0, nl-1 do begin
    print, 'lambda = ', lpyr[i]
 endfor
 
+; *************************************************** ;
 save, file='qtables.sav', Qastrosil, Qolivine, Qpyroxene
 
 return

@@ -1,4 +1,6 @@
+; ****************************************************************************************************** ;
 pro qcrystalline, Qforsterite, Qenstatite
+; ****************************************************************************************************** ;
 ; read in files of optical constants
 ; generate Qext, Qabs values, as a function of grain size & wavelength
 ; three structures: Qenstatite and Qforsterite
@@ -15,8 +17,10 @@ NA = n_elements(agrain)
 ; maximum grain size parameter allowed to mie_single is 12000.0
 maxx = 12000.0
 
+; *************************************************** ;
 ; FORSTERITE: Mg2 Si O4 -- magnesium end member of crystalline olivine
 ; tables given for Mg1.9 Fe0.1 Si O4 
+; *************************************************** ;
 
 ; read in optical data
 ; 3 files: one for each orientation. 
@@ -96,8 +100,9 @@ for i=0, nl-1 do begin
    print, 'lambda = ', l_forst[i]
 endfor
 
-
+; *************************************************** ;
 ; ENSTATITE: crystalline form of pyroxene
+; *************************************************** ;
 
 ; read in optical data
 ; 3 files: one for each orientation. 
@@ -167,6 +172,7 @@ for i=0, nl-1 do begin
    print, 'lambda = ', l_ens[i]
 endfor
 
+; *************************************************** ;
 plot, [0],[0], xrange=[1,100], yrange=[1e-5,10], /xlog, /ylog, /nodata
 
 for i=0,4 do begin
@@ -186,8 +192,9 @@ endfor
 return
 end
 
-
+; ****************************************************************************************************** ;
 pro newqtables
+; ****************************************************************************************************** ;
 qcrystalline, Qforsterite, Qenstatite
 restore, 'qtables.sav'
 save, file='qtables_withcrys.sav', Qastrosil, Qolivine, Qpyroxene,$
@@ -195,8 +202,9 @@ save, file='qtables_withcrys.sav', Qastrosil, Qolivine, Qpyroxene,$
 return
 end
 
-
+; ****************************************************************************************************** ;
 pro qcrys_short, Qforsterite, Qenstatite
+; ****************************************************************************************************** ;
 ; calculate short wavelength components, from values of indices of 
 ; refractions tabulated by Huffman & Stapp
 ; INPUT: existing Qforsterite, Qenstatite tables
@@ -205,7 +213,9 @@ pro qcrys_short, Qforsterite, Qenstatite
 ; maximum grain size parameter allowed to mie_single is 12000.0
 maxx = 12000.0
 
+; *************************************************** ;
 ; FORSTERITE: Mg2 Si O4 -- magnesium end member of crystalline olivine
+; *************************************************** ;
 agrain = Qforsterite.agrain
 NA = n_elements(agrain)
 
@@ -247,8 +257,9 @@ Qscat = [[Qscatf[*,i1]], [Qforsterite.Qscat[*,i2]]]
 Qforsterite = {agrain:agrain, lambda:alll, $
                Qext:Qext, Qscat:Qscat}
 
-
+; *************************************************** ;
 ; ENSTATITE: crystalline form of pyroxene
+; *************************************************** ;
 agrain = Qenstatite.agrain
 NA = n_elements(agrain)
 
@@ -314,8 +325,9 @@ return
 end
 
 
-
+; ****************************************************************************************************** ;
 pro qtables_shortcrys
+; ****************************************************************************************************** ;
 restore, 'qtables_withcrys.sav'
 QCRYS_SHORT, Qforsterite, Qenstatite
 read_crys_opac, crystallineabs
