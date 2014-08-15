@@ -39,15 +39,14 @@
 ; -
 ; *************************************************** ;
 
-pro qlookup, grainrad, wavelength, olivratio, crysfrac, forstfrac, $
+pro qlookup, grainrad, wavelength, olivratio, crysfrac, forstfrac, icefrac, $
              qabs, qext=qext, qscat=qscat, separate=separate
 
 ; Carry global variables relating to silicate features
-COMMON grainprops, qastrosil, qolivine, qpyroxene, qenstatite, qforsterite, crystallineabs
-;COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs                                           
-
-qextall = dblarr(n_elements(grainrad), n_elements(wavelength),4)
-qscatall = dblarr(n_elements(grainrad), n_elements(wavelength),4)
+COMMON grainprops, qastrosil, qolivine, qpyroxene, qenstatite, qforsterite, qwaterice, crystallineabs
+                         
+qextall = dblarr(n_elements(grainrad), n_elements(wavelength),5)
+qscatall = dblarr(n_elements(grainrad), n_elements(wavelength),5)
 
 ; agrain indices
 ii = interpol(dindgen(n_elements(qastrosil.agrain)), $
@@ -63,17 +62,17 @@ if nshort gt 0 then begin
   
   qextall[*, shortl,*] = $
      rebin(exp(interpolate(alog(Qastrosil.Qext), ii, jj, /grid)), $
-     n_elements(grainrad), nshort, 4)
+     n_elements(grainrad), nshort, 5)
            
   qscatall[*, shortl,*] = $
      rebin(exp(interpolate(alog(Qastrosil.Qscat), ii, jj, /grid)), $
-     n_elements(grainrad), nshort, 4)
+     n_elements(grainrad), nshort, 5)
       
 endif 
 
 
 ; *************************************************** ;
-; Compute for each graintype [olivine,pyroxene,forsterite,enstatite]
+; Compute for each graintype [olivine,pyroxene,forsterite,enstatite,waterice]
 ; *************************************************** ;
 
 
@@ -120,6 +119,15 @@ qstruct = qenstatite
   qscatall[*,*,graintype] = exp(interpolate((Qstruct.logQscat), ii, jj, /grid))
 ;endif
 
+; *************************************************** ;
+graintype =4
+qstruct = qwaterice
+;longl = where(wavelength ge min(qstruct.agrain), nlong)
+;if nlong gt 0 then begin
+jj = interpol(dindgen(n_elements(qstruct.lambda)), alog(qstruct.lambda), alog(wavelength) )
+qextall[*,*,graintype] = exp(interpolate((Qstruct.logQext), ii, jj, /grid))
+qscatall[*,*,graintype] = exp(interpolate((Qstruct.logQscat), ii, jj, /grid))
+;endif
 
 
 ; *************************************************** ;
@@ -128,43 +136,47 @@ qstruct = qenstatite
 ; crysfrac = crystalline/(crystalline+amorphous)
 ; forstfrac = forsterite/(enstatite+forsterite)
 
-; Compresses the 4 *grain* layers into one 2D sheet
+; Compresses the 5 *grain* layers into one 2D sheet
 ; Can probably work around with a keyword at top: /separate or something
 
 IF NOT KEYWORD_SET(separate) THEN BEGIN
 
-  qext = reform( qextall[*,*,0]*olivratio*(1.0-crysfrac) + $
-                 qextall[*,*,1]*(1.0-olivratio)*(1.0-crysfrac) + $
-                 qextall[*,*,2]*forstfrac*crysfrac + $
-                 qextall[*,*,3]*(1.0-forstfrac)*crysfrac, $
+  qext = reform( qextall[*,*,0]*olivratio*(1.0-crysfrac)*(1.0-icefrac) + $
+                 qextall[*,*,1]*(1.0-olivratio)*(1.0-crysfrac)*(1.0-icefrac) + $
+                 qextall[*,*,2]*forstfrac*crysfrac*(1.0-icefrac) + $
+                 qextall[*,*,3]*(1.0-forstfrac)*crysfrac*(1.0-icefrac) + $
+                 qextall[*,*,4]*icefrac, $
                  n_elements(grainrad), n_elements(wavelength) )
   
-  qscat = reform( qscatall[*,*,0]*olivratio*(1.0-crysfrac) + $
-                  qscatall[*,*,1]*(1.0-olivratio)*(1.0-crysfrac) + $
-                  qscatall[*,*,2]*forstfrac*crysfrac + $
-                  qscatall[*,*,3]*(1.0-forstfrac)*crysfrac, $
+  qscat = reform( qscatall[*,*,0]*olivratio*(1.0-crysfrac)*(1.0-icefrac) + $
+                  qscatall[*,*,1]*(1.0-olivratio)*(1.0-crysfrac)*(1.0-icefrac) + $
+                  qscatall[*,*,2]*forstfrac*crysfrac*(1.0-icefrac) + $
+                  qscatall[*,*,3]*(1.0-forstfrac)*crysfrac*(1.0-icefrac) + $
+                  qscatall[*,*,4]*icefrac, $
                   n_elements(grainrad), n_elements(wavelength) )
 
 qabs = qext-qscat
 
 ENDIF ELSE BEGIN
   
-  qabs = dblarr(n_elements(grainrad),n_elements(wavelength),4)
-  qext = dblarr(n_elements(grainrad),n_elements(wavelength),4)
-  qscat = dblarr(n_elements(grainrad),n_elements(wavelength),4)
+  qabs = dblarr(n_elements(grainrad),n_elements(wavelength),5)
+  qext = dblarr(n_elements(grainrad),n_elements(wavelength),5)
+  qscat = dblarr(n_elements(grainrad),n_elements(wavelength),5)
   
-  qext[*,*,0] = qextall[*,*,0]*olivratio*(1.0-crysfrac)
-  qext[*,*,1] = qextall[*,*,1]*(1.0-olivratio)*(1.0-crysfrac)
-  qext[*,*,2] = qextall[*,*,2]*forstfrac*crysfrac
-  qext[*,*,3] = qextall[*,*,3]*(1.0-forstfrac)*crysfrac 
+  qext[*,*,0] = qextall[*,*,0]*olivratio*(1.0-crysfrac)*(1.0-icefrac)
+  qext[*,*,1] = qextall[*,*,1]*(1.0-olivratio)*(1.0-crysfrac)*(1.0-icefrac)
+  qext[*,*,2] = qextall[*,*,2]*forstfrac*crysfrac*(1.0-icefrac)
+  qext[*,*,3] = qextall[*,*,3]*(1.0-forstfrac)*crysfrac*(1.0-icefrac)
+  qext[*,*,4] = qextall[*,*,4]*icefrac
   
-  qscat[*,*,0] = qscatall[*,*,0]*olivratio*(1.0-crysfrac)
-  qscat[*,*,1] = qscatall[*,*,1]*(1.0-olivratio)*(1.0-crysfrac)
-  qscat[*,*,2] = qscatall[*,*,2]*forstfrac*crysfrac
-  qscat[*,*,3] = qscatall[*,*,3]*(1.0-forstfrac)*crysfrac
+  qscat[*,*,0] = qscatall[*,*,0]*olivratio*(1.0-crysfrac)*(1.0-icefrac)
+  qscat[*,*,1] = qscatall[*,*,1]*(1.0-olivratio)*(1.0-crysfrac)*(1.0-icefrac)
+  qscat[*,*,2] = qscatall[*,*,2]*forstfrac*crysfrac*(1.0-icefrac)
+  qscat[*,*,3] = qscatall[*,*,3]*(1.0-forstfrac)*crysfrac*(1.0-icefrac)
+  qscat[*,*,4] = qscatall[*,*,4]*icefrac
   
   
-  FOR i=0,3 DO qabs[*,*,i] = qext[*,*,i] - qscat[*,*,i]
+  FOR i=0,4 DO qabs[*,*,i] = qext[*,*,i] - qscat[*,*,i]
   
 ENDELSE
 

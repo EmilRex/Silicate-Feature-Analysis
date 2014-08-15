@@ -15,7 +15,7 @@ readcol, 'IOP_2008_ASCIItable.dat', lwater_ice, m_re, m_im, format='(F,F,F)'
 nl = n_elements(lwater_ice)
 Qwater_ice = {agrain:agrain, lambda:lwater_ice, $
   Qext:dblarr(NA,nl), Qscat:dblarr(NA,nl),$
-  logQext:dblarr(NA,nl), logQscat:dblarr(NA,nl) }
+  logQext:dblarr(NA,nl), logQscat:dblarr(NA,nl)}
   
 print, 'Water_ice'
 for i=0, nl-1 do begin
