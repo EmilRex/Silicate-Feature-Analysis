@@ -21,11 +21,12 @@ out_dir = '../Silicate_Feature_Analysis_output'
 ;RUN MULTIPLE
 ; *************************************************** ;
 
-names = ['HD95086','HD106906','HD108257','HD110058','HD111520','HD113556','HD113766','HD114082','HD115600','HD117214','HD145560','HD146181','HD146897']
+;names = ['HD95086','HD106906','HD108257','HD110058','HD111520','HD113556','HD113766','HD114082','HD115600','HD117214','HD145560','HD146181','HD146897']
 ;names = ['HD95086','HD110058','HD113556','HD114082','HD115600','HD117214','HD145560','HD146181','HD146897']
-;names = ['HD117214','HD146897']
-;fit_names = ['single'];['single','multi','disk']
-fit_names = ['disk'];['multi','single'];,'disk']
+names = ['HD117214','HD146897']
+;names = ['HD181327']
+fit_names = ['single','multi'];,'disk']
+;fit_names = ['disk'];['multi','single'];,'disk']
 
 FOREACH name, names DO BEGIN
   FOREACH fit_name, fit_names DO BEGIN

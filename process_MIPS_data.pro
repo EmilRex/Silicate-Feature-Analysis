@@ -1,6 +1,6 @@
 ; +
 ; NAME:
-;  process_data
+;  process_MIPS_data
 ;
 ; PURPOSE:
 ;  Join Spitzer IRS data with Spitzer MIPS SED data. Scales MIPS SED
@@ -28,9 +28,10 @@
 ;
 ; MODIFICATION HISTORY:
 ;  Written by EC (7/2/2014)
+;  Renamed process_MIPS_data by EC (8/18/14)
 ; -
 ; *************************************************** ;
-pro process_data, plot=plot
+pro process_MIPS_data, plot=plot
 
 ; Set iterators
 count = 0
