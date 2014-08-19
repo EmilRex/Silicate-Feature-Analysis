@@ -98,7 +98,7 @@ restore, grainfiles[ki]
     
     print, 'Fitting single grain model...'
     
-	  param_bnd = dblarr(3,6)
+	  param_bnd = dblarr(3,7)
  		;param_bnd[*,0]= [10.0, 1000.0,0] ; Temperatures limited to reasonable values
 		param_bnd[*,0]= [1.0, 5.0,0] ; New distance bounds
 		param_bnd[*,1]= [amin, 30.0,0] ; .1 as lower bound
@@ -121,7 +121,7 @@ restore, grainfiles[ki]
 
     print, 'Fitting two grain model...'
 
-	  param_bnd = dblarr(3,12)
+	  param_bnd = dblarr(3,14)
  		;param_bnd[*,0]= [30.0, 300.0,0] ; Temp limited to reasonable values
 		param_bnd[*,0]= [1.0, 5.0,0] ; New distance bounds
 		param_bnd[*,1]= [amin, 30.0,0] ; blowout radius as lower bound
@@ -136,9 +136,9 @@ restore, grainfiles[ki]
 		param_bnd[*,8]= [amin, 30.0,0] ; blowout radius as lower bound
 		param_bnd[*,9]= [16.5, 23.5,0] ; positive scale factors
 		param_bnd[*,10]= [0, 1.0,0] ; olivine/pyroxene composition 
-		param_bnd[*,12]= [0, 1.0,0] ; crystalline fraction
-		param_bnd[*,13]= [0, 1.0,0] ; forsterite/enstatite composition 
-    param_bnd[*,12]= [0, 1.0,0] ; water-ice fraction (fraction of total mass)
+		param_bnd[*,11]= [0, 1.0,0] ; crystalline fraction
+		param_bnd[*,12]= [0, 1.0,0] ; forsterite/enstatite composition 
+    param_bnd[*,13]= [0, 1.0,0] ; water-ice fraction (fraction of total mass)
     
     ;if keyword_set(nocrys) then begin
 		;  param_bnd[*,4]= [0, 1.0,1]
@@ -169,7 +169,7 @@ restore, grainfiles[ki]
 	;   ff = fitparam[9]
 	3: begin
  
-	  param_bnd = dblarr(3,10)
+	  param_bnd = dblarr(3,11)
 		param_bnd[*,0]= [1, 5.0,0] ; rin
 		param_bnd[*,1]= [0.0,10.0,0] ; r range
 		param_bnd[*,2]= [-5,5 ,0] ; no limits on alpha

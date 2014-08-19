@@ -42,21 +42,69 @@ readcol,'MIPS_SED_response.txt',F=fmt,v1,v2,resp_wave,response,v5,v6, /SILENT
 restore, 'old_savfiles_mcmc/'+name+'.sav'
 
 ; *************************************************** ;
-; Read, concatenate and bin PACS data
-fmt='f,f,f,f,f'
+; Read and bin PACS data
 
 file = strarr(4)
+fmt='f,f,f,f,f'
 
+file[0] = 'hipe11_0_2454_calver49_OBSID_1342231318_B2A_2_TB_CS_PSF_PO.csv'
+file[1] = 'hipe11_0_2454_calver49_OBSID_1342231723_B2B_2_TB_CS_PSF_PO.csv'
+file[2] = 'hipe11_0_2454_calver49_OBSID_1342231318_R1_102_TB_CS_PSF_PO.csv'
+file[3] = 'hipe11_0_2454_calver49_OBSID_1342231723_R1_102_TB_CS_PSF_PO.csv'
 
-file[0] = 'hipe11_0_2454_calver49_OBSID_1342231318_B2A_2_TB_CS_PSF_PO.txt'
-file[1] = 'hipe11_0_2454_calver49_OBSID_1342231723_B2B_2_TB_CS_PSF_PO.txt'
-file[2] = 'hipe11_0_2454_calver49_OBSID_1342231318_R1_102_TB_CS_PSF_PO.txt'
-file[3] = 'hipe11_0_2454_calver49_OBSID_1342231723_R1_102_TB_CS_PSF_PO.txt'
+pacs_wave = list(length=4)
+pacs_flux = list(length=4)
 
-readcol, 'HD181327_PACS_data/'+name+'.dat',F=fmt,mips_sed_wave,mips_sed_spec,Mips_sed_specerr,mips_sed_sn;, /SILENT
+FOR i=0,3 DO BEGIN
+  
+  ; Read data
+  readcol, 'HD181327_PACS_data/'+file[i],F=fmt,pacs_wave_in,v2,pacs_flux_in,v4,v5
+  
+  ; Prep bins
+  n_pacs = n_elements(pacs_wave_in)
+  min_pacs = min(pacs_wave_in)
+  max_pacs = max(pacs_wave_in)
+  range_pacs = max_pacs - min_pacs
+  
+  n_new = round(n_pacs/20.0)
+  bin_width = range_pacs/n_new
+  
+  wave_new = dblarr(n_new)
+  flux_new = dblarr(n_new)
 
+  ;plot, pacs_wave_in,pacs_flux_in
+  ;stop
+  
+  ; Integrate over each bin
+  FOR j=0,(n_new-1) DO BEGIN
+    start_val = min_pacs + j*bin_width
+    stop_val = min_pacs + (j+1)*bin_width
+    wave_new[j] = start_val + 0.5*bin_width
+    
+    wave_int = pacs_wave_in[where( (pacs_wave_in ge start_val) and (pacs_wave_in le stop_val) )]
+    flux_int = pacs_flux_in[where( (pacs_wave_in ge start_val) and (pacs_wave_in le stop_val) )]
+    
+    flux_new[j] = int_tabulated(wave_int,flux_int)/(max(wave_int)-min(wave_int))
+  ENDFOR
+  
+  ;plot, wave_new, flux_new
+  ;stop
+  
+  ; Store the data
+  pacs_wave[i] = wave_new;pacs_wave_in;wave_new
+  pacs_flux[i] = flux_new;pacs_flux_in;flux_new
 
+ENDFOR
 
+plot, pacs_wave[0],pacs_flux[0],xrange=[1,220],yrange=[0,5.0],psym=1,/xlog,/ylog
+oplot, pacs_wave[1],pacs_flux[1],psym=3
+oplot, pacs_wave[2],pacs_flux[2],psym=2
+oplot, pacs_wave[3],pacs_flux[3],psym=4
+
+oplot, final_wave,final_spec
+oplot, final_phot_wave,final_phot_fnu
+
+stop
 ; *************************************************** ;
 ; Normalize MIPS SED data by comparing with MIPS70
 

@@ -191,6 +191,7 @@ for i = 1, params.nstep - 1, 1 do begin ; iterate through nsteps
           counts=where(trial gt param_bnd[1,*] or  trial lt param_bnd[0,*],number)
         end
   
+  
         if(min(finite(trial))) eq 0 then begin
           trial = current
         end

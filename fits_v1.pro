@@ -168,6 +168,9 @@ case fittype of
       'multi': begin
 ; ****************************************************************************************************** ;
 
+        ; Set best value for testing. Data from 'multi' pso of HD117214
+        best_val2 = ['1.4509246','22.767167','17.219054','0.43772772','0.50851350','0.75268637','0.57578153','3.1285306','12.679639','20.795885','0.32345488','0.0066844907','0.49349049','0.16473943','4.20770']
+
         ; For more detailed comments see case 'single' above
         ; *************************************************** ;
         ; Re-define variables
@@ -199,9 +202,6 @@ case fittype of
           while (go gt 0.0) and ( i lt 9.0) do begin
              pso_min_example,name=name,teff=Teff,amin=amin,output= value,sequence = i
              val[*,i]=value
-             
-             print,i
-             print,'Chisq: '+string(value[12])
              
              if(( min(val[14,0:3]) le 1.00) and ( i eq 3)) then begin
                  go = -1.0
@@ -279,11 +279,9 @@ case fittype of
         ; PSO Routine
         while (go gt 0.0) and ( i lt 6.0) do begin
           pso_min_example,name=name,teff=Teff,amin=amin,output= value,sequence = i
-          ;COMMON disk_benchmarking, run, times, lines
+
           val[*,i]=value
-          ;save,times,filename='disk_benchmark_data_HD146897.sav'
-          ;save,lines,filename='disk_benchmark_lines_HD146897.sav'
-          ;stop
+
           if(val[11,i] le 1.00) and ( i le 2.0) then begin
             go = -1.0
             yes = 1.0
