@@ -230,15 +230,19 @@ FINAL_SOURCE = MAKE_ARRAY(n_elements(FINAL_WAVE), 1, /STRING, VALUE = 'SpitzerIR
 ;print,string(name)+' MIPS70 Value = '+strcompress(string(MIPS70_VAL))+' Jy'
 ;print,string(name)+' MIPS70 Error = '+strcompress(string(MIPS70_ERROR))+' Jy'
 ;print,""
-weight = 0
+weight = 1
+pacs_error = MAKE_ARRAY(n_elements(pacs_wave), 1, /FLOAT, VALUE = stddev(pacs_flux))
 
 ; Append data structure recursively to account for data weight
 FOR k = 0, weight-1 DO BEGIN
   FINAL_WAVE = [FINAL_WAVE, pacs_wave]
   FINAL_SPEC = [FINAL_SPEC, pacs_flux]
-  ;FINAL_SPECERR = [FINAL_SPECERR, pacs_error]
+  FINAL_SPECERR = [FINAL_SPECERR, pacs_error]
   FINAL_SOURCE = [FINAL_SOURCE, pacs_source]
 ENDFOR
+
+plot,FINAL_WAVE,FINAL_SPEC
+stop
 
 ; Sort arrays by wavelength
 order = SORT(FINAL_WAVE)
@@ -247,11 +251,15 @@ FINAL_SPEC = FINAL_SPEC[order]
 ;FINAL_SPECERR = FINAL_SPECERR[order]
 FINAL_SOURCE = FINAL_SOURCE[order]
 
+stop
+
 ; Save to new data file
 SAVE,$
   FINAL_PHOT_FNU,FINAL_PHOT_WAVE, FINAL_WAVE, FINAL_SPEC, FINAL_SPECERR, FINAL_SOURCE,$
   filename='savfiles_PACS/'+name+'.sav'
-  
+
+stop
+
 ; Make a plot of the new spectrum
 ;IF KEYWORD_SET(plot) THEN BEGIN
 ;  plot_spectrum,name

@@ -61,9 +61,9 @@ endfor
 
 
 ; Deal with global values
-COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs
+COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, Qwaterice, crystallineabs
 COMMON stellarprops, temptable, folivine, effectiveTemp, lambdastar, fluxstar
-COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, effectiveTempArray, stellar_emit
+COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, waterice_emit, effectiveTempArray, stellar_emit
 restore, 'graintempdata.sav'
 restore, 'qtables_withcrys2.sav' ; qastrosil, qolivine, qpyroxene     
 
