@@ -26,7 +26,7 @@ AU_in_cm = 1.496e13
 scale1 = dustmass1*0.75/(rho_s*agr1*1e-4)/AU_in_cm^2
 scale2 = 0.0
 ;if keyword_set(mie) then begin
-   qlookup, [agr1], lambda, foliv1, fcrys1, ffors1, qabs1
+   qlookup_old, [agr1], lambda, foliv1, fcrys1, ffors1, qabs1
    abscoeff = replicate(0,n_elements(lambda))
 ;endif else begin
 ;   qlookup, [agr1], lambda, foliv1, 0.0, 0.0, qabs1

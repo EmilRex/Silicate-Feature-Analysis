@@ -55,7 +55,6 @@ file[3] = 'hipe11_0_2454_calver49_OBSID_1342231723_R1_102_TB_CS_PSF_PO.csv'
 pacs_wave = list(length=4)
 pacs_flux = list(length=4)
 
-
 FOR i=0,3 DO BEGIN
   
   ; Read data
@@ -126,11 +125,12 @@ min_pacs = min(pacs_wave_tot)
 max_pacs = max(pacs_wave_tot)
 range_pacs = max_pacs - min_pacs
 
-n_new = round(n_pacs/20.0)
+n_new = round(n_pacs/50.0)
 bin_width = range_pacs/n_new
 
 wave_new = dblarr(n_new)
 flux_new = dblarr(n_new)
+pacs_err = dblarr(n_new)
 
 ;plot, pacs_wave_tot,pacs_flux_tot,xrange=[30,220],yrange=[0,5.0],psym=2
 ;stop
@@ -144,7 +144,9 @@ FOR j=0,(n_new-1) DO BEGIN
   wave_int = pacs_wave_tot[where( (pacs_wave_tot ge start_val) and (pacs_wave_tot le stop_val) )]
   flux_int = pacs_flux_tot[where( (pacs_wave_tot ge start_val) and (pacs_wave_tot le stop_val) )]
   
+  
   flux_new[j] = int_tabulated(wave_int,flux_int)/(max(wave_int)-min(wave_int))
+  pacs_err[j] = stddev(flux_int)
 ENDFOR
 
 ; *************************************************** ;
@@ -152,10 +154,17 @@ ENDFOR
 
 wave_new = wave_new[3:(n_elements(wave_new)-1)]
 flux_new = flux_new[3:(n_elements(flux_new)-1)]
+pacs_err = pacs_err[3:(n_elements(flux_new)-1)]
 
 ; Trim the unusually high point
 wave_new = wave_new[where( (flux_new lt 4.0) and (flux_new gt 0.05) )]
 flux_new = flux_new[where( (flux_new lt 4.0) and (flux_new gt 0.05) )]
+pacs_err = pacs_err[where( (flux_new lt 4.0) and (flux_new gt 0.05) )]
+
+; Remove outlier near 145 microns
+wave_new = wave_new[where( flux_new ne max(flux_new[where(wave_new gt 140.0 and wave_new  lt 150.0)]) )]
+flux_new = flux_new[where( flux_new ne max(flux_new[where(wave_new gt 140.0 and wave_new  lt 150.0)]) )]
+pacs_err = pacs_err[where( flux_new ne max(flux_new[where(wave_new gt 140.0 and wave_new  lt 150.0)]) )]
 
 ; Store the data
 pacs_wave = wave_new
@@ -197,11 +206,10 @@ norm = MIPS_as_flambda/synth_f70
 pacs_flux = norm*pacs_flux
 
 ; Test output
-plot, pacs_wave, pacs_flux,xrange=[1,220],yrange=[0,5.0],psym=1
-oplot,final_wave,final_spec
-oplot,[71.42],[MIPS70_VAL],psym=6
-
-stop
+;plot, pacs_wave, pacs_flux,xrange=[1,220],yrange=[0,5.0],psym=1
+;oplot,final_wave,final_spec
+;oplot,[71.42],[MIPS70_VAL],psym=6
+;stop
 
 ; *************************************************** ;
 ; Subtract off the photosphere
@@ -211,11 +219,10 @@ phot_int = 10^interpol(alog10(final_phot_fnu),alog10(final_phot_wave*to_cm),alog
 pacs_flux = pacs_flux - phot_int
 
 ; Test output
-plot, pacs_wave, pacs_flux,xrange=[1,220],yrange=[0,5.0],psym=1,/xlog,/ylog
-oplot,final_wave,final_spec
-oplot,final_phot_wave,final_phot_fnu
-
-stop
+;plot, pacs_wave, pacs_flux,xrange=[1,220],yrange=[0,5.0],psym=1,/xlog,/ylog
+;oplot,final_wave,final_spec
+;oplot,final_phot_wave,final_phot_fnu
+;stop
 
 ; *************************************************** ;
 ; Concatenate and save
@@ -231,34 +238,35 @@ FINAL_SOURCE = MAKE_ARRAY(n_elements(FINAL_WAVE), 1, /STRING, VALUE = 'SpitzerIR
 ;print,string(name)+' MIPS70 Error = '+strcompress(string(MIPS70_ERROR))+' Jy'
 ;print,""
 weight = 1
-pacs_error = MAKE_ARRAY(n_elements(pacs_wave), 1, /FLOAT, VALUE = stddev(pacs_flux))
+;pacs_error = MAKE_ARRAY(n_elements(pacs_wave), 1, /FLOAT, VALUE = stddev(pacs_flux))
 
 ; Append data structure recursively to account for data weight
 FOR k = 0, weight-1 DO BEGIN
   FINAL_WAVE = [FINAL_WAVE, pacs_wave]
   FINAL_SPEC = [FINAL_SPEC, pacs_flux]
-  FINAL_SPECERR = [FINAL_SPECERR, pacs_error]
+  FINAL_SPECERR = [FINAL_SPECERR, pacs_err]
   FINAL_SOURCE = [FINAL_SOURCE, pacs_source]
 ENDFOR
 
-plot,FINAL_WAVE,FINAL_SPEC
+plot,FINAL_WAVE,FINAL_SPEC,xrange=[1,220],yrange=[0,5.0],psym=1
+oploterr,FINAL_WAVE,FINAL_SPEC,FINAL_SPECERR
 stop
 
 ; Sort arrays by wavelength
 order = SORT(FINAL_WAVE)
 FINAL_WAVE = FINAL_WAVE[order]
 FINAL_SPEC = FINAL_SPEC[order]
-;FINAL_SPECERR = FINAL_SPECERR[order]
+FINAL_SPECERR = FINAL_SPECERR[order]
 FINAL_SOURCE = FINAL_SOURCE[order]
 
-stop
+;stop
 
 ; Save to new data file
 SAVE,$
   FINAL_PHOT_FNU,FINAL_PHOT_WAVE, FINAL_WAVE, FINAL_SPEC, FINAL_SPECERR, FINAL_SOURCE,$
   filename='savfiles_PACS/'+name+'.sav'
 
-stop
+;stop
 
 ; Make a plot of the new spectrum
 ;IF KEYWORD_SET(plot) THEN BEGIN
