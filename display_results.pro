@@ -46,15 +46,15 @@ function display_results,name
       print, [dist, mcmc_result[1:6]]
       
     END
-    'multi_mips': BEGIN
+    'multi': BEGIN
       print,['Dist1[AU] ','a_grain1 ','dustmass1 ','folive1 ','fcrys1 ','ffors1 ','fwaterice1','Dist2[AU] ','a_grain2 ','dustmass2 ','folive2 ','fcrys2 ','ffors2 ','fwaterice2 ']
       
       dist1 = (r_sun*r_star)*(10^mcmc_result[0])
       dist2 = (r_sun*r_star)*(10^mcmc_result[7])
-      print, [dist1, mcmc_result[1:6], dist2, mcmc_result[7:13]]
+      print, [dist1, mcmc_result[1:6], dist2, mcmc_result[8:13]]
       
     END
-    'disk_mips': BEGIN
+    'disk': BEGIN
       print, ['rin ','rout ','rlaw ','amin ','amax ','alaw ','diskmass ','folive ','fcrys ','ffors ','fwaterice']
       
       print, mcmc_result[0:(n_elements(mcmc_result)-2)]

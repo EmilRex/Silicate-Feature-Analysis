@@ -27,15 +27,16 @@ out_dir = '../Silicate_Feature_Analysis_output'
 ;names = ['HD95086','HD110058','HD113556','HD114082','HD115600','HD117214','HD145560','HD146181','HD146897']
 ;names = ['HD117214'];,'HD146897']
 names = ['HD181327']
-fit_names = ['single','multi','disk']
+fit_names = ['single','multi'];,'disk']
 ;fit_names = ['disk'];['multi','single'];,'disk']
 
 FOREACH name, names DO BEGIN
   FOREACH fit_name, fit_names DO BEGIN
     object_name = name
-    fits_v1, name=name, fittype=fit_name
+    ;fits_v1, name=name, fittype=fit_name
     ;print, object_name
     
+    plot_result_PACS
     ;plot_result
     ;plot_result_separate, /plot_old
     null = display_historic(name)

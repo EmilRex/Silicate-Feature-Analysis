@@ -25,7 +25,7 @@ CASE fit_name OF
     ; No data hence nothing to do
   END
   
-  'multi_mips': BEGIN
+  'multi': BEGIN
     fmt = 'a,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f'
     readcol, 'multi_new.csv',F=fmt,db_name,chisq,temp1,temp2,Loc,Loc2,amin1,amin2,mass1,mass2,fcryst1,fcryst2,oliv1,oliv2,ffost1,ffost2,/silent
     
@@ -40,7 +40,7 @@ CASE fit_name OF
 
   END
   
-  'disk_mips': BEGIN
+  'disk': BEGIN
     fmt = 'a,f,f,f,f,f,f,f,f,f,f,f'
     readcol, 'disk_new.csv',F=fmt,db_name,chisq,rin,rout,rlaw,amin,amax,alaw,diskmass,fcryst,foliv,ffost,/silent
 

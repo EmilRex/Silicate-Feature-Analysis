@@ -31,7 +31,7 @@
 ;  Generalized and renamed by EC (7/14/14)
 ; -
 ; *************************************************** ;
-pro plot_result
+pro plot_result_PACS
 
 COMMON file_path, in_dir, out_dir, fit_name, object_name
 
@@ -119,10 +119,10 @@ IRS_psym = 2 ; asterisk
 ;MIPS70_color = 2 ; red
 ;MIPS70_psym = 6 ; square
 
-MIPS_SED_wave = wave_irs[where(strmatch(final_source, 'SpitzerMIPS_SED') EQ 1)]
-MIPS_SED_spec = fl_diff[where(strmatch(final_source, 'SpitzerMIPS_SED') EQ 1)]
-MIPS_SED_color = 3 ; blue
-MIPS_SED_psym = 6 ; square
+PACS_wave = wave_irs[where(strmatch(final_source, 'Herschel_PACS') EQ 1)]
+PACS_spec = fl_diff[where(strmatch(final_source, 'Herschel_PACS') EQ 1)]
+PACS_color = 3 ; blue
+PACS_psym = 6 ; square
 
 x_start = min(wave_irs)
 x_range = max(wave_irs)-min(wave_irs)
@@ -147,7 +147,7 @@ ENDIF
 
 
 
-IF (fit_name eq 'multi_mips') THEN BEGIN
+IF (fit_name eq 'multi') THEN BEGIN
 
   out_model = modelsinglespectrum(transpose(model_x), link, /multi)
 
@@ -169,7 +169,7 @@ ENDIF
 
 
 
-IF (fit_name eq 'disk_mips') THEN BEGIN
+IF (fit_name eq 'disk') THEN BEGIN
   
   out_model = modelsinglespectrum(transpose(model_x), link, /disk)
 
@@ -206,7 +206,7 @@ tmp1 = round(chisq_best*100.)/100.
 
 ; Set up device
 set_plot,'PS'
-device, filename ='plots/MIPS_SED_'+object_name+'_'+fit_name+'.ps',/COLOR,/HELVETICA,XSIZE=15,YSIZE=12.5 & !p.font =0
+device, filename ='plots/PACS_'+object_name+'_'+fit_name+'.ps',/COLOR,/HELVETICA,XSIZE=15,YSIZE=12.5 & !p.font =0
 loadct,39,/silent
 !p.background=16777215
 
@@ -226,7 +226,7 @@ plot,wave_irs,fl_diff,title=object_name+' ('+fit_name+' Model)', $
 ; Overlay data with different colors and markers
 oplot,IRS_wave,IRS_spec,color=IRS_color,psym=IRS_psym
 ;oplot,MIPS70_wave,MIPS70_spec,color=MIPS70_color,psym=MIPS70_psym
-oplot,MIPS_SED_wave,MIPS_SED_spec,color=MIPS_SED_color,psym=MIPS_SED_psym
+oplot,PACS_wave,PACS_spec,color=PACS_color,psym=PACS_psym
 
 ; Add error bars
 oploterr,wave_irs,fl_diff,uncer_irs,0;,psym=1;,color=0
@@ -240,7 +240,7 @@ if (plot_old eq 1) then begin
 endif
 
 ; Create legend
-legend,['IRS','MIPS SED','New Model','Old Model'],psym=[2,6,0,0],$
+legend,['IRS','PACS','New Model','Old Model'],psym=[2,6,0,0],$
   colors=[1,3,3,2],linestyle=[0,0,2,3],textcolors=[0,0,0,0]
 
 xyouts,35,0.1,cggreek('chi')+'!E2!N!X / d.o.f. : '+strtrim(string(-2.0*chisq_best,format='(f18.2)'),1),/data
