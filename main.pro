@@ -32,7 +32,7 @@ fit_names = ['single','multi'];,'disk']
 
 FOREACH name, names DO BEGIN
   FOREACH fit_name, fit_names DO BEGIN
-    ;object_name = name
+    object_name = name
     fits_v1, name=name, fittype=fit_name
     ;print, object_name
     
