@@ -1,23 +1,36 @@
+;+
+; NAME
+;   equiltemplookup
+;   
+; PURPOSE
+;   calculates equilibrium temperature of grains at the given grain size
+;   from table lookup
+;   
+; INPUTS:
+;   teff = effective temperature of the star in K
+;   distance = distance from the star, in units of R_star. can be 1D array.
+;   grainrad = radius of grain, in microns.  can be 1D array.
+;   f* = mass fractions of grain species
+; 
+; OUTPUT:
+;   tdust = the equilibrium temperature vs. grainrad,
+;         n_elements(grainrad) x n_elements(distance) array
+;
+; AUTHORS
+;  Tushar Mittal - mittal.tushar22@gmail.com
+;  Christine Chen - cchen@stsci.edu
+;  Emil Christensen - chris2er@dukes.jmu.edu
+;
+; DISCLAIMER
+;  This software is provided as is without any warranty whatsoever.
+;  Permission to use, copy, modify, and distribute modified or
+;  unmodified copies is granted, provided this disclaimer
+;  is included unchanged.
+;-
+
 pro equiltemplookup, teff, grainrad, distance, $
                      tdust, $
                      folivine, fcrystalline, fforst, fwaterice
-  
-;print, "Distance: ", distance                 
-; 
-; calculates equilibrium temperature of grains at the given grain size
-; from table lookup
-; INPUTS:
-; teff = effective temperature of the star in K
-; distance = distance from the star, in units of R_star. can be 1D array.
-; grainrad = radius of grain, in microns.  can be 1D array.
-; OUTPUT:
-; tdust = the equilibrium temperature vs. grainrad, 
-;         n_elements(grainrad) x n_elements(distance) array
-
-; restore, file='graintempdata.sav'
-; tgrain, agrain, olivine_emit, pyroxene_emit, 
-;                 forsterite_emit, enstatite_emit
-; tables of total emission versus temperature and grain size
 
 COMMON GRAINTEMPDATA, tgrain, agrain, olivine_emit, pyroxene_emit, forsterite_emit, enstatite_emit, waterice_emit, effectiveTempArray, stellar_emit
 COMMON GRAINPROPS

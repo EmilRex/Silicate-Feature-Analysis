@@ -4,7 +4,7 @@ pro main
 ; Perform setup operations
 
 ; Set to directory containing repository
-home_dir = '~/'
+home_dir = '~/Summer2014/Silicate_Feature_Analysis'
 CD, home_dir
 
 ; Expand IDL path
@@ -26,7 +26,7 @@ out_dir = 'output'
 ;RUN
 ; *************************************************** ;
 ; Set name of object(s) to be run
-names = ['']
+names = ['BetaPic']
 
 ; Set fits to run.
 ; Default is all

@@ -6,11 +6,9 @@
 ;  Search the parameter space with the PSO routine rmd_pso 
 ;
 ; INPUTS
-;  AMIN:
-;  TEFF: 
-;  NAME:
-;  OUT_PAR:
-;  SEQUENCE:
+;  AMIN: Minimum grain size
+;  TEFF: Star temperature in Kelvin
+;  NAME: Name of object to be fitted
 ;
 ; KEYWORDS
 ;   NONE
@@ -128,20 +126,21 @@ pro pso_min_example,amin=amin,Teff=teff_val,name=name1,output=output1,out_par=fu
 COMMON file_path, in_dir, out_dir, fit_name, object_name
 
 IF (fit_name eq 'single') THEN BEGIN
-  ;prange = [[30.0, 800.0],[amin, 30.0],[16.5, 23.5],[0, 1.0],[0, 1.0],[0, 1.0]]
+
   prange = [[1.0, 5.0],[amin, 30.0],[16.5, 23.5],[0, 1.0],[0, 1.0],[0, 1.0],[0, 1.0]]
+
 ENDIF
 
 IF (fit_name eq 'multi') THEN BEGIN
-  ;prange = [[30.0, 300.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0],$
-  ;         [100.0, 1000.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0]]
   
   prange = [[1.0, 5.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0],[0, 1.0],$
            [1.0, 6.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0],[0, 1.0]]
 ENDIF
 
 IF (fit_name eq 'disk') THEN BEGIN
+
   prange = [[1.0, 5.0],[0.0, 10.0],[-5., 5.],[amin, 30.0],[0.0, 7.0],[1.5, 5.5],[16.5, 23.5],[0.0, 1.0],[0.0, 1.0],[0.0, 1.0],[0, 1.0]]
+
 ENDIF
 
 func = 'f1_eval' ; Function to be minimized

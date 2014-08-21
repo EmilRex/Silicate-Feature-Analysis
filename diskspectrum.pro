@@ -4,7 +4,6 @@
 ;
 ; PURPOSE
 ;  Computes the spectrum of a circumstellar dust disk 
-;   with grain arranged in a continuous disk
 ;
 ; INPUTS
 ;   RIN: Disk inner radius (stellar radii)
@@ -24,8 +23,7 @@
 ;
 ; KEYWORDS
 ;   VERBOSE: Set to run additional diagnostics
-;   RING: Calculate for ring layout
-;   MIE: Set to use MIE theory
+;   SINGLE: Calculate for one grain size at one location
 ;
 ; OUTPUTS
 ;   FLUX: array of fluxes corresponding to given wavelengths for the modeled spectrum
@@ -54,7 +52,7 @@
 pro diskspectrum, rin, rout, amin, amax, Teff, diskmass, $ 
                   folivine, fcrystalline, fforst, fwaterice, $
                   rlaw=rlaw, alaw=alaw, verbose=verbose, $
-                  lambda, flux, ring=ring, mie=mie, single=single
+                  lambda, flux, mie=mie, single=single
 
 ;COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, Qwaterice, crystallineabs
 
@@ -67,33 +65,6 @@ k = 1.381d-16
 
 if not keyword_set(rlaw) then rlaw=1.5
 if not keyword_set(alaw) then alaw=3.5
-
-; *************************************************** ;
-; number of grains per surface area per grain size bin
-; = N(a) = N_0 (a/a0)^{-alaw} (r/r0)^{-rlaw}
-; then total mass = 
-; = int_rin^rout 2*pi*r dr int_amin^amax da 4/3 pi a^3 rho_s N(a)
-; = 8*pi^2*rho_s/3 * int_rin^rout r dr int_amin^amax da a^3 
-;                              * N_0 (a/a0)^{-alaw} (r/r0)^{-rlaw}
-; = 8*pi^2*rho_s/3 *N_0*a0^{alaw}*r0^{rlaw} * 
-;       int_rin^rout r^{-0.5} dr int_amin^amax da a^{-0.5} 
-; = 8*pi^2*rho_s/3 *N_0*a0^{alaw}*r0^{rlaw} * 
-;       2.0*[rout^0.5 - rin^0.5] * 2.0*[amax^0.5 - amin^0.5]
-; = 32*pi^2*rho_s/3 *N_0*a0^4*r0^2 * 
-;       [(rout/r0)^0.5 - (rin/r0)^0.5] * [(amax/a0)^0.5 - (amin/a0)^0.5]
-; so N_0 = 3*diskmass/ { 32*pi^2*rho_s * a0^4*r0^2 * 
-;                        [(rout/r0)^0.5 - (rin/r0)^0.5] * 
-;                        [(amax/a0)^0.5 - (amin/a0)^0.5] }
-; a0 = 1 micron, rho_s in g/cm
-; N_0*a0*r0^2 = 3*diskmass/ { 32*pi^2*rho_s*(1e-4)^3 *
-;                        [(rout/r0)^0.5 - (rin/r0)^0.5] * 
-;                        [(amax/a0)^0.5 - (amin/a0)^0.5] }
-; THIS EQUATION ONLY WORKS FOR ALAW=3.5
-; norm = 3.0*diskmass/( 32.0*!dpi^2*rho_s*(1e-4)^3 * $
-;                      (rout^0.5 - rin^0.5) * (amax^0.5 - amin^0.5) )
-; sigma T^4 = !pi * int B_nu dnu
-; luminosity = 4!pi R^2 sigma T^4
-; *************************************************** ;
 
 if keyword_set(single) then begin
   
@@ -208,43 +179,3 @@ endfor
 
 return
 end
-
-
-
-; *************************************************** ;
-;pro compareringfits
-;COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, $
-;   crystallineabs
-;COMMON stellarprops, temptable, folivine, effectiveTemp, lambdastar, fluxstar
-
-;;;restore, 'qtables_withcrys.sav' ; qastrosil, qolivine, qpyroxene
-;;;restore, '../modelgrids/Teff6000grains.sav'
-
-;lambda = [qastrosil.lambda[where(qastrosil.lambda lt qolivine.lambda[0])], $
-;          qolivine.lambda]
-;lambda = lambda[where(lambda ge 1.0)]
-;lambda2 = lambda
-
-;Teff = effectiveTemp
-;diskspectrum, 100.0, 0.0, 5.0, 5.1, Teff, 0.1, 0.0, 0.0, $
-;              alaw=3.5, lambda2, flux2 , /verb
-
-;lambda1 = lambda2
-;diskspectrum, 100.0, 1.0, 5.0, 5.1, Teff, 0.1, 0.0, 0.0, $
-;              alaw=3.5, lambda1, flux1, $
-;              /ring, /verb
-
-;
-;ii = interpol(findgen(n_elements(temptable[0].agrain)), temptable[0].agrain, 5.0)
-;jj = interpol(findgen(n_elements(temptable[0].radii)), temptable[0].radii, 100.0)
-;mytemp = interpolate(temptable[0].temperatures, ii, jj)
-;onegr = modelonegrain(lambda1, [mytemp, 5.0, 0.0,0.0, 1.0])*0.002
-
-;ymin = min([flux1,flux2], max=ymax)
-;plot, lambda1, flux1, /xlog,/ylog, yrange=[ymin,ymax],lines=0
-;oplot, lambda2, flux2, lines=1
-;print, (flux1-flux2)/flux1
-;oplot, lambda1, onegr, lines=2
-
-;return
-;end

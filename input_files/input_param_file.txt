@@ -1,0 +1,2 @@
+Name	t_star	a_min		dist_pc		
+BetaPic	8500.0	1.05143705	19.279

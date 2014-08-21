@@ -3,7 +3,7 @@
 ;  printmodels
 ;
 ; PURPOSE:
-;  Restore save data for specified object and pass to modelfit_v1
+;  Restore save data for specified object and pass to modelfit
 ;  via 'params' structure.
 ;
 ; INPUTS:
@@ -13,14 +13,8 @@
 ;          2) 'multi' - Two discrete grain populations, (T1,a1), (T2,a2)
 ;          3) 'disk' - Continuous radial distribution of particles 
 ;  PS:
-;  NSTEP:
-;  THIN_VAL:
-;  TEFF: 
-;  DIST:
+;  NSTEP: number of steps for MCMC to take
 ;  AMIN: Minimum grain size (units?)
-;  SEED: 
-;  CNT:
-;  SCALE_VAL:
 ;  NUM_CHAINS: Number of MCMC chains to run
 ;
 ; OUTPUTS:
@@ -50,7 +44,7 @@ COMMON file_path, in_dir, out_dir
 
 ; Assign default if fit type not set
 if not keyword_set(fittype) then begin
-  print, 'Error: fit type not set. Exiting from printmodels'
+  print, 'Error: fit type not set. Exiting at printmodels'
   return
 endif
 

@@ -6,14 +6,14 @@
 ;  Declare parameter bounds for each model and pass to MCMC routine
 ;
 ; INPUTS:
-;  PARAMS:
+;  PARAMS: parameter structure from printmodels
 ;  FITTYPE: Model to be fitted (in order of appearance below)
 ;          1) 'single' - Single grain model
 ;          2) 'multi' - Two discrete grain populations, (T1,a1), (T2,a2)
 ;          2) 'disk' - Continuous radial distribution of particles 
 ;          
 ; KEYWORDS:
-;   NOCRYS = Do not use crystals in model
+;   NONE
 ; 
 ; OUTPUTS:
 ;   NONE
@@ -107,8 +107,7 @@ restore, grainfiles[ki]
 		param_bnd[*,4]= [0, 1.0,0] ; crystalline fraction
 		param_bnd[*,5]= [0, 1.0,0] ; forsterite/enstatite composition 
 		param_bnd[*,6]= [0, 1.0,0] ; water-ice fraction (fraction of total mass)
-
-
+		
     mcmc_general,par_bound=param_bnd,parameter=params
          
   end
@@ -139,17 +138,6 @@ restore, grainfiles[ki]
 		param_bnd[*,11]= [0, 1.0,0] ; crystalline fraction
 		param_bnd[*,12]= [0, 1.0,0] ; forsterite/enstatite composition 
     param_bnd[*,13]= [0, 1.0,0] ; water-ice fraction (fraction of total mass)
-    
-    ;if keyword_set(nocrys) then begin
-		;  param_bnd[*,4]= [0, 1.0,1]
-    ;  param_bnd[*,5]= [0, 1.0,1]
-    ;  param_bnd[*,10]= [0, 1.0,1]
-    ;  param_bnd[*,11]= [0, 1.0,1]
-    ;  initparams[4] = 0.0
-	  ;  initparams[10] = 0.0
-    ;endif
-
-    ;scale_val=[1.010,.70, .0220, .0150, .0150, .0150,  1.50, .530,  .0120, .0150, .0150, .0150]
 
      mcmc_general,par_bound=param_bnd,parameter=params
 
@@ -182,17 +170,7 @@ restore, grainfiles[ki]
     param_bnd[*,9]= [0.0, 1.0,0] ; crystalline composition
     param_bnd[*,10]= [0.0, 1.0,0] ; water-ice fraction (fraction of total mass)
 
-	  ;if keyword_set(nocrys) then begin
-		;	param_bnd[*,8]= [0.0, 1.0,1]
-    ;  initparams[8] = 0.0
-  	;endif
-
-    ;scale_val=[[.030,.030,.0220,0.80,.030,.0220, .0220, .0150, .015, .0150],$
-    ;[.050,.050,.0350,1.60,.050,.0350, .0420, .0350, .0325, .0150],$
-    ;[.080,.080,.0350,1.80,.080,.0350, .0620, .0350, .0325, .0150]]
-
     mcmc_general,par_bound=param_bnd,parameter=params
-    ;mcmc__define_sd,'modelsinglespectrum',par_bound=param_bnd,parameter=params,scale_val=scale_val[*,params.scale_val]
 
   end
 endcase
