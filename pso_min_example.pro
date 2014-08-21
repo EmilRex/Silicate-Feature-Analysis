@@ -127,16 +127,21 @@ pro pso_min_example,amin=amin,Teff=teff_val,name=name1,output=output1,out_par=fu
 
 COMMON file_path, in_dir, out_dir, fit_name, object_name
 
+; This branch "forced_dist" forces ring radius to 90.5 AU -> intended for HD181327
+; param = alog10(dist/(r_sun*r_star))
+; rstar = 0.60794045 rstar ; rsun = 0.00464913034 AU
+; 90.5 AU -> 4.50542
+
 IF (fit_name eq 'single') THEN BEGIN
   ;prange = [[30.0, 800.0],[amin, 30.0],[16.5, 23.5],[0, 1.0],[0, 1.0],[0, 1.0]]
-  prange = [[1.0, 5.0],[amin, 30.0],[16.5, 23.5],[0, 1.0],[0, 1.0],[0, 1.0],[0, 1.0]]
+  prange = [[4.50542, 4.50542],[amin, 30.0],[16.5, 23.5],[0, 1.0],[0, 1.0],[0, 1.0],[0, 1.0]]
 ENDIF
 
 IF (fit_name eq 'multi') THEN BEGIN
   ;prange = [[30.0, 300.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0],$
   ;         [100.0, 1000.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0]]
   
-  prange = [[1.0, 5.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0],[0, 1.0],$
+  prange = [[4.50542, 4.50542],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0],[0, 1.0],$
            [1.0, 6.0],[amin, 30.0],[16.5, 23.5],[0., 1.0],[0., 1.0],[0., 1.0],[0, 1.0]]
 ENDIF
 

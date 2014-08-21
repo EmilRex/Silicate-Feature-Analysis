@@ -96,11 +96,16 @@ restore, grainfiles[ki]
   ; params = [Temperature, agrain, folivine, fcrystal, scale]
   1: begin
     
+    ; This branch "forced_dist" forces ring radius to 90.5 AU -> intended for HD181327
+    ; param = alog10(dist/(r_sun*r_star))
+    ; rstar = 0.60794045 rstar ; rsun = 0.00464913034 AU
+    ; 90.5 AU -> 4.50542
+    
     print, 'Fitting single grain model...'
     
 	  param_bnd = dblarr(3,7)
  		;param_bnd[*,0]= [10.0, 1000.0,0] ; Temperatures limited to reasonable values
-		param_bnd[*,0]= [1.0, 5.0,0] ; New distance bounds
+		param_bnd[*,0]= [4.50542, 4.50542,0] ; New distance bounds
 		param_bnd[*,1]= [amin, 30.0,0] ; .1 as lower bound
 		param_bnd[*,2]= [16.5, 23.5,0] ; positive scale factors
 		param_bnd[*,3]= [0, 1.0,0] ; olivine/pyroxene composition 
@@ -119,11 +124,16 @@ restore, grainfiles[ki]
   ;           T2, a2, scale2, fo2, fc2, ff2]
   2: begin
 
+    ; This branch "forced_dist" forces ring radius to 90.5 AU -> intended for HD181327
+    ; param = alog10(dist/(r_sun*r_star))
+    ; rstar = 0.60794045 rstar ; rsun = 0.00464913034 AU
+    ; 90.5 AU -> 4.50542
+    
     print, 'Fitting two grain model...'
 
 	  param_bnd = dblarr(3,14)
  		;param_bnd[*,0]= [30.0, 300.0,0] ; Temp limited to reasonable values
-		param_bnd[*,0]= [1.0, 5.0,0] ; New distance bounds
+		param_bnd[*,0]= [4.50542, 4.50542,0] ; New distance bounds
 		param_bnd[*,1]= [amin, 30.0,0] ; blowout radius as lower bound
 		param_bnd[*,2]= [16.5, 23.5,0] ; positive scale factors
 		param_bnd[*,3]= [0, 1.0,0] ; olivine/pyroxene composition 
