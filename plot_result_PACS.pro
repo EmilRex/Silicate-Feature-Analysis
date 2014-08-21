@@ -31,7 +31,7 @@
 ;  Generalized and renamed by EC (7/14/14)
 ; -
 ; *************************************************** ;
-pro plot_result
+pro plot_result_PACS, separate=separate
 
 COMMON file_path, in_dir, out_dir, fit_name, object_name
 
@@ -119,10 +119,10 @@ IRS_psym = 2 ; asterisk
 ;MIPS70_color = 2 ; red
 ;MIPS70_psym = 6 ; square
 
-MIPS_SED_wave = wave_irs[where(strmatch(final_source, 'SpitzerMIPS_SED') EQ 1)]
-MIPS_SED_spec = fl_diff[where(strmatch(final_source, 'SpitzerMIPS_SED') EQ 1)]
-MIPS_SED_color = 3 ; blue
-MIPS_SED_psym = 6 ; square
+PACS_wave = wave_irs[where(strmatch(final_source, 'Herschel_PACS') EQ 1)]
+PACS_spec = fl_diff[where(strmatch(final_source, 'Herschel_PACS') EQ 1)]
+PACS_color = 3 ; blue
+PACS_psym = 6 ; square
 
 x_start = min(wave_irs)
 x_range = max(wave_irs)-min(wave_irs)
@@ -140,16 +140,26 @@ r_sun = 0.00464913034 ;AU
 plot_old = 0
 
 IF (fit_name eq 'single') THEN BEGIN
-
+  
   out_model = modelsinglespectrum(transpose(model_x), link, /single)
+  
+  if keyword_set(separate) then begin
+    out_model_separate = modelsinglespectrum(transpose(model_x), link, /single, /separate)
+    n_models = 0
+  endif
   
 ENDIF
 
 
 
-IF (fit_name eq 'multi_mips') THEN BEGIN
+IF (fit_name eq 'multi') THEN BEGIN
 
   out_model = modelsinglespectrum(transpose(model_x), link, /multi)
+
+  if keyword_set(separate) then begin
+    out_model_separate = modelsinglespectrum(transpose(model_x), link, /multi, /separate)
+    n_models = 1
+  endif
 
   fmt = 'a,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f'
   readcol, 'multi_new.csv',F=fmt,db_name,chisq,temp1,temp2,Loc,Loc2,amin1,amin2,mass1,mass2,fcryst1,fcryst2,oliv1,oliv2,ffost1,ffost2,/silent
@@ -169,9 +179,14 @@ ENDIF
 
 
 
-IF (fit_name eq 'disk_mips') THEN BEGIN
+IF (fit_name eq 'disk') THEN BEGIN
   
   out_model = modelsinglespectrum(transpose(model_x), link, /disk)
+
+  if keyword_set(separate) then begin
+    out_model_separate = modelsinglespectrum(transpose(model_x), link, /disk, /separate)
+    n_models = 0
+  endif
 
   fmt = 'a,f,f,f,f,f,f,f,f,f,f,f'
   readcol, 'disk_new.csv',F=fmt,db_name,chisq,rin,rout,rlaw,amin,amax,alaw,diskmass,fcryst,foliv,ffost,/silent
@@ -204,9 +219,14 @@ tmp1 = round(chisq_best*100.)/100.
 ; *************************************************** ;
 ; Begin plotting
 
+sep_label = ""
+if keyword_set(separate) then begin
+  sep_label = "_separate"
+endif
+
 ; Set up device
 set_plot,'PS'
-device, filename ='plots/MIPS_SED_'+object_name+'_'+fit_name+'.ps',/COLOR,/HELVETICA,XSIZE=15,YSIZE=12.5 & !p.font =0
+device, filename ='plots/PACS_'+object_name+'_'+fit_name+sep_label+'.ps',/COLOR,/HELVETICA,XSIZE=15,YSIZE=12.5 & !p.font =0
 loadct,39,/silent
 !p.background=16777215
 
@@ -220,13 +240,9 @@ plot,wave_irs,fl_diff,title=object_name+' ('+fit_name+' Model)', $
      xthick=2, ythick=2, charsize=1,color=0;, $
      ;yrange=[1.0e-6,1.0],/ylog
 
-; Connect the points
-;oplot,wave_irs,fl_diff,color=0
-
 ; Overlay data with different colors and markers
 oplot,IRS_wave,IRS_spec,color=IRS_color,psym=IRS_psym
-;oplot,MIPS70_wave,MIPS70_spec,color=MIPS70_color,psym=MIPS70_psym
-oplot,MIPS_SED_wave,MIPS_SED_spec,color=MIPS_SED_color,psym=MIPS_SED_psym
+oplot,PACS_wave,PACS_spec,color=PACS_color,psym=PACS_psym
 
 ; Add error bars
 oploterr,wave_irs,fl_diff,uncer_irs,0;,psym=1;,color=0
@@ -234,18 +250,36 @@ oploterr,wave_irs,fl_diff,uncer_irs,0;,psym=1;,color=0
 ; Plot the models
 oplot,model_x,out_model,color=3, thick=5,linestyle=lines[1]
 
+legend_names = ['IRS','PACS','New Model','Old Model']
+legend_psyms = [2,6,0,0]
+legend_colors=[1,3,3,2]
+legend_linestyle=[0,0,2,3]
+legend_textcolors=[0,0,0,0]
+
+if keyword_set(separate) then begin
+  for j=0,n_models do begin
+    for i=0,4 do begin
+      oplot,model_x,out_model_separate[*,(j*5+i)],color=(1+j),linestyle=(i)
+      legend_psyms = [legend_psyms,0]
+      legend_colors = [legend_colors,1+j]
+      legend_linestyle = [legend_linestyle,i]
+      legend_textcolors = [legend_textcolors,0]
+    endfor
+    legend_names = [legend_names,'Olivine','Pyroxene','Forsterite','Enstatite','Water-ice']
+  endfor
+endif
+
 if (plot_old eq 1) then begin  
   oplot,model_x,tushar_model,color=2, thick=5,linestyle=lines[2]
   print, "Old model plotted for: "+object_name
 endif
 
+
 ; Create legend
-legend,['IRS','MIPS SED','New Model','Old Model'],psym=[2,6,0,0],$
-  colors=[1,3,3,2],linestyle=[0,0,2,3],textcolors=[0,0,0,0]
+legend,[legend_names],psym=legend_psyms,colors=legend_colors,linestyle=legend_linestyle,textcolors=legend_textcolors;,corners=[150.0,0.8,200.0,1.6]
 
 xyouts,35,0.1,cggreek('chi')+'!E2!N!X / d.o.f. : '+strtrim(string(-2.0*chisq_best,format='(f18.2)'),1),/data
 
-;LEGEND,cggreek('chi')+'^{2}/d.o.f. : '+strtrim(string(chisq_best,format='(f18.2)'),1),color=1,linestyle=lines[1],textcolor
 
 device,/close
 set_plot,'x'
