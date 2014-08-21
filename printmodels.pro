@@ -1,6 +1,6 @@
 ; +
 ; NAME:
-;  printmodels_v1
+;  printmodels
 ;
 ; PURPOSE:
 ;  Restore save data for specified object and pass to modelfit_v1
@@ -42,7 +42,7 @@
 ;  Organized and commented by EC (6/24/2014)
 ; -
 ; *************************************************** ;
-pro printmodels_v1, name1, fittype=fittype,ps=ps,nstep=nstep,$
+pro printmodels, name1, fittype=fittype,ps=ps,nstep=nstep,$
   thin_val=thin_val,teff=teff,dist=dist,amin=amin,seed=seed,$
   cnt=cnt,scale_val =scale_val,num_chains=num_chains
 
@@ -78,7 +78,7 @@ params={distval:dist,$
 print,fittype
 
 ; Pass 'params' to modelfit
-modelfit_v1,param_struc=params,fittype=fittype
+modelfit,param_struc=params,fittype=fittype
 
 ; End program
 return

@@ -1,6 +1,6 @@
 ; +
 ; NAME:
-;  modelfit_v1
+;  modelfit
 ;
 ; PURPOSE:
 ;  Declare parameter bounds for each model and pass to MCMC routine
@@ -34,7 +34,7 @@
 ;  Organized and commented by EC (6/26/2014)
 ; -
 ; *************************************************** ;
-pro modelfit_v1,param_struc=params,fittype=fittype
+pro modelfit,param_struc=params,fittype=fittype
 
 ; Create global variables relating to silicate features
 COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, Qwaterice, crystallineabs

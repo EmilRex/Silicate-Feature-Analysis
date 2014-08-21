@@ -1,6 +1,6 @@
 ; +
 ; NAME:
-;  fits_v1
+;  fits
 ;
 ; PURPOSE:
 ;  Script called from main.pro. Runs appropriate pso and mcmc versions.
@@ -34,7 +34,7 @@
 ;  Organized and commented by EC (6/23/2014)
 ; -
 ; *************************************************** ;
-pro fits_v1, name=name,fittype=fittype
+pro fits, name=name,fittype=fittype
 
 COMMON file_path, in_dir, out_dir, fit_name, object_name
 COMMON star_params, t_star, dist_to_star, star_lambda, star_fnu
@@ -87,7 +87,7 @@ case fittype of
           if (best_val1[0] lt 99999 ) then begin
 
              ; Call MCMC routine with 100 steps of 10 chains
-             printmodels_v1,name,fittype=[1],ps='X',nstep=100,thin_val=1,teff=Teff,$
+             printmodels,name,fittype=[1],ps='X',nstep=100,thin_val=1,teff=Teff,$
              dist=dist_val,amin=amin,seed=best_val1[0:6],cnt=1,scale_val=0,num_chains=10
 
              ; Read in and store data from printmodels_v1 called just above
@@ -152,7 +152,7 @@ case fittype of
           ; MCMC Routine
           if (yes eq 1.0) then begin
               ; Call MCMC routine with 6000 steps of 10 chains
-              printmodels_v1,name,fittype=[1],ps='X',nstep=5000,thin_val=1,teff=Teff,$
+              printmodels,name,fittype=[1],ps='X',nstep=5000,thin_val=1,teff=Teff,$
               dist=dist_val,amin=amin,seed=best_val1[0:6],cnt=1,scale_val=0,num_chains=10
           endif
 
@@ -178,7 +178,7 @@ case fittype of
 
           if (best_val2[0] lt 99999 ) then begin 
 
-              printmodels_v1,name,fittype=[2],ps='X',nstep=100,thin_val=1,teff=Teff,$
+              printmodels,name,fittype=[2],ps='X',nstep=100,thin_val=1,teff=Teff,$
               dist=dist_val,amin=amin,seed=best_val2[0:13],cnt=1,scale_val=0,num_chains=20
 
               data = readfits(out_dir+'/'+name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=1)
@@ -234,7 +234,7 @@ case fittype of
         ; *************************************************** ;
         ; MCMC Routine
           if (yes eq 1.0) then begin
-              printmodels_v1,name,fittype=[2],ps='X',nstep=5000,thin_val=1,teff=Teff,$
+              printmodels,name,fittype=[2],ps='X',nstep=5000,thin_val=1,teff=Teff,$
               dist=dist_val,amin=amin,seed=best_val2[0:13],cnt=1,scale_val=0,num_chains=20
           endif
 
@@ -255,7 +255,7 @@ case fittype of
         
         if (best_val3[0] lt 99999 ) then begin
         
-          printmodels_v1,name,fittype=[3],ps='X',nstep=100,thin_val=1,teff=Teff,$
+          printmodels,name,fittype=[3],ps='X',nstep=100,thin_val=1,teff=Teff,$
             dist=dist_val,amin=amin,seed=best_val3[0:10],cnt=1,scale_val=0,num_chains=15
             
           data = readfits(out_dir+'/'+name+'_chn_mcmc_'+fit_name+'_part.fits',EXTEN_NO=1)
@@ -313,7 +313,7 @@ case fittype of
         ; *************************************************** ;
         ; MCMC Routine
         if (yes eq 1.0) then begin
-          printmodels_v1,name,fittype=[3],ps='X',nstep=5000,thin_val=1,teff=Teff,$
+          printmodels,name,fittype=[3],ps='X',nstep=5000,thin_val=1,teff=Teff,$
             dist=dist_val,amin=amin,seed=best_val3[0:10],cnt=1,scale_val=0,num_chains=15
         endif
         

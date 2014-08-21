@@ -3,45 +3,47 @@ pro main
 ; ****************************************************************************************************** ;
 ; Perform setup operations
 
-; Home directory
-home_dir = '~/Summer2014/Silicate_Feature_Analysis/'
+; Set to directory containing repository
+home_dir = '~/'
 CD, home_dir
 
-; Path
+; Expand IDL path
 !PATH=!PATH+':'+Expand_Path('+'+home_dir)
 
 ; Functional directories
 COMMON file_path, in_dir, out_dir, fit_name, object_name
-;in_dir = 'savfiles_MIPS_SED_corrected'
-in_dir = 'savfiles_PACS'
+; Set to directory containing data
+; Default set to savfiles
+in_dir = 'savfiles'
 
-;out_dir = '../Silicate_Feature_Analysis_output'
-out_dir = '../Science3_output'
+; Set directory location for output. 
+; Location should be relative to your home directory
+; Default set to output
+out_dir = 'output'
 
 
 ; *************************************************** ;
-;RUN MULTIPLE
+;RUN
 ; *************************************************** ;
+; Set name of object(s) to be run
+names = ['']
 
-;names = ['HD95086','HD106906','HD108257','HD110058','HD111520','HD113556','HD113766','HD114082','HD115600','HD117214','HD145560','HD146181','HD146897']
-;names = ['HD95086','HD110058','HD113556','HD114082','HD115600','HD117214','HD145560','HD146181','HD146897']
-;names = ['HD117214'];,'HD146897']
-names = ['HD181327']
-;fit_names = ['single','multi'];,'disk']
-fit_names = ['disk'];['multi','single'];,'disk']
+; Set fits to run.
+; Default is all
+fit_names = ['single','multi','disk']
 
 FOREACH name, names DO BEGIN
   FOREACH fit_name, fit_names DO BEGIN
+
     object_name = name
-    ;fits_v1, name=name, fittype=fit_name
-    ;print, object_name
+    print, object_name
+
+    fits, name=name, fittype=fit_name
     
-    plot_result_PACS,/separate
-    ;plot_result
-    ;plot_result_separate, /plot_old
-    null = display_historic(name)
+    plot_result
+
     null = display_results(name)
-    ;stop
+
   ENDFOREACH
 ENDFOREACH
 

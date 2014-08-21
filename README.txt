@@ -12,6 +12,11 @@ Silicate_Feature_Analysis contains the library of IDL codes used for the analysi
 presented in "The Spitzer IRS Debris Disk Catalog: II. Silicate Feature Analysis" by 
 Mittal et al. To begin please see main.pro
 
+USAGE:
+
+	Data:
+	For each star 
+Run from Main
 
 DISCLAIMER & Acknowledgements;
 This work is still in development. Hopefully the repository will be ready by late August 
