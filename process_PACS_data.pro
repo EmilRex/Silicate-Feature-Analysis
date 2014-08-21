@@ -146,7 +146,7 @@ FOR j=0,(n_new-1) DO BEGIN
   
   
   flux_new[j] = int_tabulated(wave_int,flux_int)/(max(wave_int)-min(wave_int))
-  pacs_err[j] = stddev(flux_int)
+  pacs_err[j] = stddev(flux_int)/sqrt(n_elements(flux_int))
 ENDFOR
 
 ; *************************************************** ;

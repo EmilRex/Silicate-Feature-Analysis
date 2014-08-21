@@ -15,8 +15,8 @@ COMMON file_path, in_dir, out_dir, fit_name, object_name
 ;in_dir = 'savfiles_MIPS_SED_corrected'
 in_dir = 'savfiles_PACS'
 
-out_dir = '../Silicate_Feature_Analysis_output'
-;out_dir = '../Science3_output'
+;out_dir = '../Silicate_Feature_Analysis_output'
+out_dir = '../Science3_output'
 
 
 ; *************************************************** ;
@@ -39,8 +39,8 @@ FOREACH name, names DO BEGIN
     plot_result_PACS,/separate
     ;plot_result
     ;plot_result_separate, /plot_old
-    ;null = display_historic(name)
-    ;null = display_results(name)
+    null = display_historic(name)
+    null = display_results(name)
     ;stop
   ENDFOREACH
 ENDFOREACH

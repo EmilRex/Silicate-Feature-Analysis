@@ -259,10 +259,10 @@ legend_textcolors=[0,0,0,0]
 if keyword_set(separate) then begin
   for j=0,n_models do begin
     for i=0,4 do begin
-      oplot,model_x,out_model_separate[*,(j*5+i)],color=(i),linestyle=(1+j)
+      oplot,model_x,out_model_separate[*,(j*5+i)],color=(1+j),linestyle=(i)
       legend_psyms = [legend_psyms,0]
-      legend_colors = [legend_colors,i]
-      legend_linestyle = [legend_linestyle,1+j]
+      legend_colors = [legend_colors,1+j]
+      legend_linestyle = [legend_linestyle,i]
       legend_textcolors = [legend_textcolors,0]
     endfor
     legend_names = [legend_names,'Olivine','Pyroxene','Forsterite','Enstatite','Water-ice']
