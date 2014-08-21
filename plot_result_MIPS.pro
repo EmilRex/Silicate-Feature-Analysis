@@ -119,10 +119,10 @@ IRS_psym = 2 ; asterisk
 ;MIPS70_color = 2 ; red
 ;MIPS70_psym = 6 ; square
 
-PACS_wave = wave_irs[where(strmatch(final_source, 'Herschel_PACS') EQ 1)]
-PACS_spec = fl_diff[where(strmatch(final_source, 'Herschel_PACS') EQ 1)]
-PACS_color = 3 ; blue
-PACS_psym = 6 ; square
+MIPS_SED_wave = wave_irs[where(strmatch(final_source, 'SpitzerMIPS_SED') EQ 1)]
+MIPS_SED_spec = fl_diff[where(strmatch(final_source, 'SpitzerMIPS_SED') EQ 1)]
+MIPS_SED_color = 3 ; blue
+MIPS_SED_psym = 6 ; square
 
 x_start = min(wave_irs)
 x_range = max(wave_irs)-min(wave_irs)
@@ -226,7 +226,7 @@ endif
 
 ; Set up device
 set_plot,'PS'
-device, filename ='plots/PACS_'+object_name+'_'+fit_name+sep_label+'.ps',/COLOR,/HELVETICA,XSIZE=15,YSIZE=12.5 & !p.font =0
+device, filename ='plots/MIPS_'+object_name+'_'+fit_name+sep_label+'.ps',/COLOR,/HELVETICA,XSIZE=15,YSIZE=12.5 & !p.font =0
 loadct,39,/silent
 !p.background=16777215
 
@@ -242,7 +242,7 @@ plot,wave_irs,fl_diff,title=object_name+' ('+fit_name+' Model)', $
 
 ; Overlay data with different colors and markers
 oplot,IRS_wave,IRS_spec,color=IRS_color,psym=IRS_psym
-oplot,PACS_wave,PACS_spec,color=PACS_color,psym=PACS_psym
+oplot,MIPS_SED_wave,MIPS_SED_spec,color=MIPS_SED_color,psym=MIPS_SED_psym
 
 ; Add error bars
 oploterr,wave_irs,fl_diff,uncer_irs,0;,psym=1;,color=0
@@ -250,7 +250,7 @@ oploterr,wave_irs,fl_diff,uncer_irs,0;,psym=1;,color=0
 ; Plot the models
 oplot,model_x,out_model,color=3, thick=5,linestyle=lines[1]
 
-legend_names = ['IRS','PACS','New Model','Old Model']
+legend_names = ['IRS','MIPS SED','New Model','Old Model']
 legend_psyms = [2,6,0,0]
 legend_colors=[1,3,3,2]
 legend_linestyle=[0,0,2,3]
