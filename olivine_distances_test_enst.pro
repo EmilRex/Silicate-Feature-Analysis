@@ -82,7 +82,7 @@ FOR i=0, n_elements(db_name)-1 DO BEGIN
       ','+string(dist[0,3])+','+string(temp[1,i])+','+string(loc[1,i])+','+string(dist[1,0])+','+$
       string(dist[1,1])+','+string(dist[1,2])+','+string(dist[1,3])
       
-    ;printf,1,string(db_name[i])+','+string(temp[0,i])+','+string(dist)+','+string(loc[part,i])+','+string(dist-loc)
+    printf,1,string(db_name[i])+','+string(temp[0,i])+','+string(dist)+','+string(loc[part,i])+','+string(dist-loc)
     
     ;stop
   ENDFOR ; object
