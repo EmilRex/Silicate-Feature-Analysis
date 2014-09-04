@@ -9,7 +9,7 @@ pro qlookup_old, grainrad, wavelength, olivratio, crysfrac, forstfrac, $
 COMMON grainprops, qastrosil, qolivine, qpyroxene, qenstatite, qforsterite, $
    crystallineabs
 
-restore, 'graintempdata_old.sav'
+restore, 'qtables_withcrys2.sav'
 
 ;COMMON grainprops, Qastrosil, Qolivine, Qpyroxene, Qenstatite, Qforsterite, crystallineabs                                           
 qextall = dblarr(n_elements(grainrad), n_elements(wavelength),4)
