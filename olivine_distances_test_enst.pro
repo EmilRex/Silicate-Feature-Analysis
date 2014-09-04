@@ -60,7 +60,7 @@ FOR i=0, n_elements(db_name)-1 DO BEGIN
       dist_val_AU = dist_val*pc_in_AU
       
       ; Get q_abs over phot lambdas
-      qlookup, [agr[part,i]], final_phot_wave, foliv[part,i], fcrys[part,i], ffors[part,i], qabs_phot, /separate
+      qlookup_old, [agr[part,i]], final_phot_wave, foliv[part,i], fcrys[part,i], ffors[part,i], qabs_phot, /separate
       
       ; ******************************** ;
       ; Calculate
